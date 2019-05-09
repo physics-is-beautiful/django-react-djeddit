@@ -45,7 +45,7 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
-    name='django-djeddit',
+    name='django-react-djeddit',
     version=version,
     description="""Bare bones Django forum application with Reddit like features""",
     long_description=readme + '\n\n' + history,
