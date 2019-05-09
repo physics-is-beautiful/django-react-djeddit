@@ -2,8 +2,7 @@
 {% extends BASE_TEMPLATE %}
 {% load djeddit_tags %}
 {% block title %}
-    <h2><a target="_blank" href="{% url "user-profile" pageUser.pk %}">{{ pageUser.display_name }}</a></h2>
-    <div>Username: {{ pageUser.username }}</div>
+    <h2>{{ pageUser.username }}</h2>
 {% endblock %}
 {% block content %}
     <div>
@@ -12,7 +11,7 @@
         </ul>
     </div>
     <br>
-    <div>
+    <div class="col-md-8">
         <ul class="list-group">
             {% block groupItems %}{% endblock %}
         </ul>
