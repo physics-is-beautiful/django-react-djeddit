@@ -1,4 +1,3 @@
-from builtins import IndexError
 from datetime import datetime
 from django import VERSION as DJANGO_VERSION
 from django import template
@@ -16,7 +15,7 @@ register = template.Library()
 def getAmountContext(num, name, infix=''):
     if num:
         if abs(num) > 1:
-            if name.endswith('y') and name != 'day':
+            if name.endswith('y'):
                 name = '{name}ies'.format(name=name[:-1])
             else:
                 name += 's'
@@ -38,10 +37,7 @@ def getAmount(num, name, infix=''):
 
 @register.simple_tag
 def postUserName(created_by):
-    if created_by and created_by.display_name:
-        return created_by.display_name
-    else:
-        return 'unbeknown'
+    return created_by or 'guest'
 
 
 @register.simple_tag
@@ -63,34 +59,10 @@ def postWidth(thread, post):
 @register.simple_tag
 def postVoteClicked(user, post, upvote):
     try:
-        # try to find post in prefetch objects see discussionPage(request) view for details
-        if hasattr(post, 'current_user_post_votes'):
-            userPostVote = post.current_user_post_votes[0]
-        else:
-            # originally by djeedit
-            userPostVote = UserPostVote.objects.get(user=user, post=post) # FIXME ! generates too much sqk queries in template!
+        userPostVote = UserPostVote.objects.get(user=user, post=post)
         if (userPostVote.val == 1 and upvote) or (userPostVote.val == -1 and not upvote):
             return 'color-primary'
-    except (IndexError, UserPostVote.DoesNotExist):
-        pass
-    return ''
-
-
-@register.simple_tag
-def postVoteColor(user, post):
-
-    try:
-        # try to find post in prefetch objects see discussionPage(request) view for details
-        if hasattr(post, 'current_user_post_votes'):
-            userPostVote = post.current_user_post_votes[0]
-        else:
-            # originally by djeedit
-            userPostVote = UserPostVote.objects.get(user=user, post=post)
-        if (userPostVote.val == 1):
-            return 'color-upvote'
-        elif (userPostVote.val == -1):
-            return 'color-downvote'
-    except (IndexError, UserPostVote.DoesNotExist):
+    except UserPostVote.DoesNotExist:
         pass
     return ''
 
@@ -105,37 +77,19 @@ def postContainer(parent):
 
 
 @register.simple_tag
-def postDate(dt, prefix='', verbose=True):
+def postDate(dt, prefix=''):
     dt_now = datetime.utcnow().replace(tzinfo=utc)
-    # if dt.date() == dt_now.date():
-    delta = (dt_now - dt).total_seconds()
-
-    years = int(delta / 31556926)
-    string = getAmountContext(years, 'year')
-    if string:
-        return '%s ago' % string if verbose else '%sy' % years
-
-    months = int(delta / 2592000)
-    string = getAmountContext(months, 'month')
-    if string:
-        return '%s ago' % string if verbose else '%smo' % months
-
-    days = int(delta / 86400)
-    string = getAmountContext(days, 'day')
-    if string:
-        return '%s ago' % string if verbose else '%sd' % days
-   
-    hours = int(delta / 3600)
-    string = getAmountContext(hours, 'hour')
-    if string:
-        return '%s ago' % string if verbose else '%sh' % hours
-   
-    minutes = int(delta / 60)
-    string = getAmountContext(minutes, 'minute')
-    if string:
-        return '%s ago' % string if verbose else '%sm' % minutes
-    return 'less than a minute ago' if verbose else '<1m'
-   
+    if dt.date() == dt_now.date():
+        delta = dt_now - dt
+        hours = int(delta.seconds / 3600)
+        string = getAmountContext(hours, 'hour')
+        if string:
+            return '%s ago' % string
+        minutes = int(delta.seconds / 60)
+        string = getAmountContext(minutes, 'minute')
+        if string:
+            return '%s ago' % string
+        return 'less than a minute ago'
     return prefix + formats.date_format(dt.date(), "DATE_FORMAT")
 
 
