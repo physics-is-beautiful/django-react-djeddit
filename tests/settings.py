@@ -48,7 +48,8 @@ ROOT_URLCONF = "tests.urls"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'djeddit', 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'djeddit', 'templates'),
+                 os.path.join(BASE_DIR, 'frontend', 'django-react-djeddit-client', 'build')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -72,9 +73,12 @@ DATABASES = {
 
 SITE_ID = 1
 STATIC_URL = '/static/'
+STATIC_ROOT = '/frontend/django-react-djeddit-client/build'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend', 'django-react-djeddit-client', 'build')]
 
 # django-crispy-forms config:
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+# CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # django-djeddit config:
-DJEDDIT_BASE_TEMPLATE = "djeddit/base.html"
+DJEDDIT_BASE_TEMPLATE = "djeddit/react_index.html"
+
