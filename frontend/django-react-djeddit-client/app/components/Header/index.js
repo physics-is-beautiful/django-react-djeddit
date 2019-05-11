@@ -26,6 +26,11 @@ const Header = ({ intl }) => {
     setActiveMenu('topics')
   }
 
+  const handleSignupClick = () => {
+    history.push('/signup')
+    setActiveMenu('signup')
+  }
+
   return (
     <div>
       <A href="/">
@@ -53,8 +58,8 @@ const Header = ({ intl }) => {
           />
           <Menu.Item
             name="Sign Up"
-            // active={activeItem === 'logout'}
-            // onClick={this.handleItemClick}
+            active={activeMenu === 'signup'}
+            onClick={handleSignupClick}
           />
         </Menu.Menu>
       </Menu>

@@ -31,5 +31,8 @@ urlpatterns = [
     url(r'^$', serve, {
         'path': 'index.html',
     }),
+    url(r'^(?:signup|topics)$', serve, {
+        'path': 'index.html',
+    }),
     url(r'^(?P<path>.*)$', serve,  {}),
 ]

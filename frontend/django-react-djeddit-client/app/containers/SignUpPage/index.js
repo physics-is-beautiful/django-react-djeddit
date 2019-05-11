@@ -1,16 +1,15 @@
 /*
- * HomePage
- *
- * This is the first thing users see of our App, at the '/' route
+ * SignUpPage
  */
 
 import React, { useEffect, memo } from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
+import { Button, Checkbox, Form } from 'semantic-ui-react'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -20,11 +19,8 @@ import {
   makeSelectError,
 } from 'containers/App/selectors'
 import H2 from 'components/H2'
-import ReposList from 'components/ReposList'
-import AtPrefix from './AtPrefix'
+
 import CenteredSection from './CenteredSection'
-import Form from './Form'
-import Input from './Input'
 import Section from './Section'
 import messages from './messages'
 import { loadRepos } from '../App/actions'
@@ -33,44 +29,76 @@ import { makeSelectUsername } from './selectors'
 import reducer from './reducer'
 import saga from './saga'
 
-const key = 'home'
+const key = 'signup'
 
-export function HomePage({
+export function SignUpPage({
   username,
-  loading,
-  error,
-  repos,
+  // loading,
+  // error,
+  // repos,
   onSubmitForm,
-  onChangeUsername,
+  // onChangeUsername,
 }) {
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
-  useEffect(() => {
-    // When initial state username is not null, submit the form to load repos
-    if (username && username.trim().length > 0) onSubmitForm()
-  }, [])
+  // useEffect(() => {
+  //   // When initial state username is not null, submit the form to load repos
+  //   if (username && username.trim().length > 0) onSubmitForm()
+  // }, [])
 
-  const reposListProps = {
-    loading,
-    error,
-    repos,
-  }
+  // const reposListProps = {
+  //   loading,
+  //   error,
+  //   repos,
+  // }
 
   return (
     <article>
       <Helmet>
-        <title>Home Page</title>
-        <meta name="description" content="Djeedit React application homepage" />
+        <title>Sign Up</title>
+        <meta name="description" content="Djeddit react signup page" />
       </Helmet>
       <div>
         <CenteredSection>
           <H2>
             {/*<FormattedMessage {...messages.startProjectHeader} />*/}
-            <FormattedMessage {...messages.djedditReactWelcome} />
+            <FormattedMessage {...messages.signupHeader} />
           </H2>
           <p>{/*<FormattedMessage {...messages.startProjectMessage} />*/}</p>
         </CenteredSection>
+        <Section>
+          <Form>
+            <Form.Field required>
+              <label>
+                <FormattedMessage {...messages.username} />
+              </label>
+              <input />
+              <FormattedMessage {...messages.usernameDescription} />
+            </Form.Field>
+            <Form.Field required>
+              <label>
+                <FormattedMessage {...messages.email} />
+              </label>
+              <input />
+            </Form.Field>
+            <Form.Field required>
+              <label>
+                <FormattedMessage {...messages.password} />
+              </label>
+              <input />
+              <FormattedHTMLMessage {...messages.passwordDescription} />
+            </Form.Field>
+            <Form.Field required>
+              <label>
+                <FormattedMessage {...messages.passwordConfirmation} />
+              </label>
+              <input />
+              <FormattedMessage {...messages.passwordConfirmationDescription} />
+            </Form.Field>
+            <Button type="submit"><FormattedMessage {...messages.submitButton} /></Button>
+          </Form>
+        </Section>
         <Section>
           {/*<H2>*/}
           {/*<FormattedMessage {...messages.trymeHeader} />*/}
@@ -97,13 +125,13 @@ export function HomePage({
   )
 }
 
-HomePage.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+SignUpPage.propTypes = {
+  // loading: PropTypes.bool,
+  // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  // repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   onSubmitForm: PropTypes.func,
   username: PropTypes.string,
-  onChangeUsername: PropTypes.func,
+  // onChangeUsername: PropTypes.func,
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -131,4 +159,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(HomePage)
+)(SignUpPage)
