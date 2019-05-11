@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
-import Circle from './Circle';
-import Wrapper from './Wrapper';
+import Circle from './Circle'
+import Wrapper from './Wrapper'
 
 const LoadingIndicator = () => (
   <Wrapper>
@@ -18,6 +18,6 @@ const LoadingIndicator = () => (
     <Circle rotate={300} delay={-0.2} />
     <Circle rotate={330} delay={-0.1} />
   </Wrapper>
-);
+)
 
-export default LoadingIndicator;
+export default LoadingIndicator

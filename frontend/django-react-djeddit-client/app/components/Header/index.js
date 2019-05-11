@@ -1,6 +1,10 @@
-import React from 'react'
-// import { FormattedMessage } from 'react-intl'
+import React, { useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Input, Menu } from 'semantic-ui-react'
+import { injectIntl, intlShape, FormattedRelative } from 'react-intl'
+
+import PropTypes from 'prop-types'
+import history from 'utils/history'
 
 import A from './A'
 import Img from './Img'
@@ -9,7 +13,19 @@ import Img from './Img'
 import Banner from './banner.jpg'
 import messages from './messages'
 
-function Header() {
+const Header = ({ intl }) => {
+  const [activeMenu, setActiveMenu] = useState('home')
+
+  const handleHomeClick = () => {
+    history.push('/')
+    setActiveMenu('home')
+  }
+
+  const handleTopicsClick = () => {
+    history.push('/topics')
+    setActiveMenu('topics')
+  }
+
   return (
     <div>
       <A href="/">
@@ -17,24 +33,18 @@ function Header() {
       </A>
       <Menu secondary>
         <Menu.Item
-          name="home"
-          active={true}
-          // active={activeItem === 'home'}
-          // onClick={this.handleItemClick}
+          name={intl.formatMessage(messages.home)}
+          active={activeMenu === 'home'}
+          onClick={handleHomeClick}
         />
         <Menu.Item
-          name="topics"
-          // active={activeItem === 'messages'}
-          // onClick={this.handleItemClick}
-        />
-        <Menu.Item
-          name="friends"
-          // active={activeItem === 'friends'}
-          // onClick={this.handleItemClick}
+          name={intl.formatMessage(messages.topics)}
+          active={activeMenu === 'topics'}
+          onClick={handleTopicsClick}
         />
         <Menu.Menu position="right">
           {/*<Menu.Item>*/}
-            {/*<Input icon="search" placeholder="Search..." />*/}
+          {/*<Input icon='search' placeholder='Search...' />*/}
           {/*</Menu.Item>*/}
           <Menu.Item
             name="Login"
@@ -49,10 +59,10 @@ function Header() {
         </Menu.Menu>
       </Menu>
       {/*<NavBar>*/}
-      {/*<HeaderLink to="/">*/}
+      {/*<HeaderLink to='/'>*/}
       {/*<FormattedMessage {...messages.home} />*/}
       {/*</HeaderLink>*/}
-      {/*<HeaderLink to="/features">*/}
+      {/*<HeaderLink to='/features'>*/}
       {/*<FormattedMessage {...messages.features} />*/}
       {/*</HeaderLink>*/}
       {/*</NavBar>*/}
@@ -60,4 +70,9 @@ function Header() {
   )
 }
 
-export default Header
+Header.propTypes = {
+  selectedMenu: PropTypes.string,
+  intl: PropTypes.object,
+}
+
+export default injectIntl(Header)
