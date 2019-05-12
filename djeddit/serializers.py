@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from .models import Thread, Post
 
@@ -31,3 +34,14 @@ class ThreadSerializer(serializers.ModelSerializer):
         model = Thread
         fields = ['title', 'slug', 'views', 'posts_in_tree_order']
 
+
+class UserSerializer(serializers.ModelSerializer):
+    # def create(self, validated_data):
+    #     user = get_user_model().objects.create_user(**validated_data)
+    #     return user
+
+    # TODO set REQUIRED_FIELDS
+
+    class Meta:
+        model = get_user_model()
+        fields = ('id', get_user_model().USERNAME_FIELD, get_user_model().EMAIL_FIELD, 'password')

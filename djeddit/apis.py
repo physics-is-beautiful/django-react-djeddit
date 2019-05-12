@@ -1,10 +1,12 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions, mixins
 from rest_framework.pagination import PageNumberPagination
 
 from .permissions import EditDeleteByOwnerOrStaff
 from .models import Thread, Post
-from .serializers import ThreadSerializer, PostSerializer
+from .serializers import ThreadSerializer, PostSerializer, UserSerializer
 
 try:
     from notifications.signals import notify
@@ -20,6 +22,14 @@ class ThreadViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = ThreadSerializer
     queryset = Thread.objects.all()
+    lookup_field = 'id'
+
+
+class UserViewSet(ModelViewSet):
+    # TODO add permissions
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = UserSerializer
+    queryset = get_user_model().objects.all()
     lookup_field = 'id'
 
 

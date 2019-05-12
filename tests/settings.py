@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     # 3rd party apps
     'crispy_forms',
     'mptt',
@@ -67,7 +68,8 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
+        "NAME": os.path.join(BASE_DIR, 'db.sqlite3'),
+        # "NAME": ":memory:",
     }
 }
 
@@ -81,4 +83,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend', 'django-react-djeddit-cli
 
 # django-djeddit config:
 DJEDDIT_BASE_TEMPLATE = "djeddit/react_index.html"
+DJEDDIT_USE_INTERNAL_USER = True
 
