@@ -2,10 +2,10 @@
  * SignUpPage
  */
 
-import React, { useEffect, memo } from 'react'
+import React, { useEffect, memo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
+import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
@@ -32,15 +32,30 @@ import saga from './saga'
 const key = 'signup'
 
 export function SignUpPage({
-  username,
+  // username,
   // loading,
   // error,
   // repos,
   onSubmitForm,
+  intl,
   // onChangeUsername,
 }) {
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
+
+  const [state, setState] = useState({
+    username: '',
+    email: '',
+    password: '',
+    password2: '',
+  })
+
+  const [submitDisabled, setSubmitDisabled] = useState(true)
+
+  const handleChange = (e, { name, value }) => {
+    // TODO validate input
+    setState(prevState => ({ ...prevState, [name]: value }), () => {})
+  }
 
   // useEffect(() => {
   //   // When initial state username is not null, submit the form to load repos
@@ -53,6 +68,11 @@ export function SignUpPage({
   //   repos,
   // }
 
+  const handleSubmit = () => {
+    const { name, email } = this.state
+    onSubmitForm()
+  }
+
   /* TODO create this form based on OPTION API call */
 
   return (
@@ -64,63 +84,69 @@ export function SignUpPage({
       <div>
         <CenteredSection>
           <H2>
-            {/*<FormattedMessage {...messages.startProjectHeader} />*/}
+            {/* <FormattedMessage {...messages.startProjectHeader} /> */}
             <FormattedMessage {...messages.signupHeader} />
           </H2>
-          <p>{/*<FormattedMessage {...messages.startProjectMessage} />*/}</p>
+          <p>{/* <FormattedMessage {...messages.startProjectMessage} /> */}</p>
         </CenteredSection>
         <Section>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Field required>
-              <label>
-                <FormattedMessage {...messages.username} />
-              </label>
-              <input />
+              <Form.Input
+                label={intl.formatMessage(messages.username)}
+                value={state.username}
+                onChange={handleChange}
+              />
               <FormattedMessage {...messages.usernameDescription} />
             </Form.Field>
             <Form.Field required>
-              <label>
-                <FormattedMessage {...messages.email} />
-              </label>
-              <input />
+              <Form.Input
+                label={intl.formatMessage(messages.email)}
+                value={state.email}
+                onChange={handleChange}
+              />
             </Form.Field>
             <Form.Field required>
-              <label>
-                <FormattedMessage {...messages.password} />
-              </label>
-              <input />
+              <Form.Input
+                label={intl.formatMessage(messages.password)}
+                value={state.password}
+                onChange={handleChange}
+              />
               <FormattedHTMLMessage {...messages.passwordDescription} />
             </Form.Field>
             <Form.Field required>
-              <label>
-                <FormattedMessage {...messages.passwordConfirmation} />
-              </label>
-              <input />
+              <Form.Input
+                label={intl.formatMessage(messages.passwordConfirmation)}
+                value={state.password2}
+                onChange={handleChange}
+              />
               <FormattedMessage {...messages.passwordConfirmationDescription} />
             </Form.Field>
-            <Button type="submit"><FormattedMessage {...messages.submitButton} /></Button>
+            <Button type="submit" disabled={submitDisabled}>
+              <FormattedMessage {...messages.submitButton} />
+            </Button>
           </Form>
         </Section>
         <Section>
-          {/*<H2>*/}
-          {/*<FormattedMessage {...messages.trymeHeader} />*/}
-          {/*</H2>*/}
-          {/*<Form onSubmit={onSubmitForm}>*/}
-          {/*<label htmlFor="username">*/}
-          {/*<FormattedMessage {...messages.trymeMessage} />*/}
-          {/*<AtPrefix>*/}
-          {/*<FormattedMessage {...messages.trymeAtPrefix} />*/}
-          {/*</AtPrefix>*/}
-          {/*<Input*/}
-          {/*id="username"*/}
-          {/*type="text"*/}
-          {/*placeholder="mxstbr"*/}
-          {/*value={username}*/}
-          {/*onChange={onChangeUsername}*/}
-          {/*/>*/}
-          {/*</label>*/}
-          {/*</Form>*/}
-          {/*<ReposList {...reposListProps} />*/}
+          {/* <H2> */}
+          {/* <FormattedMessage {...messages.trymeHeader} /> */}
+          {/* </H2> */}
+          {/* <Form onSubmit={onSubmitForm}> */}
+          {/* <label htmlFor="username"> */}
+          {/* <FormattedMessage {...messages.trymeMessage} /> */}
+          {/* <AtPrefix> */}
+          {/* <FormattedMessage {...messages.trymeAtPrefix} /> */}
+          {/* </AtPrefix> */}
+          {/* <Input */}
+          {/* id="username" */}
+          {/* type="text" */}
+          {/* placeholder="mxstbr" */}
+          {/* value={username} */}
+          {/* onChange={onChangeUsername} */}
+          {/* /> */}
+          {/* </label> */}
+          {/* </Form> */}
+          {/* <ReposList {...reposListProps} /> */}
         </Section>
       </div>
     </article>
@@ -161,4 +187,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SignUpPage)
+)(injectIntl(SignUpPage))
