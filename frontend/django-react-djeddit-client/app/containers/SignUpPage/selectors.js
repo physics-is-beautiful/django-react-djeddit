@@ -5,12 +5,21 @@
 import { createSelector } from 'reselect'
 import { initialState } from './reducer'
 
-const selectHome = state => state.home || initialState
+const selectSignUp = state => state.signUp || initialState
 
-const makeSelectUsername = () =>
+const makeSelectUser = () =>
   createSelector(
-    selectHome,
-    homeState => homeState.username,
+    selectSignUp,
+    signUpState => signUpState.user,
   )
 
-export { selectHome, makeSelectUsername }
+// const makeSelectFormData = () =>
+//   createSelector(
+//     selectSignUp,
+//     signUpState => {
+//       console.log(signUpState);
+//       return signUpState.formData
+//     },
+//   )
+
+export { selectSignUp, makeSelectUser }

@@ -3,11 +3,12 @@
  */
 
 import React, { useEffect, memo, useState } from 'react'
+
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
+import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { Button, Checkbox, Form } from 'semantic-ui-react'
 
@@ -23,9 +24,10 @@ import H2 from 'components/H2'
 import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
-import { loadRepos } from '../App/actions'
-// import { changeUsername } from './actions'
-// import { makeSelectUsername } from './selectors'
+// import { loadRepos } from '../App/actions'
+// import { signUp } from './actions'
+import * as signupCreators from './actions'
+import { makeSelectUser } from './selectors'
 import reducer from './reducer'
 import saga from './saga'
 
@@ -36,7 +38,8 @@ export function SignUpPage({
   // loading,
   // error,
   // repos,
-  onSubmitForm,
+  //onSubmitForm,
+  signUpActions,
   intl,
   // onChangeUsername,
 }) {
@@ -88,7 +91,8 @@ export function SignUpPage({
   }, [formData])
 
   const handleSubmit = () => {
-    onSubmitForm(...formData)
+    // onSubmitForm(...formData)
+    signUpActions.signUp(formData)
   }
 
   /* TODO create this form based on OPTION API call */
@@ -152,18 +156,19 @@ export function SignUpPage({
             </Button>
           </Form>
         </Section>
-        <Section>
-        </Section>
       </div>
     </article>
   )
 }
 
 SignUpPage.propTypes = {
+  signUpActions: PropTypes.shape({
+    signUp: PropTypes.func.isRequired,
+  }).isRequired,
   // loading: PropTypes.bool,
   // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   // repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  onSubmitForm: PropTypes.func,
+  // onSubmitForm: PropTypes.func,
   // username: PropTypes.string,
   // onChangeUsername: PropTypes.func,
 }
@@ -171,6 +176,8 @@ SignUpPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   // repos: makeSelectRepos(),
   // username: makeSelectUsername(),
+  // user: makeSelectUser(),
+  // formData: makeSelectFormData(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
 })
@@ -178,10 +185,12 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     // onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    onSubmitForm: evt => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault()
-      dispatch(loadRepos())
-    },
+    signUpActions: bindActionCreators(signupCreators, dispatch),
+    // onSubmitForm: evt => {
+    //   if (evt !== undefined && evt.preventDefault) evt.preventDefault()
+    //   // dispatch(loadRepos())
+    //   dispatch(signUp())
+    // },
   }
 }
 

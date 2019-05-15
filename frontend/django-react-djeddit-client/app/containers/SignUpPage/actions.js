@@ -15,7 +15,7 @@
  *    }
  */
 
-import { CHANGE_USERNAME } from './constants';
+import { CHANGE_USERNAME, SIGN_UP, SIGN_UP_SUCCESS } from './constants'
 
 /**
  * Changes the input field of the form
@@ -28,5 +28,32 @@ export function changeUsername(username) {
   return {
     type: CHANGE_USERNAME,
     username,
-  };
+  }
+}
+
+/**
+ * signUp, this action starts the request saga
+ *
+ * @return {object} An action object with a type of LOAD_REPOS
+ */
+export function signUp(formData) {
+  return {
+    type: SIGN_UP,
+    formData,
+  }
+}
+
+/**
+ * Dispatched when the repositories are loaded by the request saga
+ *
+ * @param  {array} repos The repository data
+ * @param  {string} username The current username
+ *
+ * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+ */
+export function signUpSuccess(user) {
+  return {
+    type: SIGN_UP_SUCCESS,
+    user,
+  }
 }

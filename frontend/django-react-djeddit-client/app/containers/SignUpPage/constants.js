@@ -10,3 +10,6 @@
  */
 
 export const CHANGE_USERNAME = 'boilerplate/Home/CHANGE_USERNAME'
+
+export const SIGN_UP = 'djeddit/SignUpPage/SIGN_UP'
+export const SIGN_UP_SUCCESS = 'djeddit/SignUpPage/SIGN_UP_SUCCESS'
