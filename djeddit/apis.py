@@ -1,8 +1,12 @@
 from django.contrib.auth import get_user_model
 
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions, mixins
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 
 from .permissions import EditDeleteByOwnerOrStaff
 from .models import Thread, Post
@@ -31,6 +35,12 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
     lookup_field = 'id'
+
+    @action(methods=['GET'],
+            detail=False, )
+    def me(self, request, *args, **kwargs):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
 
 class PostViewSet(mixins.CreateModelMixin,

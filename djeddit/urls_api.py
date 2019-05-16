@@ -13,5 +13,7 @@ if settings.DJEDDIT_USE_INTERNAL_USER:
     from .apis import UserViewSet
     router.register(r'users', UserViewSet, base_name='users')
 
+# todo import users api if embed
+
 urlpatterns = router.urls
 

@@ -49,13 +49,18 @@ export function* signUp(action) {
   // const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`
 
   try {
-    const userData = yield Api.signUpCall(action.formData)
-    yield call(() => {
-      window.location.href = '/'
-    })
+    const success = yield Api.signUpCall(action.formData)
+    if (success) {
+      yield call(() => {
+        window.location.href = '/'
+      })
+    }
     // yield put(signUpSuccess(userData))
   } catch (err) {
     // yield put(repoLoadingError(err))
+    yield call(() => {
+      console.log(err)
+    })
   }
 }
 
