@@ -1,3 +1,5 @@
+import request from 'utils/request'
+
 import Cookies from 'js-cookie'
 
 function* signUpCall(data) {
@@ -10,7 +12,7 @@ function* signUpCall(data) {
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
     .join('&')
 
-  const respone = yield fetch('/accounts/signup/', {
+  yield request('/accounts/signup/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -24,7 +26,6 @@ function* signUpCall(data) {
     //   Object.assign({}, formData, { csrfmiddlewaretoken: csrftoken }),
     // ),
   })
-  return yield respone.status === 200
 }
 
 export const Api = { signUpCall }

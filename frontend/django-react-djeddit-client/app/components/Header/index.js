@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+  FormattedRelative,
+} from 'react-intl'
 import { Input, Menu } from 'semantic-ui-react'
-import { injectIntl, intlShape, FormattedRelative } from 'react-intl'
 
 import PropTypes from 'prop-types'
 import history from 'utils/history'
@@ -13,7 +17,7 @@ import Img from './Img'
 import Banner from './banner.jpg'
 import messages from './messages'
 
-const Header = ({ intl }) => {
+const Header = ({ intl, signedInUser }) => {
   const [activeMenu, setActiveMenu] = useState('home')
 
   const handleHomeClick = () => {
@@ -29,6 +33,11 @@ const Header = ({ intl }) => {
   const handleSignupClick = () => {
     history.push('/signup')
     setActiveMenu('signup')
+  }
+
+  const handleNewTopicClick = () => {
+    history.push('/new-topic')
+    setActiveMenu('new-topic')
   }
 
   return (
@@ -47,37 +56,55 @@ const Header = ({ intl }) => {
           active={activeMenu === 'topics'}
           onClick={handleTopicsClick}
         />
+        {signedInUser && (
+          <Menu.Item
+            name={intl.formatMessage(messages.newTopic)}
+            active={activeMenu === 'new-topic'}
+            onClick={handleNewTopicClick}
+          />
+        )}
         <Menu.Menu position="right">
-          {/*<Menu.Item>*/}
-          {/*<Input icon='search' placeholder='Search...' />*/}
-          {/*</Menu.Item>*/}
-          <Menu.Item
-            name="Login"
-            // active={activeItem === 'logout'}
-            // onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="Sign Up"
-            active={activeMenu === 'signup'}
-            onClick={handleSignupClick}
-          />
+          {/* <Menu.Item> */}
+          {/* <Input icon='search' placeholder='Search...' /> */}
+          {/* </Menu.Item> */}
+          {signedInUser ? (
+            <Menu.Item
+              name={signedInUser.username}
+              // active={activeMenu === 'signup'}
+              // onClick={handleSignupClick}
+            />
+          ) : (
+            <React.Fragment>
+              <Menu.Item
+                name="Login"
+                // active={activeItem === 'logout'}
+                // onClick={this.handleItemClick}
+              />
+              <Menu.Item
+                name="Sign Up"
+                active={activeMenu === 'signup'}
+                onClick={handleSignupClick}
+              />
+            </React.Fragment>
+          )}
         </Menu.Menu>
       </Menu>
-      {/*<NavBar>*/}
-      {/*<HeaderLink to='/'>*/}
-      {/*<FormattedMessage {...messages.home} />*/}
-      {/*</HeaderLink>*/}
-      {/*<HeaderLink to='/features'>*/}
-      {/*<FormattedMessage {...messages.features} />*/}
-      {/*</HeaderLink>*/}
-      {/*</NavBar>*/}
+      {/* <NavBar> */}
+      {/* <HeaderLink to='/'> */}
+      {/* <FormattedMessage {...messages.home} /> */}
+      {/* </HeaderLink> */}
+      {/* <HeaderLink to='/features'> */}
+      {/* <FormattedMessage {...messages.features} /> */}
+      {/* </HeaderLink> */}
+      {/* </NavBar> */}
     </div>
   )
 }
 
 Header.propTypes = {
-  selectedMenu: PropTypes.string,
+  // selectedMenu: PropTypes.string,
   intl: PropTypes.object,
+  signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
 export default injectIntl(Header)

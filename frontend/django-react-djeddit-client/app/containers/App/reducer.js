@@ -1,5 +1,5 @@
 /*
- * AppReducer
+ * AppReducer (global)
  *
  * The reducer takes care of our data. Using actions, we can
  * update our application state. To add a new action,
@@ -8,7 +8,14 @@
  */
 
 import produce from 'immer'
-import { LOAD_REPOS_SUCCESS, LOAD_REPOS, LOAD_REPOS_ERROR } from './constants'
+import {
+  LOAD_REPOS_SUCCESS,
+  LOAD_REPOS,
+  LOAD_REPOS_ERROR,
+  LOAD_SIGNED_IN_USER,
+  LOAD_SIGNED_IN_USER_SUCCESS,
+  LOAD_SIGNED_IN_USER_ERROR,
+} from './constants'
 
 // The initial state of the App
 export const initialState = {
@@ -18,6 +25,7 @@ export const initialState = {
   userData: {
     repositories: false,
   },
+  signedInUser: false,
 }
 
 /* eslint-disable default-case, no-param-reassign */
@@ -37,6 +45,23 @@ const appReducer = (state = initialState, action) =>
         break
 
       case LOAD_REPOS_ERROR:
+        draft.error = action.error
+        draft.loading = false
+        break
+
+      case LOAD_SIGNED_IN_USER:
+        draft.loading = true
+        draft.error = false
+        draft.signedInUser = false
+        break
+
+      case LOAD_SIGNED_IN_USER_SUCCESS:
+        draft.userData.repositories = action.repos
+        draft.loading = false
+        draft.signedInUser = action.signedInUser
+        break
+
+      case LOAD_SIGNED_IN_USER_ERROR:
         draft.error = action.error
         draft.loading = false
         break

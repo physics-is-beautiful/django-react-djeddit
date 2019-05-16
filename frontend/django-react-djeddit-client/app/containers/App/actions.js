@@ -15,7 +15,14 @@
  *    }
  */
 
-import { LOAD_REPOS, LOAD_REPOS_SUCCESS, LOAD_REPOS_ERROR } from './constants'
+import {
+  LOAD_REPOS,
+  LOAD_REPOS_SUCCESS,
+  LOAD_REPOS_ERROR,
+  LOAD_SIGNED_IN_USER,
+  LOAD_SIGNED_IN_USER_SUCCESS,
+  LOAD_SIGNED_IN_USER_ERROR,
+} from './constants'
 
 /**
  * Load the repositories, this action starts the request saga
@@ -54,6 +61,26 @@ export function reposLoaded(repos, username) {
 export function repoLoadingError(error) {
   return {
     type: LOAD_REPOS_ERROR,
+    error,
+  }
+}
+
+export function loadSignedInUser() {
+  return {
+    type: LOAD_SIGNED_IN_USER,
+  }
+}
+
+export function signedInUserLoaded(signedInUser) {
+  return {
+    type: LOAD_SIGNED_IN_USER_SUCCESS,
+    signedInUser,
+  }
+}
+
+export function signedInLoadingError(error) {
+  return {
+    type: LOAD_SIGNED_IN_USER_ERROR,
     error,
   }
 }

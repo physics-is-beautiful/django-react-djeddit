@@ -6,7 +6,7 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React from 'react'
+import React, { memo, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
@@ -18,7 +18,19 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import PropTypes from 'prop-types'
 import GlobalStyle from '../../global-styles'
+// import { useInjectReducer } from '../../utils/injectReducer'
+import { useInjectSaga } from '../../utils/injectSaga'
+import saga from './saga'
+// import { makeSelectError, makeSelectLoading, makeSelectRepos } from './selectors'
+import { makeSelectSignedInUser, makeSelectLoading } from './selectors'
+// import { makeSelectUsername } from '../HomePage/selectors'
+// import { changeUsername } from '../HomePage/actions'
+import { loadSignedInUser } from './actions'
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -29,7 +41,15 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `
 
-export default function App() {
+const key = 'app'
+
+function App({ signedInUser, loadSignedInUserAction, loading }) {
+  useInjectSaga({ key, saga })
+
+  useEffect(() => {
+    loadSignedInUserAction()
+  }, [])
+
   return (
     <AppWrapper>
       <Helmet
@@ -38,10 +58,10 @@ export default function App() {
       >
         <meta name="description" content="React djeddit client application" />
       </Helmet>
-      <Header />
+      <Header signedInUser={signedInUser} />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        {/*<Route path="/features" component={FeaturePage} />*/}
+        {/* <Route path="/features" component={FeaturePage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
@@ -50,3 +70,38 @@ export default function App() {
     </AppWrapper>
   )
 }
+
+App.propTypes = {
+  loading: PropTypes.bool,
+  signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  loadSignedInUserAction: PropTypes.func,
+}
+
+const mapStateToProps = createStructuredSelector({
+  // repos: makeSelectRepos(),
+  // username: makeSelectUsername(),
+  signedInUser: makeSelectSignedInUser(),
+  // loading: makeSelectLoading(),
+  // error: makeSelectError(),
+})
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    loadSignedInUserAction: () => dispatch(loadSignedInUser()),
+    // onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
+    // onSubmitForm: evt => {
+    //   if (evt !== undefined && evt.preventDefault) evt.preventDefault()
+    //   dispatch(loadRepos())
+    // },
+  }
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+export default compose(
+  withConnect,
+  memo,
+)(App)

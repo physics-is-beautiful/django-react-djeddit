@@ -16,6 +16,10 @@ export default defineMessages({
     id: `${scope}.topics`,
     defaultMessage: 'Topics',
   },
+  newTopic: {
+    id: `${scope}.topics`,
+    defaultMessage: 'New topic',
+  },
   // features: {
   //   id: `${scope}.features`,
   //   defaultMessage: 'Features',

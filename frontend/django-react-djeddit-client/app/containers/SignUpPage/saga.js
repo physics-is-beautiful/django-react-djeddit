@@ -5,8 +5,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 // import { LOAD_REPOS } from 'containers/App/constants'
 // import { reposLoaded, repoLoadingError } from 'containers/App/actions'
-//
-// import request from 'utils/request'
+
 import { Api } from './api'
 
 import { SIGN_UP } from './constants'
@@ -49,12 +48,11 @@ export function* signUp(action) {
   // const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`
 
   try {
-    const success = yield Api.signUpCall(action.formData)
-    if (success) {
-      yield call(() => {
-        window.location.href = '/'
-      })
-    }
+    // const success = yield Api.signUpCall(action.formData)
+    yield call(Api.signUpCall, action.formData)
+    yield call(() => {
+      window.location.href = '/'
+    })
     // yield put(signUpSuccess(userData))
   } catch (err) {
     // yield put(repoLoadingError(err))

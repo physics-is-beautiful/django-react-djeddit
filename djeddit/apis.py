@@ -39,6 +39,8 @@ class UserViewSet(ModelViewSet):
     @action(methods=['GET'],
             detail=False, )
     def me(self, request, *args, **kwargs):
+        if request.user.is_anonymous():
+            raise NotFound
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
