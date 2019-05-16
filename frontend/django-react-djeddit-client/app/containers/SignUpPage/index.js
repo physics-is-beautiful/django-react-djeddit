@@ -46,7 +46,7 @@ export function SignUpPage({
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
-  const formList = ['username', 'email', 'password', 'password2']
+  const formList = ['username', 'email', 'password1', 'password2']
   const formDict = formList.reduce((_obj, x) => {
     const obj = Object.assign({}, _obj)
     obj[x] = ''
@@ -136,7 +136,7 @@ export function SignUpPage({
                 label={intl.formatMessage(messages.password)}
                 value={formData.password}
                 type="password"
-                name="password"
+                name="password1"
                 onChange={handleChange}
               />
               <FormattedHTMLMessage {...messages.passwordDescription} />

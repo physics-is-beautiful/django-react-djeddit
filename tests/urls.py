@@ -10,6 +10,8 @@ from djeddit.urls_api import urlpatterns as djeddit_urls_api
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.views import serve
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from django.views.generic.base import RedirectView
 
 from djeddit.sitemaps import ThreadSitemap
@@ -23,6 +25,7 @@ sitemaps = {
 urlpatterns = [
     # url(r'^', include(djeddit_urls)),
     url(r'^api/v1/', include(djeddit_urls_api)),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     # it should served by nginx on production
     # url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
@@ -31,7 +34,7 @@ urlpatterns = [
     url(r'^$', serve, {
         'path': 'index.html',
     }),
-    url(r'^(?:signup|topics)$', serve, {
+    url(r'^(?:signup|topics)$', ensure_csrf_cookie(serve), {
         'path': 'index.html',
     }),
     url(r'^(?P<path>.*)$', serve,  {}),

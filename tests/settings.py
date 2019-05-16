@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'mptt',
     'meta',
+    'allauth',
+    'allauth.account',
     # project apps
     'djeddit',
 ]
@@ -85,3 +87,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend', 'django-react-djeddit-cli
 DJEDDIT_BASE_TEMPLATE = "djeddit/react_index.html"
 DJEDDIT_USE_INTERNAL_USER = True
 
+# email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = False

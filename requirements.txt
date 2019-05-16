@@ -5,3 +5,4 @@ awesome-slugify>=1.6.5
 django-ipware>=2.1.0
 django-meta>=1.4.1
 djangorestframework>=3.8.2
+django-allauth==0.39.1
