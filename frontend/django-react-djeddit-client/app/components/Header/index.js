@@ -40,6 +40,11 @@ const Header = ({ intl, signedInUser }) => {
     setActiveMenu('new-topic')
   }
 
+  const handleSigninClick = () => {
+    history.push('/signin')
+    setActiveMenu('signin')
+  }
+
   return (
     <div>
       <A href="/">
@@ -76,9 +81,9 @@ const Header = ({ intl, signedInUser }) => {
           ) : (
             <React.Fragment>
               <Menu.Item
-                name="Login"
-                // active={activeItem === 'logout'}
-                // onClick={this.handleItemClick}
+                name="Sign in"
+                active={activeMenu === 'signup'}
+                onClick={handleSigninClick}
               />
               <Menu.Item
                 name="Sign Up"

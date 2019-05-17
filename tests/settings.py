@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'meta',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     # project apps
     'djeddit',
 ]

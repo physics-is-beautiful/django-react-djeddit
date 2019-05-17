@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^$', serve, {
         'path': 'index.html',
     }),
-    url(r'^(?:signup|topics|new-topic)$', ensure_csrf_cookie(serve), {
+    url(r'^(?:signup|topics|new-topic|signin)$', ensure_csrf_cookie(serve), {
         'path': 'index.html',
     }),
     url(r'^(?P<path>.*)$', serve,  {}),
