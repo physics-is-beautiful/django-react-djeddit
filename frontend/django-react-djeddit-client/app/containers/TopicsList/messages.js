@@ -8,8 +8,8 @@ import { defineMessages } from 'react-intl'
 export const scope = 'boilerplate.containers.HomePage'
 
 export default defineMessages({
-  djedditReactWelcome: {
-    id: `${scope}.welcome.header`,
-    defaultMessage: 'Welcome to the djeddit-react!',
+  topicsList: {
+    id: `${scope}.topics`,
+    defaultMessage: 'Topics',
   },
 })

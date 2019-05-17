@@ -21,7 +21,7 @@ export function* getTopicsList() {
     // Call our request helper (see 'utils/request')
     // const repos = yield call(request, requestURL)
 
-    const topicsList = yield call(Api.signUpCall)
+    const topicsList = yield call(Api.getTopics)
 
     yield put(topicsListLoaded(topicsList, username))
   } catch (err) {

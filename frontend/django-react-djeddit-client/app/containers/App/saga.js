@@ -20,6 +20,7 @@ export function* getSignedInUser() {
     yield put(signedInUserLoaded(user))
   } catch (err) {
     yield put(signedInLoadingError(err))
+    yield put(signedInUserLoaded(undefined))
   }
 }
 

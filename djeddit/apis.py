@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions, mixins
@@ -26,6 +25,7 @@ class ThreadViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = ThreadSerializer
     queryset = Thread.objects.all()
+    pagination_class = StandardResultsSetPagination
     lookup_field = 'id'
 
 
@@ -33,6 +33,7 @@ class TopicsViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = TopicsSerializer
     queryset = Topic.objects.all()
+    pagination_class = StandardResultsSetPagination
     lookup_field = 'id'
 
 
@@ -41,6 +42,7 @@ class UserViewSet(ModelViewSet):
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
+    pagination_class = StandardResultsSetPagination
     lookup_field = 'id'
 
     @action(methods=['GET'],
@@ -59,6 +61,7 @@ class PostViewSet(mixins.CreateModelMixin,
     permission_classes = (permissions.IsAuthenticated, EditDeleteByOwnerOrStaff)
     serializer_class = PostSerializer
     queryset = Post.objects.select_related('created_by__profile').all()
+    pagination_class = StandardResultsSetPagination
     lookup_field = 'uid'
 
     def perform_create(self, serializer):

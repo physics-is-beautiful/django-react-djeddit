@@ -3,6 +3,7 @@
  */
 
 import React, { useEffect, memo, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
@@ -20,6 +21,7 @@ import { useInjectSaga } from 'utils/injectSaga'
 //   makeSelectError,
 // } from 'containers/App/selectors'
 import H2 from 'components/H2'
+import { makeSelectSignedInUser } from '../App/selectors'
 
 import CenteredSection from './CenteredSection'
 import Section from './Section'
@@ -37,8 +39,8 @@ export function NewTopicPage({
   // username,
   // loading,
   // error,
-  // repos,
-  //onSubmitForm,
+  signedInUser,
+  // onSubmitForm,
   newTopicActions,
   intl,
   // onChangeUsername,
@@ -46,8 +48,8 @@ export function NewTopicPage({
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
-  // const formList = ['title', 'description']
-  const formList = ['title']
+  const formList = ['title', 'description']
+  // const formList = ['title']
   const formDict = formList.reduce((_obj, x) => {
     const obj = Object.assign({}, _obj)
     obj[x] = ''
@@ -62,7 +64,7 @@ export function NewTopicPage({
   const validateForm = () => {
     const errors = {}
     formList.forEach(function(formKey) {
-      if (!formData[formKey]) {
+      if (formKey != 'description' && !formData[formKey]) {
         errors[formKey] = `${formKey} is required`
       }
     })
@@ -91,6 +93,17 @@ export function NewTopicPage({
   const handleSubmit = () => {
     // onSubmitForm(...formData)
     newTopicActions.newTopic(formData)
+  }
+
+  if (signedInUser === undefined) {
+    // user loading false / todo it is better to use signedInUserError value
+    return (
+      <Redirect
+        to={{
+          pathname: '/signin',
+        }}
+      />
+    )
   }
 
   /* TODO create this form based on OPTION API call */
@@ -147,6 +160,7 @@ NewTopicPage.propTypes = {
   newTopicActions: PropTypes.shape({
     newTopic: PropTypes.func.isRequired,
   }).isRequired,
+  signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   // loading: PropTypes.bool,
   // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   // repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
@@ -157,7 +171,7 @@ NewTopicPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   // repos: makeSelectRepos(),
-  // username: makeSelectUsername(),
+  signedInUser: makeSelectSignedInUser(),
   // user: makeSelectUser(),
   // formData: makeSelectFormData(),
   // loading: makeSelectLoading(),

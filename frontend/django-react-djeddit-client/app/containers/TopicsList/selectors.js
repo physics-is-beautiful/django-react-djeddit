@@ -1,16 +1,16 @@
 /**
- * Homepage selectors
+ * topics list selectors
  */
 
-import { createSelector } from 'reselect';
-import { initialState } from './reducer';
+import { createSelector } from 'reselect'
+import { initialState } from './reducer'
 
-const selectHome = state => state.home || initialState;
+const selectTopicsList = state => state.topicsList || initialState
 
-const makeSelectUsername = () =>
+const makeSelectTopicsList = () =>
   createSelector(
-    selectHome,
-    homeState => homeState.username,
-  );
+    selectTopicsList,
+    homeState => homeState.topicsList,
+  )
 
-export { selectHome, makeSelectUsername };
+export { selectTopicsList, makeSelectTopicsList }

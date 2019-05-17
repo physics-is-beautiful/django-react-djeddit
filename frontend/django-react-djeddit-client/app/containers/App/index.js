@@ -17,6 +17,7 @@ import SignUpPage from 'containers/SignUpPage/Loadable'
 import SignInPage from 'containers/SignInPage/Loadable'
 import NewTopicPage from 'containers/NewTopicPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
+import TopicsList from 'containers/TopicsList/Loadable'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
@@ -25,7 +26,6 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import PropTypes from 'prop-types'
 import GlobalStyle from '../../global-styles'
-// import { useInjectReducer } from '../../utils/injectReducer'
 import { useInjectSaga } from '../../utils/injectSaga'
 import saga from './saga'
 // import { makeSelectError, makeSelectLoading, makeSelectRepos } from './selectors'
@@ -66,15 +66,8 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
         {/* <Route path="/features" component={FeaturePage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="/signin" component={SignInPage} />
-        {signedInUser ? (
-          <Route path="/new-topic" component={NewTopicPage} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/signin',
-            }}
-          />
-        )}
+        <Route path="/topics" component={TopicsList} />
+        <Route path="/new-topic" component={NewTopicPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <Footer />

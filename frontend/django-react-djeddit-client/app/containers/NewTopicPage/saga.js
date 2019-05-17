@@ -19,8 +19,8 @@ export function* newTopic(action) {
     // const success = yield Api.newTopicCall(action.formData)
     yield call(Api.newTopicCall, action.formData)
     yield call(() => {
-      // refresh topics list
       // move to topics list
+      window.location.href = '/topics'
     })
     // yield put(newTopicSuccess(userData))
   } catch (err) {
