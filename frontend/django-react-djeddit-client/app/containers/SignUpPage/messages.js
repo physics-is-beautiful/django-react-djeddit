@@ -36,7 +36,7 @@ export default defineMessages({
   },
   passwordConfirmation: {
     id: `${scope}.password.confirmation`,
-    defaultMessage: 'Password confirmation*',
+    defaultMessage: 'Password confirmation',
   },
   passwordConfirmationDescription: {
     id: `${scope}.password.confirmation.description`,

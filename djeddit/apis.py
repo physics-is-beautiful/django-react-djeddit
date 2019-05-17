@@ -9,8 +9,8 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 
 from .permissions import EditDeleteByOwnerOrStaff
-from .models import Thread, Post
-from .serializers import ThreadSerializer, PostSerializer, UserSerializer
+from .models import Thread, Post, Topic
+from .serializers import ThreadSerializer, PostSerializer, UserSerializer, TopicsSerializer
 
 try:
     from notifications.signals import notify
@@ -26,6 +26,13 @@ class ThreadViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = ThreadSerializer
     queryset = Thread.objects.all()
+    lookup_field = 'id'
+
+
+class TopicsViewSet(ModelViewSet):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = TopicsSerializer
+    queryset = Topic.objects.all()
     lookup_field = 'id'
 
 

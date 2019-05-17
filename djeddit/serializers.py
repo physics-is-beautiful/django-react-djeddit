@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import Thread, Post
+from .models import Thread, Post, Topic
 
 # import markdown_deux
 
@@ -33,6 +33,13 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         fields = ['title', 'slug', 'views', 'posts_in_tree_order']
+
+
+class TopicsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Topic
+        fields = ['title', 'slug', 'description']
 
 
 class UserSerializer(serializers.ModelSerializer):

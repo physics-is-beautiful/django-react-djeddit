@@ -1,5 +1,5 @@
 /*
- * SignUpPage
+ * NewTopicPage
  */
 
 import React, { useEffect, memo, useState } from 'react'
@@ -10,7 +10,7 @@ import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -25,28 +25,29 @@ import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
 // import { loadRepos } from '../App/actions'
-// import { signUp } from './actions'
-import * as signupCreators from './actions'
-import { makeSelectUser } from './selectors'
+// import { newTopic } from './actions'
+import * as newtopicCreators from './actions'
+// import { makeSelectUser } from './selectors'
 import reducer from './reducer'
 import saga from './saga'
 
-const key = 'signup'
+const key = 'newtopic'
 
-export function SignUpPage({
+export function NewTopicPage({
   // username,
   // loading,
   // error,
   // repos,
   //onSubmitForm,
-  signUpActions,
+  newTopicActions,
   intl,
   // onChangeUsername,
 }) {
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
-  const formList = ['username', 'email', 'password1', 'password2']
+  // const formList = ['title', 'description']
+  const formList = ['title']
   const formDict = formList.reduce((_obj, x) => {
     const obj = Object.assign({}, _obj)
     obj[x] = ''
@@ -66,9 +67,6 @@ export function SignUpPage({
       }
     })
 
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Email address is invalid'
-    }
     return errors
   }
 
@@ -92,7 +90,7 @@ export function SignUpPage({
 
   const handleSubmit = () => {
     // onSubmitForm(...formData)
-    signUpActions.signUp(formData)
+    newTopicActions.newTopic(formData)
   }
 
   /* TODO create this form based on OPTION API call */
@@ -101,67 +99,39 @@ export function SignUpPage({
   return (
     <article>
       <Helmet>
-        <title>Sign Up</title>
-        <meta name="description" content="Djeddit react signup page" />
+        <title>New topic</title>
+        <meta name="description" content="Djeddit react newtopic page" />
       </Helmet>
       <div>
         <CenteredSection>
           <H2>
-            {/* <FormattedMessage {...messages.startProjectHeader} /> */}
-            <FormattedMessage {...messages.signupHeader} />
+            <FormattedMessage {...messages.newTopicHeader} />
           </H2>
-          <p>{/* <FormattedMessage {...messages.startProjectMessage} /> */}</p>
         </CenteredSection>
         <Section>
           <Form onSubmit={handleSubmit}>
             <Form.Field required>
               <label>
-                <FormattedHTMLMessage {...messages.username} />
+                <FormattedHTMLMessage {...messages.title} />
               </label>
               <Form.Input
-                // label={intl.formatMessage(messages.username)}
-                value={formData.username}
+                // label={intl.formatMessage(messages.title)}
+                value={formData.title}
                 onChange={handleChange}
-                name="username"
-              />
-              <FormattedMessage {...messages.usernameDescription} />
-            </Form.Field>
-            <Form.Field required>
-              <label>
-                <FormattedHTMLMessage {...messages.email} />
-              </label>
-              <Form.Input
-                // label={intl.formatMessage(messages.email)}
-                value={formData.email}
-                onChange={handleChange}
-                name="email"
+                name="title"
               />
             </Form.Field>
-            <Form.Field required>
+            <Form.Field>
               <label>
-                <FormattedHTMLMessage {...messages.password} />
+                <FormattedHTMLMessage {...messages.description} />
               </label>
               <Form.Input
-                // label={intl.formatMessage(messages.password)}
-                value={formData.password}
-                type="password"
-                name="password1"
+                // label={intl.formatMessage(messages.description)}
+                value={formData.description}
+                type="textarea"
+                name="description"
                 onChange={handleChange}
               />
-              <FormattedHTMLMessage {...messages.passwordDescription} />
-            </Form.Field>
-            <Form.Field required>
-              <label>
-                <FormattedHTMLMessage {...messages.passwordConfirmation} />
-              </label>
-              <Form.Input
-                // label={intl.formatMessage(messages.passwordConfirmation)}
-                type="password"
-                name="password2"
-                value={formData.password2}
-                onChange={handleChange}
-              />
-              <FormattedMessage {...messages.passwordConfirmationDescription} />
             </Form.Field>
             <Button type="submit" disabled={submitDisabled}>
               <FormattedMessage {...messages.submitButton} />
@@ -173,9 +143,9 @@ export function SignUpPage({
   )
 }
 
-SignUpPage.propTypes = {
-  signUpActions: PropTypes.shape({
-    signUp: PropTypes.func.isRequired,
+NewTopicPage.propTypes = {
+  newTopicActions: PropTypes.shape({
+    newTopic: PropTypes.func.isRequired,
   }).isRequired,
   // loading: PropTypes.bool,
   // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
@@ -197,11 +167,11 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     // onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    signUpActions: bindActionCreators(signupCreators, dispatch),
+    newTopicActions: bindActionCreators(newtopicCreators, dispatch),
     // onSubmitForm: evt => {
     //   if (evt !== undefined && evt.preventDefault) evt.preventDefault()
     //   // dispatch(loadRepos())
-    //   dispatch(signUp())
+    //   dispatch(newTopic())
     // },
   }
 }
@@ -214,4 +184,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(injectIntl(SignUpPage))
+)(injectIntl(NewTopicPage))

@@ -102,7 +102,7 @@ export function SignInPage({
   return (
     <article>
       <Helmet>
-        <title>Sign Up</title>
+        <title>Sign In</title>
         <meta name="description" content="Djeddit react signin page" />
       </Helmet>
       <div>

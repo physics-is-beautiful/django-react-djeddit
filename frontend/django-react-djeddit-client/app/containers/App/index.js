@@ -9,12 +9,13 @@
 import React, { memo, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import HomePage from 'containers/HomePage/Loadable'
 // import FeaturePage from 'containers/FeaturePage/Loadable'
 import SignUpPage from 'containers/SignUpPage/Loadable'
 import SignInPage from 'containers/SignInPage/Loadable'
+import NewTopicPage from 'containers/NewTopicPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
@@ -65,6 +66,15 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
         {/* <Route path="/features" component={FeaturePage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="/signin" component={SignInPage} />
+        {signedInUser ? (
+          <Route path="/new-topic" component={NewTopicPage} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/signin',
+            }}
+          />
+        )}
         <Route path="" component={NotFoundPage} />
       </Switch>
       <Footer />
