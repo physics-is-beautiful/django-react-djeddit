@@ -9,7 +9,7 @@
 import React, { memo, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 import HomePage from 'containers/HomePage/Loadable'
 // import FeaturePage from 'containers/FeaturePage/Loadable'
@@ -18,6 +18,7 @@ import SignInPage from 'containers/SignInPage/Loadable'
 import NewTopicPage from 'containers/NewTopicPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import TopicsList from 'containers/TopicsList/Loadable'
+import ThreadsList from 'containers/ThreadsList/Loadable'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
@@ -66,7 +67,11 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
         {/* <Route path="/features" component={FeaturePage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="/signin" component={SignInPage} />
-        <Route path="/topics" component={TopicsList} />
+        <Route exact path="/topics" component={TopicsList} />
+        <Route
+          path="/topics/:topic_title([A-Za-z0-9_\-\.]+)"
+          component={ThreadsList}
+        />
         <Route path="/new-topic" component={NewTopicPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>

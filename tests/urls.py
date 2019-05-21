@@ -34,8 +34,12 @@ urlpatterns = [
     url(r'^$', serve, {
         'path': 'index.html',
     }),
-    url(r'^(?:signup|topics|new-topic|signin)$', ensure_csrf_cookie(serve), {
-        'path': 'index.html',
-    }),
+    # url(r'^(?:signup|topics|new-topic|signin)$', ensure_csrf_cookie(serve), {
+    #     'path': 'index.html',
+    # }),
+    # exclude url with dot (files extension)
+    url(r'^[^.]*$', ensure_csrf_cookie(serve), {
+         'path': 'index.html',
+     }),
     url(r'^(?P<path>.*)$', serve,  {}),
 ]
