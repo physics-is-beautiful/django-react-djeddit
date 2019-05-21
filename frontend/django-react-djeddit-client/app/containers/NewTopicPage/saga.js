@@ -9,6 +9,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { Api } from './api'
 
 import { NEW_TOPIC } from './constants'
+import history from '../../utils/history'
 
 export function* newTopic(action) {
   // Select username from store
@@ -20,7 +21,8 @@ export function* newTopic(action) {
     yield call(Api.newTopicCall, action.formData)
     yield call(() => {
       // move to topics list
-      window.location.href = '/topics'
+      // window.location.href = '/topics'
+      history.push('/topics')
     })
     // yield put(newTopicSuccess(userData))
   } catch (err) {

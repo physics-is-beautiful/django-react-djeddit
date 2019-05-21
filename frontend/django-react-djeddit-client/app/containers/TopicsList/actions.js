@@ -26,9 +26,10 @@ import {
  *
  * @return {object} An action object with a type of LOAD_TOPICS
  */
-export function loadTopics() {
+export function loadTopics(nextHref) {
   return {
     type: LOAD_TOPICS,
+    nextHref,
   }
 }
 
@@ -36,15 +37,13 @@ export function loadTopics() {
  * Dispatched when the topics List are loaded by the request saga
  *
  * @param  {array} topicsList The topics List data
- * @param  {string} username The current username
  *
  * @return {object}      An action object with a type of LOAD_TOPICS_SUCCESS passing the topicsList
  */
-export function topicsListLoaded(topicsList, username) {
+export function topicsListLoaded(topicsList) {
   return {
     type: LOAD_TOPICS_SUCCESS,
     topicsList,
-    username,
   }
 }
 

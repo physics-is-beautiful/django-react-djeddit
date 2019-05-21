@@ -1,5 +1,5 @@
 /*
- * HomeReducer
+ * TopicListReducer
  *
  * The reducer takes care of our data. Using actions, we can
  * update our application state. To add a new action,

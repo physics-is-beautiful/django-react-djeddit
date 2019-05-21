@@ -10,5 +10,6 @@
  */
 
 export const LOAD_TOPICS = 'djeddit/TopicsList/LOAD_TOPICS'
+export const CLEAR_TOPICS = 'djeddit/TopicsList/CLEAR_TOPICS'
 export const LOAD_TOPICS_SUCCESS = 'djeddit/TopicsList/LOAD_TOPICS_SUCCESS'
 export const LOAD_TOPICS_ERROR = 'djeddit/TopicsList/LOAD_TOPICS_ERROR'

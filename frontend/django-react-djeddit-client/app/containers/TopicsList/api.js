@@ -2,8 +2,15 @@ import { API_PREFIX } from 'utils/constants'
 
 import request from 'utils/request'
 
-function getTopics() {
-  return request(`${API_PREFIX}topics/`, {
+function getTopics(nextHref) {
+  let url
+  if (nextHref) {
+    url = nextHref
+  } else {
+    url = `${API_PREFIX}topics/`
+  }
+
+  return request(url, {
     method: 'GET',
     headers: {
       Accept: 'application/json',

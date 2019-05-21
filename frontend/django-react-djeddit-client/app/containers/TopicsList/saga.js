@@ -1,33 +1,28 @@
-/**
- * Gets the repositories of the user from Github
- */
-
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { makeSelectUsername } from 'containers/HomePage/selectors'
+// import { makeSelectUsername } from 'containers/HomePage/selectors'
 import { LOAD_TOPICS } from './constants'
 import { topicsListLoaded, topicsListLoadingError } from './actions'
 
 import { Api } from './api'
 
-/**
- * Github repos request/response handler
- */
-export function* getTopicsList() {
-  // Select username from store
-  const username = yield select(makeSelectUsername())
-  // const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`
+export function* getTopicsList(sagaArgs) {
+  const { nextHref } = sagaArgs
+
+  // const username = yield select(makeSelectUsername())
 
   try {
     // Call our request helper (see 'utils/request')
     // const repos = yield call(request, requestURL)
 
-    const topicsList = yield call(Api.getTopics)
+    const topicsList = yield call(Api.getTopics, nextHref)
 
-    yield put(topicsListLoaded(topicsList, username))
+    yield put(topicsListLoaded(topicsList))
   } catch (err) {
     yield put(topicsListLoadingError(err))
   }
 }
+
+// export function* clearTopicsList() {}
 
 /**
  * Root saga manages watcher lifecycle

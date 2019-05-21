@@ -10,7 +10,7 @@ const selectTopicsList = state => state.topicsList || initialState
 const makeSelectTopicsList = () =>
   createSelector(
     selectTopicsList,
-    homeState => homeState.topicsList,
+    topicListState => topicListState.topicsList,
   )
 
 export { selectTopicsList, makeSelectTopicsList }
