@@ -40,6 +40,11 @@ const Header = ({ intl, signedInUser }) => {
     setActiveMenu('new-topic')
   }
 
+  const handleNewThreadClick = () => {
+    history.push('/new-thread')
+    setActiveMenu('new-thread')
+  }
+
   const handleSigninClick = () => {
     history.push('/signin')
     setActiveMenu('signin')
@@ -62,11 +67,18 @@ const Header = ({ intl, signedInUser }) => {
           onClick={handleTopicsClick}
         />
         {signedInUser && (
-          <Menu.Item
-            name={intl.formatMessage(messages.newTopic)}
-            active={activeMenu === 'new-topic'}
-            onClick={handleNewTopicClick}
-          />
+          <React.Fragment>
+            <Menu.Item
+              name={intl.formatMessage(messages.newTopic)}
+              active={activeMenu === 'new-topic'}
+              onClick={handleNewTopicClick}
+            />
+            <Menu.Item
+              name={intl.formatMessage(messages.newThread)}
+              active={activeMenu === 'new-thread'}
+              onClick={handleNewThreadClick}
+            />
+          </React.Fragment>
         )}
         <Menu.Menu position="right">
           {/* <Menu.Item> */}

@@ -4,7 +4,7 @@ import { API_PREFIX } from 'utils/constants'
 
 import Cookies from 'js-cookie'
 
-function newTHREADCall(data) {
+function newThreadCall(data) {
   const csrftoken = Cookies.get('csrftoken')
 
   // const formData = new FormData()
@@ -14,7 +14,7 @@ function newTHREADCall(data) {
   //   .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
   //   .join('&')
 
-  return request(`${API_PREFIX}THREADs/`, {
+  return request(`${API_PREFIX}threads/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -29,4 +29,4 @@ function newTHREADCall(data) {
   })
 }
 
-export const Api = { newTHREADCall }
+export const Api = { newThreadCall }

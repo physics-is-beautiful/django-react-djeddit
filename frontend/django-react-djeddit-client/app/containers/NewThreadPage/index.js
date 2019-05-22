@@ -1,5 +1,5 @@
 /*
- * NewTHREADPage
+ * NewThreadPage
  */
 
 import React, { useEffect, memo, useState } from 'react'
@@ -27,29 +27,28 @@ import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
 // import { loadRepos } from '../App/actions'
-// import { newTHREAD } from './actions'
-import * as newTHREADCreators from './actions'
+// import { newThread } from './actions'
+import * as newThreadCreators from './actions'
 // import { makeSelectUser } from './selectors'
 import reducer from './reducer'
 import saga from './saga'
 
-const key = 'newTHREAD'
+const key = 'newThread'
 
-export function NewTHREADPage({
+export function NewThreadPage({
   // username,
   // loading,
   // error,
   signedInUser,
   // onSubmitForm,
-  newTHREADActions,
+  newThreadActions,
   intl,
   // onChangeUsername,
 }) {
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
-  const formList = ['title', 'description']
-  // const formList = ['title']
+  const formList = ['title', 'content']
   const formDict = formList.reduce((_obj, x) => {
     const obj = Object.assign({}, _obj)
     obj[x] = ''
@@ -64,7 +63,7 @@ export function NewTHREADPage({
   const validateForm = () => {
     const errors = {}
     formList.forEach(function(formKey) {
-      if (formKey != 'description' && !formData[formKey]) {
+      if (!formData[formKey]) {
         errors[formKey] = `${formKey} is required`
       }
     })
@@ -92,7 +91,7 @@ export function NewTHREADPage({
 
   const handleSubmit = () => {
     // onSubmitForm(...formData)
-    newTHREADActions.newTHREAD(formData)
+    newThreadActions.newThread(formData)
   }
 
   if (signedInUser === undefined) {
@@ -112,13 +111,13 @@ export function NewTHREADPage({
   return (
     <article>
       <Helmet>
-        <title>New THREAD</title>
-        <meta name="description" content="Djeddit react newTHREAD page" />
+        <title>New Thread</title>
+        <meta name="description" content="Djeddit react newThread page" />
       </Helmet>
       <div>
         <CenteredSection>
           <H2>
-            <FormattedMessage {...messages.newTHREADHeader} />
+            <FormattedMessage {...messages.newThreadHeader} />
           </H2>
         </CenteredSection>
         <Section>
@@ -134,9 +133,9 @@ export function NewTHREADPage({
                 name="title"
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field required>
               <label>
-                <FormattedHTMLMessage {...messages.description} />
+                <FormattedHTMLMessage {...messages.content} />
               </label>
               <Form.Input
                 // label={intl.formatMessage(messages.description)}
@@ -156,9 +155,9 @@ export function NewTHREADPage({
   )
 }
 
-NewTHREADPage.propTypes = {
-  newTHREADActions: PropTypes.shape({
-    newTHREAD: PropTypes.func.isRequired,
+NewThreadPage.propTypes = {
+  newThreadActions: PropTypes.shape({
+    newThread: PropTypes.func.isRequired,
   }).isRequired,
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   // loading: PropTypes.bool,
@@ -181,11 +180,11 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     // onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    newTHREADActions: bindActionCreators(newTHREADCreators, dispatch),
+    newThreadActions: bindActionCreators(newThreadCreators, dispatch),
     // onSubmitForm: evt => {
     //   if (evt !== undefined && evt.preventDefault) evt.preventDefault()
     //   // dispatch(loadRepos())
-    //   dispatch(newTHREAD())
+    //   dispatch(newThread())
     // },
   }
 }
@@ -198,4 +197,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(injectIntl(NewTHREADPage))
+)(injectIntl(NewThreadPage))

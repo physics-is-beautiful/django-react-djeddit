@@ -8,17 +8,17 @@ import { defineMessages } from 'react-intl'
 export const scope = 'boilerplate.containers.HomePage'
 
 export default defineMessages({
-  newTHREADHeader: {
-    id: `${scope}.newTHREAD.header`,
-    defaultMessage: 'Create new THREAD',
+  newThreadHeader: {
+    id: `${scope}.newThread.header`,
+    defaultMessage: 'Create new Thread',
   },
   title: {
     id: `${scope}.title`,
     defaultMessage: 'Title',
   },
-  description: {
-    id: `${scope}.description`,
-    defaultMessage: 'Description',
+  content: {
+    id: `${scope}.content`,
+    defaultMessage: 'Content',
   },
   submitButton: {
     id: `${scope}.submitButton`,

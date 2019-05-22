@@ -11,20 +11,20 @@ import { Api } from './api'
 import { NEW_THREAD } from './constants'
 import history from '../../utils/history'
 
-export function* newTHREAD(action) {
+export function* newThread(action) {
   // Select username from store
   // const formData = yield select(makeSelectFormData())
   // const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`
 
   try {
-    // const success = yield Api.newTHREADCall(action.formData)
-    yield call(Api.newTHREADCall, action.formData)
+    // const success = yield Api.newThreadCall(action.formData)
+    yield call(Api.newThreadCall, action.formData)
     yield call(() => {
-      // move to THREADs list
-      // window.location.href = '/THREADs'
-      history.push('/THREADs')
+      // move to Threads list
+      // window.location.href = '/Threads'
+      history.push('/Threads')
     })
-    // yield put(newTHREADSuccess(userData))
+    // yield put(newThreadSuccess(userData))
   } catch (err) {
     // yield put(repoLoadingError(err))
     yield call(() => {
@@ -36,10 +36,10 @@ export function* newTHREAD(action) {
 /**
  * Root saga manages watcher lifecycle
  */
-export default function* newTHREADData() {
-  // Watches for NEW_THREAD actions and calls getRepos when one comes in.
+export default function* newThreadData() {
+  // Watches for NEW_Thread actions and calls getRepos when one comes in.
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
   // It will be cancelled automatically on component unmount
-  yield takeLatest(NEW_THREAD, newTHREAD)
+  yield takeLatest(NEW_THREAD, newThread)
 }

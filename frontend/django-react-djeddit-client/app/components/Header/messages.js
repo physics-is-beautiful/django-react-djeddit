@@ -17,8 +17,12 @@ export default defineMessages({
     defaultMessage: 'Topics',
   },
   newTopic: {
-    id: `${scope}.topics`,
+    id: `${scope}.new-topics`,
     defaultMessage: 'New topic',
+  },
+  newThread: {
+    id: `${scope}.new thread`,
+    defaultMessage: 'New thread',
   },
   // features: {
   //   id: `${scope}.features`,

@@ -110,12 +110,6 @@ export function ThreadsList({
           </H2>
         </CenteredSection>
         <Section>
-          {/* <List selection celled> */}
-          {/* {threadsList && */}
-          {/* threadsList.results.map(item => ( */}
-          {/* <ThreadListItem key={item.slug} item={item} /> */}
-          {/* ))} */}
-          {/* </List> */}
           <InfiniteScroll
             pageStart={0}
             loadMore={loadNextPage}
@@ -125,6 +119,9 @@ export function ThreadsList({
             <List selection celled>
               {items}
             </List>
+            {threadsList && threadsList.count === 0 && (
+              <h4>There are no threads to show</h4>
+            )}
           </InfiniteScroll>
         </Section>
       </div>

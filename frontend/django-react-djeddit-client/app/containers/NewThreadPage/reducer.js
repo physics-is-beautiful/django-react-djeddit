@@ -16,7 +16,7 @@ export const initialState = {
 }
 
 /* eslint-disable default-case, no-param-reassign */
-const newTHREADReducer = (state = initialState, action) =>
+const newThreadReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case NEW_THREAD:
@@ -24,9 +24,9 @@ const newTHREADReducer = (state = initialState, action) =>
         break
       case NEW_THREAD_SUCCESS:
         draft.loading = false
-        draft.user = action.user
+        draft.thread = action.thread
         break
     }
   })
 
-export default newTHREADReducer
+export default newThreadReducer

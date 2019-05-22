@@ -16,6 +16,7 @@ import HomePage from 'containers/HomePage/Loadable'
 import SignUpPage from 'containers/SignUpPage/Loadable'
 import SignInPage from 'containers/SignInPage/Loadable'
 import NewTopicPage from 'containers/NewTopicPage/Loadable'
+import NewThreadPage from 'containers/NewThreadPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import TopicsList from 'containers/Topics/Loadable'
 import ThreadsList from 'containers/Threads/Loadable'
@@ -73,6 +74,7 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
           component={ThreadsList}
         />
         <Route path="/new-topic" component={NewTopicPage} />
+        <Route path="/new-thread" component={NewThreadPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <Footer />
