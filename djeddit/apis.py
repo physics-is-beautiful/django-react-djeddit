@@ -7,6 +7,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 
+from django_filters import rest_framework as filters
+
 from .permissions import EditDeleteByOwnerOrStaff
 from .models import Thread, Post, Topic
 from .serializers import ThreadSerializer, PostSerializer, UserSerializer, TopicsSerializer
@@ -27,6 +29,8 @@ class ThreadViewSet(ModelViewSet):
     queryset = Thread.objects.all()
     pagination_class = StandardResultsSetPagination
     lookup_field = 'id'
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('topic__slug',)
 
 
 class TopicsViewSet(ModelViewSet):
@@ -34,7 +38,7 @@ class TopicsViewSet(ModelViewSet):
     serializer_class = TopicsSerializer
     queryset = Topic.objects.all()
     pagination_class = StandardResultsSetPagination
-    lookup_field = 'id'
+    lookup_field = 'slug'
 
 
 class UserViewSet(ModelViewSet):

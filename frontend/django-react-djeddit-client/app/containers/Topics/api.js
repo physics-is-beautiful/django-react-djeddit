@@ -20,4 +20,17 @@ function getTopics(nextHref) {
   })
 }
 
-export const Api = { getTopics }
+function getTopic(slug) {
+  const url = `${API_PREFIX}topics/${slug}/`
+
+  return request(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  })
+}
+
+export const Api = { getTopics, getTopic }

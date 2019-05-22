@@ -17,8 +17,8 @@ import SignUpPage from 'containers/SignUpPage/Loadable'
 import SignInPage from 'containers/SignInPage/Loadable'
 import NewTopicPage from 'containers/NewTopicPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
-import TopicsList from 'containers/TopicsList/Loadable'
-import ThreadsList from 'containers/ThreadsList/Loadable'
+import TopicsList from 'containers/Topics/Loadable'
+import ThreadsList from 'containers/Threads/Loadable'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
@@ -69,7 +69,7 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
         <Route path="/signin" component={SignInPage} />
         <Route exact path="/topics" component={TopicsList} />
         <Route
-          path="/topics/:topic_title([A-Za-z0-9_\-\.]+)"
+          path="/topics/:topic_slug([A-Za-z0-9_\-\.]+)"
           component={ThreadsList}
         />
         <Route path="/new-topic" component={NewTopicPage} />

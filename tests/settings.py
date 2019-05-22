@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # project apps
     'djeddit',
+    'django_filters'
 ]
 
 MIDDLEWARE_CLASSES = [

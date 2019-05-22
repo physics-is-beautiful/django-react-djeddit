@@ -26,9 +26,10 @@ import {
  *
  * @return {object} An action object with a type of LOAD_THREADS
  */
-export function loadThreads(nextHref) {
+export function loadThreads(topicSlug, nextHref) {
   return {
     type: LOAD_THREADS,
+    topicSlug,
     nextHref,
   }
 }

@@ -25,32 +25,52 @@ import {
   // makeSelectError,
 } from './selectors'
 
+import {
+  makeSelectTopic,
+  // makeSelectLoading,
+  // makeSelectError,
+} from '../Topics/selectors'
+
 import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
-import * as loadThreadsActionsCreator from './actions'
+import * as threadsActionsCreator from './actions'
+import * as topicsActionsCreator from '../Topics/actions'
 
 import reducer from './reducer'
 import saga from './saga'
 
-const key = 'threadsList'
+import topicsReducer from '../Topics/reducer'
+import topicsSaga from '../Topics/saga'
 
-export function ThreadsList({ threadListActions, match, threadsList }) {
-  useInjectReducer({ key, reducer })
-  useInjectSaga({ key, saga })
+const threadsKey = 'threads'
+const topicsKey = 'topics'
+
+export function ThreadsList({
+  threadsActions,
+  topicsActions,
+  match,
+  threadsList,
+  topic,
+}) {
+  useInjectReducer({ key: threadsKey, reducer })
+  useInjectSaga({ key: threadsKey, saga })
+
+  useInjectReducer({ key: topicsKey, reducer: topicsReducer })
+  useInjectSaga({ key: topicsKey, saga: topicsSaga })
 
   const [threads, setThreads] = useState([])
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
   useEffect(() => {
-    console.log(match);
+    topicsActions.loadTopic(match.params.topic_slug)
     // load threads from server
-    threadListActions.loadThreads()
+    threadsActions.loadThreads(match.params.topic_slug)
 
     return () => {
       // clear threads list while unmount
-      threadListActions.threadsListLoaded(false)
+      threadsActions.threadsListLoaded(false)
     }
   }, [])
 
@@ -58,7 +78,7 @@ export function ThreadsList({ threadListActions, match, threadsList }) {
     if (hasMoreItems) {
       // if we call next page setHasMore item false and waiting for a server response
       setHasMoreItems(Boolean(false))
-      threadListActions.loadThreads(nextHref)
+      threadsActions.loadThreads(nextHref)
     }
   }
 
@@ -85,7 +105,8 @@ export function ThreadsList({ threadListActions, match, threadsList }) {
       <div>
         <CenteredSection>
           <H2>
-            <FormattedMessage {...messages.threadsList} />
+            {topic && topic.title}
+            {/* <FormattedMessage {...messages.threadsList} /> */}
           </H2>
         </CenteredSection>
         <Section>
@@ -112,16 +133,21 @@ export function ThreadsList({ threadListActions, match, threadsList }) {
 }
 
 ThreadsList.propTypes = {
-  threadListActions: PropTypes.shape({
+  threadsActions: PropTypes.shape({
     loadThreads: PropTypes.func.isRequired,
     threadsListLoaded: PropTypes.func.isRequired,
   }).isRequired,
+  topicsActions: PropTypes.shape({
+    loadTopic: PropTypes.func.isRequired,
+  }).isRequired,
   match: PropTypes.object,
   threadsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
 const mapStateToProps = createStructuredSelector({
   threadsList: makeSelectThreadsList(),
+  topic: makeSelectTopic(),
   // username: makeSelectUsername(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
@@ -129,7 +155,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    threadListActions: bindActionCreators(loadThreadsActionsCreator, dispatch),
+    threadsActions: bindActionCreators(threadsActionsCreator, dispatch),
+    topicsActions: bindActionCreators(topicsActionsCreator, dispatch),
   }
 }
 

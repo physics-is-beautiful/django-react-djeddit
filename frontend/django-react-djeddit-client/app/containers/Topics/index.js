@@ -32,8 +32,9 @@ import * as loadTopicsActionsCreator from './actions'
 
 import reducer from './reducer'
 import saga from './saga'
+import history from '../../utils/history'
 
-const key = 'topicsList'
+const key = 'topics'
 
 export function TopicsList({ topicListActions, topicsList }) {
   useInjectReducer({ key, reducer })
@@ -61,6 +62,10 @@ export function TopicsList({ topicListActions, topicsList }) {
     }
   }
 
+  const onTopicClick = (e, slug) => {
+    history.push(`/topics/${slug}`)
+  }
+
   useEffect(() => {
     if (topicsList) {
       setTopics([...topics, ...topicsList.results])
@@ -72,7 +77,15 @@ export function TopicsList({ topicListActions, topicsList }) {
   let items = []
 
   if (topics) {
-    items = topics.map(item => <TopicListItem key={item.slug} item={item} />)
+    items = topics.map(item => (
+      <TopicListItem
+        onClick={e => {
+          onTopicClick(e, item.slug)
+        }}
+        key={item.slug}
+        item={item}
+      />
+    ))
   }
 
   return (
@@ -113,7 +126,7 @@ export function TopicsList({ topicListActions, topicsList }) {
 TopicsList.propTypes = {
   topicListActions: PropTypes.shape({
     loadTopics: PropTypes.func.isRequired,
-    topicsListLoaded: PropTypes.func.isRequired
+    topicsListLoaded: PropTypes.func.isRequired,
   }).isRequired,
   topicsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }

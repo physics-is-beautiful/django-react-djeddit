@@ -19,6 +19,9 @@ import {
   LOAD_TOPICS,
   LOAD_TOPICS_SUCCESS,
   LOAD_TOPICS_ERROR,
+  LOAD_TOPIC,
+  LOAD_TOPIC_SUCCESS,
+  LOAD_TOPIC_ERROR,
 } from './constants'
 
 /**
@@ -57,6 +60,27 @@ export function topicsListLoaded(topicsList) {
 export function topicsListLoadingError(error) {
   return {
     type: LOAD_TOPICS_ERROR,
+    error,
+  }
+}
+
+export function loadTopic(slug) {
+  return {
+    type: LOAD_TOPIC,
+    slug,
+  }
+}
+
+export function topicLoaded(topic) {
+  return {
+    type: LOAD_TOPIC_SUCCESS,
+    topic,
+  }
+}
+
+export function topicLoadingError(error) {
+  return {
+    type: LOAD_TOPIC_ERROR,
     error,
   }
 }

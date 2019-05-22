@@ -6,7 +6,7 @@ import { threadsListLoaded, threadsListLoadingError } from './actions'
 import { Api } from './api'
 
 export function* getThreadsList(sagaArgs) {
-  const { nextHref } = sagaArgs
+  const { nextHref, topicSlug } = sagaArgs
 
   // const username = yield select(makeSelectUsername())
 
@@ -14,7 +14,7 @@ export function* getThreadsList(sagaArgs) {
     // Call our request helper (see 'utils/request')
     // const repos = yield call(request, requestURL)
 
-    const threadsList = yield call(Api.getThreads, nextHref)
+    const threadsList = yield call(Api.getThreads, topicSlug, nextHref)
 
     yield put(threadsListLoaded(threadsList))
   } catch (err) {

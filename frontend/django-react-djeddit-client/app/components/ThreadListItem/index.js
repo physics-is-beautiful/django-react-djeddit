@@ -8,9 +8,9 @@ const CounterText = styled.div`
   font-size: 0.7rem;
 `
 
-function TopicListItem(props) {
+function ThreadListItem(props) {
   return (
-    <List.Item onClick={props.onClick}>
+    <List.Item>
       <Grid verticalAlign="middle">
         <Grid.Column width={2}>
           <FaComments size={32} />
@@ -23,16 +23,15 @@ function TopicListItem(props) {
         </Grid.Column>
         <Grid.Column width={2}>
           <CounterText>123</CounterText>
-          <CounterText>Threads</CounterText>
+          <CounterText>Comments</CounterText>
         </Grid.Column>
       </Grid>
     </List.Item>
   )
 }
 
-TopicListItem.propTypes = {
+ThreadListItem.propTypes = {
   item: PropTypes.any,
-  onClick: PropTypes.func,
 }
 
-export default TopicListItem
+export default ThreadListItem

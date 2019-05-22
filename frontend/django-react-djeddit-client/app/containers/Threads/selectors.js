@@ -5,12 +5,12 @@
 import { createSelector } from 'reselect'
 import { initialState } from './reducer'
 
-const selectThreadsList = state => state.threadsList || initialState
+const selectThreads = state => state.threads || initialState
 
 const makeSelectThreadsList = () =>
   createSelector(
-    selectThreadsList,
+    selectThreads,
     threadListState => threadListState.threadsList,
   )
 
-export { selectThreadsList, makeSelectThreadsList }
+export { selectThreads, makeSelectThreadsList }

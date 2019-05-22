@@ -12,11 +12,15 @@ import {
   LOAD_TOPICS,
   LOAD_TOPICS_SUCCESS,
   LOAD_TOPICS_ERROR,
+  LOAD_TOPIC,
+  LOAD_TOPIC_SUCCESS,
+  LOAD_TOPIC_ERROR,
 } from './constants'
 
 // The initial state of the App
 export const initialState = {
   topicsList: false,
+  topic: false,
 }
 
 /* eslint-disable default-case, no-param-reassign */
@@ -35,6 +39,22 @@ const topicsListReducer = (state = initialState, action) =>
         break
 
       case LOAD_TOPICS_ERROR:
+        draft.error = action.error
+        draft.loading = false
+        break
+
+      case LOAD_TOPIC:
+        draft.loading = true
+        draft.error = false
+        draft.topic = false
+        break
+
+      case LOAD_TOPIC_SUCCESS:
+        draft.topic = action.topic
+        draft.loading = false
+        break
+
+      case LOAD_TOPIC_ERROR:
         draft.error = action.error
         draft.loading = false
         break
