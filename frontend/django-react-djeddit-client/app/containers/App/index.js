@@ -20,7 +20,7 @@ import NewThreadPage from 'containers/NewThreadPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import TopicsList from 'containers/Topics/Loadable'
 import ThreadsList from 'containers/Threads/Loadable'
-import Header from 'components/Header'
+import Header from 'containers/Header'
 import Footer from 'components/Footer'
 
 import { createStructuredSelector } from 'reselect'
@@ -35,6 +35,7 @@ import { makeSelectSignedInUser, makeSelectLoading } from './selectors'
 // import { makeSelectUsername } from '../HomePage/selectors'
 // import { changeUsername } from '../HomePage/actions'
 import { loadSignedInUser } from './actions'
+import { TOPIC_URL_MASK } from './urls'
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -47,7 +48,7 @@ const AppWrapper = styled.div`
 
 const key = 'app'
 
-function App({ signedInUser, loadSignedInUserAction, loading }) {
+function App({ loadSignedInUserAction, loading }) {
   useInjectSaga({ key, saga })
 
   useEffect(() => {
@@ -62,19 +63,20 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
       >
         <meta name="description" content="React djeddit client application" />
       </Helmet>
-      <Header signedInUser={signedInUser} />
+      {/* <Header signedInUser={signedInUser} /> */}
+      <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
         {/* <Route path="/features" component={FeaturePage} /> */}
         <Route path="/signup" component={SignUpPage} />
         <Route path="/signin" component={SignInPage} />
         <Route exact path="/topics" component={TopicsList} />
-        <Route
-          path="/topics/:topic_slug([A-Za-z0-9_\-\.]+)"
-          component={ThreadsList}
-        />
+        <Route exact path={TOPIC_URL_MASK} component={ThreadsList} />
         <Route path="/new-topic" component={NewTopicPage} />
-        <Route path="/new-thread" component={NewThreadPage} />
+        <Route
+          path="/topics/:topicSlug([A-Za-z0-9_\-\.]+)/new-thread"
+          component={NewThreadPage}
+        />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <Footer />
@@ -85,14 +87,12 @@ function App({ signedInUser, loadSignedInUserAction, loading }) {
 
 App.propTypes = {
   loading: PropTypes.bool,
-  signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  // signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   loadSignedInUserAction: PropTypes.func,
 }
 
 const mapStateToProps = createStructuredSelector({
-  // repos: makeSelectRepos(),
-  // username: makeSelectUsername(),
-  signedInUser: makeSelectSignedInUser(),
+  // signedInUser: makeSelectSignedInUser(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
 })

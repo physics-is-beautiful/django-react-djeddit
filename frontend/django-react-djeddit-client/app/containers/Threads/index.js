@@ -64,9 +64,9 @@ export function ThreadsList({
   const [nextHref, setNextHref] = useState(null)
 
   useEffect(() => {
-    topicsActions.loadTopic(match.params.topic_slug)
+    topicsActions.loadTopic(match.params.topicSlug)
     // load threads from server
-    threadsActions.loadThreads(match.params.topic_slug)
+    threadsActions.loadThreads(match.params.topicSlug)
 
     return () => {
       // clear threads list while unmount

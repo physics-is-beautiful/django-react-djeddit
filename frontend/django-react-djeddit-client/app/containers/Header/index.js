@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import {
   FormattedMessage,
   injectIntl,
@@ -10,14 +10,35 @@ import { Input, Menu } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import history from 'utils/history'
 
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { matchPath } from 'react-router-dom'
 import A from './A'
 import Img from './Img'
 // import NavBar from './NavBar'
 // import HeaderLink from './HeaderLink'
 import Banner from './banner.jpg'
 import messages from './messages'
+import { makeSelectSignedInUser, makeSelectLocation } from '../App/selectors'
+import { loadSignedInUser } from '../App/actions'
+import { useInjectSaga } from '../../utils/injectSaga'
 
-const Header = ({ intl, signedInUser }) => {
+import saga from '../App/saga'
+import { TOPIC_URL_MASK } from '../App/urls'
+
+const Header = ({ intl, location, signedInUser }) => {
+  useInjectSaga({ key: 'app', saga }) // app level saga
+  // console.log(location);
+
+  const topicUrlMatch = matchPath(
+    location.pathname, // like: /course/123
+    { path: TOPIC_URL_MASK },
+  )
+
+  // console.log(match)
+
+  // TODO set match href menu intial
   const [activeMenu, setActiveMenu] = useState('home')
 
   const handleHomeClick = () => {
@@ -40,8 +61,8 @@ const Header = ({ intl, signedInUser }) => {
     setActiveMenu('new-topic')
   }
 
-  const handleNewThreadClick = () => {
-    history.push('/new-thread')
+  const handleNewThreadClick = topicSlug => {
+    history.push(`${topicSlug}/new-thread`)
     setActiveMenu('new-thread')
   }
 
@@ -73,11 +94,15 @@ const Header = ({ intl, signedInUser }) => {
               active={activeMenu === 'new-topic'}
               onClick={handleNewTopicClick}
             />
-            <Menu.Item
-              name={intl.formatMessage(messages.newThread)}
-              active={activeMenu === 'new-thread'}
-              onClick={handleNewThreadClick}
-            />
+            {topicUrlMatch && (
+              <Menu.Item
+                name={intl.formatMessage(messages.newThread)}
+                active={activeMenu === 'new-thread'}
+                onClick={() =>
+                  handleNewThreadClick(topicUrlMatch.params.topicSlug)
+                }
+              />
+            )}
           </React.Fragment>
         )}
         <Menu.Menu position="right">
@@ -119,9 +144,29 @@ const Header = ({ intl, signedInUser }) => {
 }
 
 Header.propTypes = {
-  // selectedMenu: PropTypes.string,
+  // loading: PropTypes.bool,
+  location: PropTypes.object,
   intl: PropTypes.object,
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
-export default injectIntl(Header)
+const mapStateToProps = createStructuredSelector({
+  signedInUser: makeSelectSignedInUser(),
+  location: makeSelectLocation(),
+})
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    loadSignedInUserAction: () => dispatch(loadSignedInUser()),
+  }
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
+
+export default compose(
+  withConnect,
+  memo,
+)(injectIntl(Header))
