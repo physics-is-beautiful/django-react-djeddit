@@ -9,8 +9,21 @@ from .models import Thread, Post, Topic
 # import markdown_deux
 
 
+class UserSerializer(serializers.ModelSerializer):
+    # def create(self, validated_data):
+    #     user = get_user_model().objects.create_user(**validated_data)
+    #     return user
+
+    # TODO set REQUIRED_FIELDS
+
+    class Meta:
+        model = get_user_model()
+        fields = ('id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+
 class PostSerializer(serializers.ModelSerializer):
-    # created_by = PublicProfileSerializer(source='created_by', read_only=True)
+    created_by = UserSerializer()
     # mardown_content = serializers.SerializerMethodField()
     #
     # def get_mardown_content(self, obj):
@@ -46,7 +59,7 @@ class ThreadSerializer(serializers.ModelSerializer):
         content = validated_data.pop('content', None)
 
         # CREATE Post
-        post_serializer = PostSerializer(data={'content': content})
+        post_serializer = PostSerializer(data={'content': content, 'created_by': self.context['request'].user.id})
 
         if post_serializer.is_valid(raise_exception=True):
             post = post_serializer.save()
@@ -73,14 +86,4 @@ class TopicsSerializer(serializers.ModelSerializer):
         fields = ['title', 'slug', 'description']
 
 
-class UserSerializer(serializers.ModelSerializer):
-    # def create(self, validated_data):
-    #     user = get_user_model().objects.create_user(**validated_data)
-    #     return user
 
-    # TODO set REQUIRED_FIELDS
-
-    class Meta:
-        model = get_user_model()
-        fields = ('id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password')
-        extra_kwargs = {'password': {'write_only': True}}

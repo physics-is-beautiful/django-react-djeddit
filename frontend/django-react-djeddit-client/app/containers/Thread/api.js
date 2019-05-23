@@ -20,7 +20,7 @@ function getPosts(threadId, nextHref) {
   if (nextHref) {
     url = nextHref
   } else {
-    url = `${API_PREFIX}posts/?thread=${threadId}`
+    url = `${API_PREFIX}posts/?thread_id=${threadId}`
   }
 
   return request(url, {

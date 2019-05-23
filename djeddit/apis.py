@@ -22,6 +22,7 @@ except ImportError:
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10  # TODO get it from the project settings
 
+
 class TopicsViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = TopicsSerializer
@@ -40,14 +41,23 @@ class ThreadViewSet(ModelViewSet):
     filterset_fields = ('topic__slug',)
 
 
-class PostViewSet(ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    pagination_class = StandardResultsSetPagination
-    lookup_field = 'id'
-    filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('thread',)
+class ThreadCommentsFilter(filters.FilterSet):
+    thread_id = filters.NumberFilter(
+        field_name='thread_id',
+        method='thread_filter',
+    )
+
+    def thread_filter(self, queryset, name, value):
+        try:
+            thread = Thread.objects.get(id=value)
+        except Thread.DoesNotExist:
+            raise NotFound('Thread not found')
+
+        return thread.op.get_descendants(include_self=True).select_related('created_by')
+
+    class Meta:
+        model = Post
+        fields = ['thread_id', ]
 
 
 class UserViewSet(ModelViewSet):
@@ -78,6 +88,9 @@ class PostViewSet(mixins.CreateModelMixin,
     queryset = Post.objects.all()
     pagination_class = StandardResultsSetPagination
     lookup_field = 'uid'
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ThreadCommentsFilter
+    # filterset_fields = ('thread',)
 
     def perform_create(self, serializer):
         post = serializer.save(created_by=self.request.user)

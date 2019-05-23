@@ -16,9 +16,7 @@ const makeSelectThread = () =>
 const makeSelectPosts = () =>
   createSelector(
     selectThread,
-    threadState => {
-      return threadState.postsList
-    },
+    threadState => threadState.postsList,
   )
 
 export { selectThread, makeSelectThread, makeSelectPosts }

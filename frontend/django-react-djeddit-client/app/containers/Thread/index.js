@@ -12,13 +12,12 @@ import { connect } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-
-import PostItem from 'components/PostItem'
+import ReactMarkdown from 'react-markdown'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
-import { List } from 'semantic-ui-react'
+import { Comment, Icon } from 'semantic-ui-react'
 import {
   makeSelectThread,
   makeSelectPosts,
@@ -76,6 +75,12 @@ export function ThreadPage({
     threadActions.loadThread(match.params.threadId)
     // load posts of thread from server
     threadActions.loadPosts(match.params.threadId)
+
+    // reset on unmount
+    return () => {
+      // clear topics list while unmount
+      threadActions.loadPosts(false)
+    }
   }, [])
 
   // TODO load next page comments
@@ -98,7 +103,40 @@ export function ThreadPage({
   let comments = []
 
   if (posts) {
-    comments = posts.map(item => <PostItem key={item.uid} item={item} />)
+    comments = posts.map(item => (
+      <Comment key={item.uid}>
+        <Comment.Avatar
+          as="a"
+          src="https://react.semantic-ui.com/images/avatar/small/joe.jpg"
+        />
+        <Comment.Content>
+          <Comment.Author>{item.created_by.username}</Comment.Author>
+          <Comment.Metadata>
+            <div>2 days ago</div>
+            {/*<div>*/}
+              {/*<Icon name="star" />5 Faves*/}
+            {/*</div>*/}
+          </Comment.Metadata>
+          <Comment.Text>
+            <ReactMarkdown source={item.content} />
+          </Comment.Text>
+          <Comment.Actions>
+            <Comment.Action>
+              <Icon name="reply" />
+              Reply
+            </Comment.Action>
+            <Comment.Action>
+              <Icon name="edit" />
+              Edit
+            </Comment.Action>
+            <Comment.Action>
+              <Icon name="delete" />
+              Delete
+            </Comment.Action>
+          </Comment.Actions>
+        </Comment.Content>
+      </Comment>
+    ))
   }
 
   return (
@@ -115,7 +153,7 @@ export function ThreadPage({
             {/* <FormattedMessage {...messages.postsList} /> */}
           </H2>
         </CenteredSection>
-        {/* TODO embed first post */}
+        {/* TODO embed first post from posts */}
         <Section>
           <InfiniteScroll
             pageStart={0}
@@ -123,9 +161,10 @@ export function ThreadPage({
             hasMore={hasMoreItems}
             // loader={<div key={this.state.nextHref} style={{clear: 'both'}} />} // fix https://github.com/CassetteRocks/react-infinite-scroller/issues/14#issuecomment-225835845
           >
-            <List selection celled>
-              {comments}
-            </List>
+            <Comment.Group threaded>{comments}</Comment.Group>
+            {/* <List selection celled> */}
+            {/* {comments} */}
+            {/* </List> */}
             {postsList && postsList.count === 0 && (
               <h4>There are no thread to show</h4>
             )}

@@ -207,6 +207,7 @@ NewThreadPage.propTypes = {
   // loading: PropTypes.bool,
   // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   match: PropTypes.object,
+  topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
 const mapStateToProps = createStructuredSelector({

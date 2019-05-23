@@ -18,11 +18,10 @@ export function* newThread(action) {
 
   try {
     // const success = yield Api.newThreadCall(action.formData)
-    yield call(Api.newThreadCall, action.formData)
+    const thread = yield call(Api.newThreadCall, action.formData)
     yield call(() => {
-      // move to Threads list
-      // window.location.href = '/Threads'
-      history.push('/Threads')
+      // move to threads list
+      history.push(`/${action.formData.topic_slug}/${thread.id}/${thread.slug}`)
     })
     // yield put(newThreadSuccess(userData))
   } catch (err) {
