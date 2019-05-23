@@ -12,9 +12,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { Button, Form } from 'semantic-ui-react'
-import ReactMde from 'react-mde'
-import * as Showdown from 'showdown'
-import 'react-mde/lib/styles/css/react-mde-all.css'
+// import ReactMde from 'react-mde'
+// import * as Showdown from 'showdown'
+// import 'react-mde/lib/styles/css/react-mde-all.css'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -24,6 +24,7 @@ import { useInjectSaga } from 'utils/injectSaga'
 //   makeSelectError,
 // } from 'containers/App/selectors'
 import H2 from 'components/H2'
+import ContentEditor from 'components/ContentEditor'
 import { makeSelectSignedInUser } from '../App/selectors'
 
 import CenteredSection from './CenteredSection'
@@ -60,7 +61,7 @@ export function NewThreadPage({
 
   const [formData, setFormData] = useState(formDict)
   const [errors, setErrors] = useState({})
-  const [mdeTab, setMdeTab] = useState('write')
+  // const [mdeTab, setMdeTab] = useState('write')
 
   const [submitDisabled, setSubmitDisabled] = useState(true)
 
@@ -82,10 +83,10 @@ export function NewThreadPage({
   const handleContentChange = val => {
     setFormData(prevState => ({ ...prevState, content: val }))
   }
-
-  const handleTabChange = tab => {
-    setMdeTab(tab)
-  }
+  //
+  // const handleTabChange = tab => {
+  //   setMdeTab(tab)
+  // }
 
   useEffect(() => {
     const validationErrors = validateForm()
@@ -117,12 +118,12 @@ export function NewThreadPage({
     )
   }
 
-  const markdownConverter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true,
-  })
+  // const markdownConverter = new Showdown.Converter({
+  //   tables: true,
+  //   simplifiedAutoLink: true,
+  //   strikethrough: true,
+  //   tasklists: true,
+  // })
 
   /* TODO create this form based on OPTION API call */
   /* TODO add validation errors info */
@@ -156,15 +157,16 @@ export function NewThreadPage({
               <label>
                 <FormattedHTMLMessage {...messages.content} />
               </label>
-              <ReactMde
-                onChange={handleContentChange}
-                value={formData.content}
-                onTabChange={handleTabChange}
-                selectedTab={mdeTab}
-                generateMarkdownPreview={markdown =>
-                  Promise.resolve(markdownConverter.makeHtml(markdown))
-                }
-              />
+              <ContentEditor onContentChange={handleContentChange} />
+              {/* <ReactMde */}
+              {/* onChange={handleContentChange} */}
+              {/* value={formData.content} */}
+              {/* onTabChange={handleTabChange} */}
+              {/* selectedTab={mdeTab} */}
+              {/* generateMarkdownPreview={markdown => */}
+              {/* Promise.resolve(markdownConverter.makeHtml(markdown)) */}
+              {/* } */}
+              {/* /> */}
               {/* <Form.Input */}
               {/* // label={intl.formatMessage(messages.description)} */}
               {/* value={formData.description} */}
