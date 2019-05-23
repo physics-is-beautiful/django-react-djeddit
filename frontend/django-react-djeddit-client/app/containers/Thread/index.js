@@ -1,5 +1,5 @@
 /*
- * ThreadsPage
+ * ThreadPage
  *
  * This is the first thing users see of our App, at the '/' route
  */
@@ -13,14 +13,15 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 
-import ThreadListItem from 'components/ThreadListItem'
+import PostItem from 'components/PostItem'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
 import { List } from 'semantic-ui-react'
 import {
-  makeSelectThreadsList,
+  makeSelectThread,
+  makeSelectPosts,
   // makeSelectLoading,
   // makeSelectError,
 } from './selectors'
@@ -34,7 +35,7 @@ import {
 import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
-import * as threadsActionsCreator from './actions'
+import * as threadActionsCreator from './actions'
 import * as topicsActionsCreator from '../Topics/actions'
 
 import reducer from './reducer'
@@ -43,87 +44,78 @@ import saga from './saga'
 import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
 
-import history from '../../utils/history'
+// import history from '../../utils/history'
 
-const threadsKey = 'threads'
+const threadKey = 'thread'
 const topicsKey = 'topics'
 
-export function ThreadsList({
-  threadsActions,
+export function ThreadPage({
+  threadActions,
   topicsActions,
   match,
-  threadsList,
+  postsList,
+  thread,
   topic,
 }) {
-  useInjectReducer({ key: threadsKey, reducer })
-  useInjectSaga({ key: threadsKey, saga })
+  useInjectReducer({ key: threadKey, reducer })
+  useInjectSaga({ key: threadKey, saga })
 
   useInjectReducer({ key: topicsKey, reducer: topicsReducer })
   useInjectSaga({ key: topicsKey, saga: topicsSaga })
 
-  const [threads, setThreads] = useState([])
+  const [posts, setPosts] = useState([])
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
   useEffect(() => {
-    topicsActions.loadTopic(match.params.topicSlug)
-    // load threads from server
-    threadsActions.loadThreads(match.params.topicSlug)
-
-    return () => {
-      // clear threads list while unmount
-      threadsActions.threadsListLoaded(false)
+    if (!topic) {
+      // todo do we need topic?
+      topicsActions.loadTopic(match.params.topicSlug)
     }
+    // load thread from server
+    threadActions.loadThread(match.params.threadId)
+    // load posts of thread from server
+    threadActions.loadPosts(match.params.threadId)
   }, [])
 
+  // TODO load next page comments
   const loadNextPage = () => {
     if (hasMoreItems) {
       // if we call next page setHasMore item false and waiting for a server response
       setHasMoreItems(Boolean(false))
-      threadsActions.loadThreads(nextHref)
+      threadActions.loadThread(nextHref)
     }
-  }
-
-  const onThreadClick = (e, item) => {
-    history.push(`/${topic.slug}/${item.id}/${item.slug}`)
   }
 
   useEffect(() => {
-    if (threadsList) {
-      setThreads([...threads, ...threadsList.results])
-      setHasMoreItems(Boolean(threadsList.next))
-      setNextHref(threadsList.next)
+    if (postsList) {
+      setPosts([...posts, ...postsList.results])
+      setHasMoreItems(Boolean(postsList.next))
+      setNextHref(postsList.next)
     }
-  }, [threadsList])
+  }, [postsList])
 
-  let items = []
+  let comments = []
 
-  if (threads) {
-    items = threads.map(item => (
-      <ThreadListItem
-        onClick={e => {
-          onThreadClick(e, item)
-        }}
-        key={item.slug}
-        item={item}
-      />
-    ))
+  if (posts) {
+    comments = posts.map(item => <PostItem key={item.uid} item={item} />)
   }
 
   return (
     <article>
       <Helmet>
-        {/* todo add titles */}
-        <title>Threads List</title>
-        <meta name="description" content="Djeedit React threads List" />
+        {/* TODO add titles */}
+        <title>Thread</title>
+        <meta name="description" content="Djeedit React thread" />
       </Helmet>
       <div>
         <CenteredSection>
           <H2>
-            {topic && topic.title}
-            {/* <FormattedMessage {...messages.threadsList} /> */}
+            {thread && thread.title}
+            {/* <FormattedMessage {...messages.postsList} /> */}
           </H2>
         </CenteredSection>
+        {/* TODO embed first post */}
         <Section>
           <InfiniteScroll
             pageStart={0}
@@ -132,10 +124,10 @@ export function ThreadsList({
             // loader={<div key={this.state.nextHref} style={{clear: 'both'}} />} // fix https://github.com/CassetteRocks/react-infinite-scroller/issues/14#issuecomment-225835845
           >
             <List selection celled>
-              {items}
+              {comments}
             </List>
-            {threadsList && threadsList.count === 0 && (
-              <h4>There are no threads to show</h4>
+            {postsList && postsList.count === 0 && (
+              <h4>There are no thread to show</h4>
             )}
           </InfiniteScroll>
         </Section>
@@ -144,22 +136,25 @@ export function ThreadsList({
   )
 }
 
-ThreadsList.propTypes = {
-  threadsActions: PropTypes.shape({
-    loadThreads: PropTypes.func.isRequired,
-    threadsListLoaded: PropTypes.func.isRequired,
+ThreadPage.propTypes = {
+  threadActions: PropTypes.shape({
+    loadThread: PropTypes.func.isRequired,
+    loadPosts: PropTypes.func.isRequired,
+    postsLoaded: PropTypes.func.isRequired,
   }).isRequired,
   topicsActions: PropTypes.shape({
     loadTopic: PropTypes.func.isRequired,
   }).isRequired,
   match: PropTypes.object,
-  threadsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  thread: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
 const mapStateToProps = createStructuredSelector({
-  threadsList: makeSelectThreadsList(),
+  postsList: makeSelectPosts(),
   topic: makeSelectTopic(),
+  thread: makeSelectThread(),
   // username: makeSelectUsername(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
@@ -167,7 +162,7 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    threadsActions: bindActionCreators(threadsActionsCreator, dispatch),
+    threadActions: bindActionCreators(threadActionsCreator, dispatch),
     topicsActions: bindActionCreators(topicsActionsCreator, dispatch),
   }
 }
@@ -180,4 +175,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(ThreadsList)
+)(ThreadPage)

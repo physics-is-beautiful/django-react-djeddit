@@ -20,6 +20,7 @@ import NewThreadPage from 'containers/NewThreadPage/Loadable'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import TopicsList from 'containers/Topics/Loadable'
 import ThreadsList from 'containers/Threads/Loadable'
+import ThreadPage from 'containers/Thread/Loadable'
 import Header from 'containers/Header'
 import Footer from 'components/Footer'
 
@@ -71,7 +72,15 @@ function App({ loadSignedInUserAction, loading }) {
         <Route path="/signup" component={SignUpPage} />
         <Route path="/signin" component={SignInPage} />
         <Route exact path="/topics" component={TopicsList} />
+        {/* ThreadsList aka TopicPage */}
         <Route exact path={TOPIC_URL_MASK} component={ThreadsList} />
+        <Route
+          exact
+          path={
+            '/:topicSlug([A-Za-z0-9_\\-\\.]+)/:threadId(\\d+)/:threadSlug([A-Za-z0-9_\\-\\.]+)'
+          }
+          component={ThreadPage}
+        />
         <Route path="/new-topic" component={NewTopicPage} />
         <Route
           path="/topics/:topicSlug([A-Za-z0-9_\-\.]+)/new-thread"

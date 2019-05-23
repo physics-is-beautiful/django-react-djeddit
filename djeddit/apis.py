@@ -22,6 +22,13 @@ except ImportError:
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10  # TODO get it from the project settings
 
+class TopicsViewSet(ModelViewSet):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = TopicsSerializer
+    queryset = Topic.objects.all()
+    pagination_class = StandardResultsSetPagination
+    lookup_field = 'slug'
+
 
 class ThreadViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -33,12 +40,14 @@ class ThreadViewSet(ModelViewSet):
     filterset_fields = ('topic__slug',)
 
 
-class TopicsViewSet(ModelViewSet):
+class PostViewSet(ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = TopicsSerializer
-    queryset = Topic.objects.all()
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
     pagination_class = StandardResultsSetPagination
-    lookup_field = 'slug'
+    lookup_field = 'id'
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('thread',)
 
 
 class UserViewSet(ModelViewSet):
@@ -60,11 +69,13 @@ class UserViewSet(ModelViewSet):
 
 class PostViewSet(mixins.CreateModelMixin,
                   mixins.UpdateModelMixin,
+                  mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   GenericViewSet):
     permission_classes = (permissions.IsAuthenticated, EditDeleteByOwnerOrStaff)
     serializer_class = PostSerializer
-    queryset = Post.objects.select_related('created_by__profile').all()
+    # queryset = Post.objects.select_related('created_by__profile').all()
+    queryset = Post.objects.all()
     pagination_class = StandardResultsSetPagination
     lookup_field = 'uid'
 

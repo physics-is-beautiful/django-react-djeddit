@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest, all, fork } from 'redux-saga/effects'
+import { call, put, select, takeLatest, all } from 'redux-saga/effects'
 // import { makeSelectUsername } from 'containers/HomePage/selectors'
 import { LOAD_TOPICS, LOAD_TOPIC } from './constants'
 import {
