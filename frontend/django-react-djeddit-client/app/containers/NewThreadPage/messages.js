@@ -10,7 +10,7 @@ export const scope = 'boilerplate.containers.HomePage'
 export default defineMessages({
   newThreadHeader: {
     id: `${scope}.newThread.header`,
-    defaultMessage: 'Create new Thread',
+    defaultMessage: 'Create new thread',
   },
   title: {
     id: `${scope}.title`,

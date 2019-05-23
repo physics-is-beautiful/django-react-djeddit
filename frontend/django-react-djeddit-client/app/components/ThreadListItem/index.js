@@ -10,7 +10,7 @@ const CounterText = styled.div`
 
 function ThreadListItem(props) {
   return (
-    <List.Item>
+    <List.Item onClick={props.onClick}>
       <Grid verticalAlign="middle">
         <Grid.Column width={2}>
           <FaComments size={32} />
@@ -32,6 +32,7 @@ function ThreadListItem(props) {
 
 ThreadListItem.propTypes = {
   item: PropTypes.any,
+  onClick: PropTypes.func,
 }
 
 export default ThreadListItem

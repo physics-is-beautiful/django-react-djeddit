@@ -36,7 +36,7 @@ const Header = ({ intl, location, signedInUser }) => {
     { path: TOPIC_URL_MASK },
   )
 
-  // console.log(match)
+  // console.log(topicUrlMatch)
 
   // TODO set match href menu intial
   const [activeMenu, setActiveMenu] = useState('home')

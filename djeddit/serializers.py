@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from .models import Thread, Post, Topic
@@ -23,6 +24,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 class ThreadSerializer(serializers.ModelSerializer):
     posts_in_tree_order = serializers.SerializerMethodField()
+    # first post data
+    content = serializers.CharField(write_only=True)
+    topic_slug = serializers.CharField(write_only=True)
+    op = PostSerializer(required=False)
 
     def get_posts_in_tree_order(self, obj):
         posts_list = obj.op.get_descendants(include_self=True).select_related('created_by')
@@ -30,9 +35,34 @@ class ThreadSerializer(serializers.ModelSerializer):
         serializer = PostSerializer(posts_list, many=True)
         return serializer.data
 
+    def create(self, validated_data):
+        # GET Topic
+        topic_slug = validated_data.pop('topic_slug', None)
+        try:
+            topic = Topic.objects.get(slug=topic_slug)
+        except Topic.DoesNotExist:
+            raise ValidationError('Topic not found')
+
+        content = validated_data.pop('content', None)
+
+        # CREATE Post
+        post_serializer = PostSerializer(data={'content': content})
+
+        if post_serializer.is_valid(raise_exception=True):
+            post = post_serializer.save()
+
+        validated_data['op'] = post
+        validated_data['topic'] = topic
+
+        # CREATE Thread
+        thread = super().create(validated_data)
+
+        return thread
+
     class Meta:
         model = Thread
-        fields = ['title', 'slug', 'views', 'posts_in_tree_order']
+        fields = ['title', 'id','slug', 'views', 'posts_in_tree_order', 'content', 'topic_slug', 'op']
+        read_only_fields = ('slug', 'posts_in_tree_order', 'views', 'id')
 
 
 class TopicsSerializer(serializers.ModelSerializer):

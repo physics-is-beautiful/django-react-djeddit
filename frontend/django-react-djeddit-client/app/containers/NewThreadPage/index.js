@@ -4,7 +4,6 @@
 
 import React, { useEffect, memo, useState } from 'react'
 import { Redirect } from 'react-router-dom'
-
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
@@ -12,52 +11,63 @@ import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { Button, Form } from 'semantic-ui-react'
-// import ReactMde from 'react-mde'
-// import * as Showdown from 'showdown'
-// import 'react-mde/lib/styles/css/react-mde-all.css'
-
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
-// import {
-//   makeSelectRepos,
-//   makeSelectLoading,
-//   makeSelectError,
-// } from 'containers/App/selectors'
+
 import H2 from 'components/H2'
 import ContentEditor from 'components/ContentEditor'
+
 import { makeSelectSignedInUser } from '../App/selectors'
+import { makeSelectTopic } from '../Topics/selectors'
 
 import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
-// import { loadRepos } from '../App/actions'
-// import { newThread } from './actions'
+
 import * as newThreadCreators from './actions'
-// import { makeSelectUser } from './selectors'
+import * as topicsActionsCreator from '../Topics/actions'
+
 import reducer from './reducer'
 import saga from './saga'
+import topicsReducer from '../Topics/reducer'
+import topicsSaga from '../Topics/saga'
 
-const key = 'newThread'
+const key = 'threads'
+const topicsKey = 'topics'
 
 export function NewThreadPage({
-  // username,
+  match,
   // loading,
   // error,
   signedInUser,
   // onSubmitForm,
   newThreadActions,
+  topicsActions,
   intl,
-  // onChangeUsername,
+  topic,
 }) {
   useInjectReducer({ key, reducer })
   useInjectSaga({ key, saga })
 
+  useInjectReducer({ key: topicsKey, reducer: topicsReducer })
+  useInjectSaga({ key: topicsKey, saga: topicsSaga })
+
+  useEffect(() => {
+    if (!topic) {
+      // load topic if we navigate url by reloading page
+      topicsActions.loadTopic(match.params.topicSlug)
+    }
+  }, [])
+
   const formList = ['title', 'content']
-  const formDict = formList.reduce((_obj, x) => {
-    const obj = Object.assign({}, _obj)
-    obj[x] = ''
-    return obj
-  }, {})
+  const formDict = formList.reduce(
+    (_obj, x) => {
+      const obj = Object.assign({}, _obj)
+      obj[x] = ''
+      return obj
+    },
+    { topic_slug: match.params.topicSlug },
+  )
 
   const [formData, setFormData] = useState(formDict)
   const [errors, setErrors] = useState({})
@@ -66,14 +76,14 @@ export function NewThreadPage({
   const [submitDisabled, setSubmitDisabled] = useState(true)
 
   const validateForm = () => {
-    const errors = {}
+    const validationErrors = {}
     formList.forEach(function(formKey) {
       if (!formData[formKey]) {
-        errors[formKey] = `${formKey} is required`
+        validationErrors[formKey] = `${formKey} is required`
       }
     })
 
-    return errors
+    return validationErrors
   }
 
   const handleChange = (event, { name, value }) => {
@@ -137,7 +147,8 @@ export function NewThreadPage({
       <div>
         <CenteredSection>
           <H2>
-            <FormattedMessage {...messages.newThreadHeader} />
+            <FormattedMessage {...messages.newThreadHeader} /> on the{' '}
+            {topic.title}
           </H2>
         </CenteredSection>
         <Section>
@@ -189,19 +200,18 @@ NewThreadPage.propTypes = {
   newThreadActions: PropTypes.shape({
     newThread: PropTypes.func.isRequired,
   }).isRequired,
+  topicsActions: PropTypes.shape({
+    loadTopic: PropTypes.func.isRequired,
+  }).isRequired,
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   // loading: PropTypes.bool,
   // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  // repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  // onSubmitForm: PropTypes.func,
-  // username: PropTypes.string,
-  // onChangeUsername: PropTypes.func,
+  match: PropTypes.object,
 }
 
 const mapStateToProps = createStructuredSelector({
-  // repos: makeSelectRepos(),
   signedInUser: makeSelectSignedInUser(),
-  // user: makeSelectUser(),
+  topic: makeSelectTopic(),
   // formData: makeSelectFormData(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
@@ -209,13 +219,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    // onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
+    topicsActions: bindActionCreators(topicsActionsCreator, dispatch),
     newThreadActions: bindActionCreators(newThreadCreators, dispatch),
-    // onSubmitForm: evt => {
-    //   if (evt !== undefined && evt.preventDefault) evt.preventDefault()
-    //   // dispatch(loadRepos())
-    //   dispatch(newThread())
-    // },
   }
 }
 

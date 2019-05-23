@@ -42,6 +42,8 @@ import saga from './saga'
 
 import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
+import TopicListItem from '../Topics'
+import history from '../../utils/history'
 
 const threadsKey = 'threads'
 const topicsKey = 'topics'
@@ -82,6 +84,10 @@ export function ThreadsList({
     }
   }
 
+  const onThreadClick = (e, item) => {
+    history.push(`/${topic.slug}/${item.id}/${item.slug}`)
+  }
+
   useEffect(() => {
     if (threadsList) {
       setThreads([...threads, ...threadsList.results])
@@ -93,7 +99,15 @@ export function ThreadsList({
   let items = []
 
   if (threads) {
-    items = threads.map(item => <ThreadListItem key={item.slug} item={item} />)
+    items = threads.map(item => (
+      <ThreadListItem
+        onClick={e => {
+          onThreadClick(e, item)
+        }}
+        key={item.slug}
+        item={item}
+      />
+    ))
   }
 
   return (
