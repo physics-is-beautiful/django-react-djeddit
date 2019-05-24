@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "django djeddit react client",
   "repository": {
     "type": "git",
@@ -18,7 +18,6 @@
     "analyze": "node ./internals/scripts/analyze.js",
     "extract-intl": "node ./internals/scripts/extract-intl.js",
     "npmcheckversion": "node ./internals/scripts/npmcheckversion.js",
-    "preinstall": "npm run npmcheckversion",
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "watch": "cross-env NODE_ENV=development webpack --config internals/webpack/webpack.dev.babel.js --color --progress --hide-modules --display-optimization-bailout --watch",
