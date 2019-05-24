@@ -6,7 +6,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 
 function ContentEditor(props) {
   const [mdeTab, setMdeTab] = useState('write')
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState(props.initialValue || '')
 
   const handleContentChange = val => {
     // setFormData(prevState => ({ ...prevState, content: val }))
@@ -41,6 +41,7 @@ function ContentEditor(props) {
 ContentEditor.propTypes = {
   // className: PropTypes.string,
   onContentChange: PropTypes.func.isRequired,
+  initialValue: PropTypes.string,
 }
 
 export default ContentEditor

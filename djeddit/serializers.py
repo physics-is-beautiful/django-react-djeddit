@@ -23,11 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    created_by = UserSerializer()
-    # mardown_content = serializers.SerializerMethodField()
-    #
-    # def get_mardown_content(self, obj):
-    #     return markdown_deux.markdown(obj.content, 'default')
+    created_by = UserSerializer(read_only=True)
 
     class Meta:
         fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score']

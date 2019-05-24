@@ -12,15 +12,17 @@ import { connect } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import ReactMarkdown from 'react-markdown'
+import { Comment, Segment } from 'semantic-ui-react'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
-import { Comment, Icon } from 'semantic-ui-react'
+import CommentItem from 'components/Comment'
+
 import {
   makeSelectThread,
   makeSelectPosts,
+  makeSelectNewPost,
   // makeSelectLoading,
   // makeSelectError,
 } from './selectors'
@@ -53,6 +55,7 @@ export function ThreadPage({
   topicsActions,
   match,
   postsList,
+  newPost,
   thread,
   topic,
 }) {
@@ -83,60 +86,93 @@ export function ThreadPage({
     }
   }, [])
 
-  // TODO load next page comments
+  // load next page comments
   const loadNextPage = () => {
     if (hasMoreItems) {
       // if we call next page setHasMore item false and waiting for a server response
       setHasMoreItems(Boolean(false))
-      threadActions.loadThread(nextHref)
+      threadActions.loadPosts(match.params.threadId, nextHref)
     }
   }
 
   useEffect(() => {
+    function mergeUnique(a, b, prop) {
+      const reduced = a.filter(
+        aItem => !b.find(bItem => aItem[prop] === bItem[prop]),
+      )
+      return reduced.concat(b)
+    }
+
     if (postsList) {
-      setPosts([...posts, ...postsList.results])
+      // remove existing comments in exist (newPost) with loaded
+      setPosts(
+        mergeUnique(posts, postsList.results, 'uid'),
+        // [...posts, ...postsList.results]
+      )
       setHasMoreItems(Boolean(postsList.next))
       setNextHref(postsList.next)
     }
   }, [postsList])
 
+  useEffect(() => {
+    // find parent in posts and append
+    if (newPost) {
+      // find last index with
+      const parentIndex = posts.findIndex(x => x.uid === newPost.parent)
+      // console.log('parent index' + parentIndex);
+      const postsCopy = [...posts]
+      postsCopy.splice(parentIndex + 1, 0, newPost)
+      setPosts(postsCopy)
+    }
+  }, [newPost])
+
+  const handleAddSubmit = (parentPost, value) => {
+    const post = {
+      content: value,
+      parent: parentPost.uid,
+    }
+    threadActions.newPost(post)
+  }
+
+  const handleUpdateSubmit = (post, value) => {
+    console.log(post, value)
+    //  update comment
+  }
+
   let comments = []
 
+  let rootComment = null
+
   if (posts) {
-    comments = posts.map(item => (
-      <Comment key={item.uid}>
-        <Comment.Avatar
-          as="a"
-          src="https://react.semantic-ui.com/images/avatar/small/joe.jpg"
+    // all pages comments / todo check for performance
+    comments = posts
+      .filter(function(item) {
+        if (item.level === 0) {
+          rootComment = (
+            <Segment.Group>
+              <Segment>
+                <Comment.Group>
+                  <CommentItem
+                    item={item}
+                    handleAddSubmit={handleAddSubmit}
+                    handleUpdateSubmit={handleUpdateSubmit}
+                  />
+                </Comment.Group>
+              </Segment>
+            </Segment.Group>
+          )
+          return false
+        }
+        return true
+      })
+      .map(item => (
+        <CommentItem
+          key={item.uid}
+          item={item}
+          handleAddSubmit={handleAddSubmit}
+          handleUpdateSubmit={handleUpdateSubmit}
         />
-        <Comment.Content>
-          <Comment.Author>{item.created_by.username}</Comment.Author>
-          <Comment.Metadata>
-            <div>2 days ago</div>
-            {/*<div>*/}
-              {/*<Icon name="star" />5 Faves*/}
-            {/*</div>*/}
-          </Comment.Metadata>
-          <Comment.Text>
-            <ReactMarkdown source={item.content} />
-          </Comment.Text>
-          <Comment.Actions>
-            <Comment.Action>
-              <Icon name="reply" />
-              Reply
-            </Comment.Action>
-            <Comment.Action>
-              <Icon name="edit" />
-              Edit
-            </Comment.Action>
-            <Comment.Action>
-              <Icon name="delete" />
-              Delete
-            </Comment.Action>
-          </Comment.Actions>
-        </Comment.Content>
-      </Comment>
-    ))
+      ))
   }
 
   return (
@@ -153,7 +189,8 @@ export function ThreadPage({
             {/* <FormattedMessage {...messages.postsList} /> */}
           </H2>
         </CenteredSection>
-        {/* TODO embed first post from posts */}
+        {/* root post */}
+        {rootComment}
         <Section>
           <InfiniteScroll
             pageStart={0}
@@ -166,7 +203,7 @@ export function ThreadPage({
             {/* {comments} */}
             {/* </List> */}
             {postsList && postsList.count === 0 && (
-              <h4>There are no thread to show</h4>
+              <h4>There are no comments to show</h4>
             )}
           </InfiniteScroll>
         </Section>
@@ -180,6 +217,7 @@ ThreadPage.propTypes = {
     loadThread: PropTypes.func.isRequired,
     loadPosts: PropTypes.func.isRequired,
     postsLoaded: PropTypes.func.isRequired,
+    newPost: PropTypes.func.isRequired,
   }).isRequired,
   topicsActions: PropTypes.shape({
     loadTopic: PropTypes.func.isRequired,
@@ -188,12 +226,14 @@ ThreadPage.propTypes = {
   thread: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 }
 
 const mapStateToProps = createStructuredSelector({
   postsList: makeSelectPosts(),
   topic: makeSelectTopic(),
   thread: makeSelectThread(),
+  newPost: makeSelectNewPost(),
   // username: makeSelectUsername(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),

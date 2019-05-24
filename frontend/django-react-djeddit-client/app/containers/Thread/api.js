@@ -1,6 +1,7 @@
 import { API_PREFIX } from 'utils/constants'
 
 import request from 'utils/request'
+import Cookies from 'js-cookie'
 
 function getThread(threadSlug) {
   const url = `${API_PREFIX}threads/${threadSlug}/`
@@ -33,4 +34,19 @@ function getPosts(threadId, nextHref) {
   })
 }
 
-export const Api = { getThread, getPosts }
+function newPostCall(post) {
+  const csrftoken = Cookies.get('csrftoken')
+
+  return request(`${API_PREFIX}posts/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: JSON.stringify(post),
+  })
+}
+
+export const Api = { getThread, getPosts, newPostCall }

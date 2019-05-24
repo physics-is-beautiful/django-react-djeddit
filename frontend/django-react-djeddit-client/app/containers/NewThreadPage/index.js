@@ -93,10 +93,6 @@ export function NewThreadPage({
   const handleContentChange = val => {
     setFormData(prevState => ({ ...prevState, content: val }))
   }
-  //
-  // const handleTabChange = tab => {
-  //   setMdeTab(tab)
-  // }
 
   useEffect(() => {
     const validationErrors = validateForm()

@@ -15,13 +15,19 @@ import {
   LOAD_POSTS,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_ERROR,
+  NEW_POST,
+  NEW_POST_SUCCESS,
+  NEW_POST_ERROR,
 } from './constants'
 
 // The initial state of the App
 export const initialState = {
   thread: false,
   postsList: false,
+  newPost: false,
 }
+
+// TODO refactor this
 
 /* eslint-disable default-case, no-param-reassign */
 const threadReducer = (state = initialState, action) =>
@@ -55,6 +61,22 @@ const threadReducer = (state = initialState, action) =>
         break
 
       case LOAD_POSTS_ERROR:
+        draft.error = action.error
+        draft.loading = false
+        break
+
+      case NEW_POST:
+        draft.loading = true
+        draft.error = false
+        draft.newPost = false
+        break
+
+      case NEW_POST_SUCCESS:
+        draft.newPost = action.newPost
+        draft.loading = false
+        break
+
+      case NEW_POST_ERROR:
         draft.error = action.error
         draft.loading = false
         break

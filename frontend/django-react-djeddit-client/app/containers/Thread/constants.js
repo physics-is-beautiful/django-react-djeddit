@@ -9,10 +9,14 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_THREAD = 'djeddit/ThreadList/LOAD_THREAD'
-export const LOAD_THREAD_SUCCESS = 'djeddit/ThreadList/LOAD_THREAD_SUCCESS'
-export const LOAD_THREAD_ERROR = 'djeddit/ThreadList/LOAD_THREAD_ERROR'
+export const LOAD_THREAD = 'djeddit/Thread/LOAD_THREAD'
+export const LOAD_THREAD_SUCCESS = 'djeddit/Thread/LOAD_THREAD_SUCCESS'
+export const LOAD_THREAD_ERROR = 'djeddit/Thread/LOAD_THREAD_ERROR'
 
-export const LOAD_POSTS = 'djeddit/ThreadList/LOAD_POSTS'
-export const LOAD_POSTS_SUCCESS = 'djeddit/ThreadList/LOAD_POSTS_SUCCESS'
-export const LOAD_POSTS_ERROR = 'djeddit/ThreadList/LOAD_POSTS_ERROR'
+export const LOAD_POSTS = 'djeddit/Thread/LOAD_POSTS'
+export const LOAD_POSTS_SUCCESS = 'djeddit/Thread/LOAD_POSTS_SUCCESS'
+export const LOAD_POSTS_ERROR = 'djeddit/Thread/LOAD_POSTS_ERROR'
+
+export const NEW_POST = 'djeddit/Thread/NEW_POST'
+export const NEW_POST_SUCCESS = 'djeddit/Thread/NEW_POST_SUCCESS'
+export const NEW_POST_ERROR = 'djeddit/Thread/NEW_POST_ERROR'

@@ -22,6 +22,9 @@ import {
   LOAD_POSTS,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_ERROR,
+  NEW_POST,
+  NEW_POST_SUCCESS,
+  NEW_POST_ERROR,
 } from './constants'
 
 /**
@@ -102,6 +105,27 @@ export function postsLoaded(postsList) {
 export function postsLoadingError(error) {
   return {
     type: LOAD_POSTS_ERROR,
+    error,
+  }
+}
+
+export function newPost(post) {
+  return {
+    type: NEW_POST,
+    post,
+  }
+}
+
+export function newPostSuccess(_newPost) {
+  return {
+    type: NEW_POST_SUCCESS,
+    newPost: _newPost,
+  }
+}
+
+export function newPostError(error) {
+  return {
+    type: NEW_POST_ERROR,
     error,
   }
 }

@@ -82,7 +82,7 @@ class PostViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   GenericViewSet):
-    permission_classes = (permissions.IsAuthenticated, EditDeleteByOwnerOrStaff)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, EditDeleteByOwnerOrStaff)
     serializer_class = PostSerializer
     # queryset = Post.objects.select_related('created_by__profile').all()
     queryset = Post.objects.all()

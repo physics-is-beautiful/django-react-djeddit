@@ -12,4 +12,8 @@ export default defineMessages({
     id: `${scope}.thread`,
     defaultMessage: 'Thread',
   },
+  submitButton: {
+    id: `${scope}.submitButton`,
+    defaultMessage: 'Submit',
+  },
 })
