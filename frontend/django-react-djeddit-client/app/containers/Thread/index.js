@@ -19,6 +19,8 @@ import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
 import CommentItem from 'components/Comment'
 
+import arrayToTree from './arrayToTree'
+
 import {
   makeSelectThread,
   makeSelectPosts,
@@ -140,39 +142,88 @@ export function ThreadPage({
   }
 
   let comments = []
-
   let rootComment = null
 
-  if (posts) {
-    // all pages comments / todo check for performance
-    comments = posts
-      .filter(function(item) {
-        if (item.level === 0) {
-          rootComment = (
-            <Segment.Group>
-              <Segment>
-                <Comment.Group>
-                  <CommentItem
-                    item={item}
-                    handleAddSubmit={handleAddSubmit}
-                    handleUpdateSubmit={handleUpdateSubmit}
-                  />
-                </Comment.Group>
-              </Segment>
-            </Segment.Group>
+  // todo move to the postsList posts effect
+  if (posts.length > 0) {
+    const treePosts = arrayToTree(posts, { id: 'uid', parentId: 'parent' })
+
+    const generateComments = postsList_ => {
+      const comments_ = []
+      for (let i = 0; i < postsList_.length; i++) {
+        // root comments
+        if (postsList_[i].children.length > 0) {
+          const children = generateComments(postsList_[i].children)
+          comments_.push(
+            <CommentItem
+              key={postsList_[i].data.uid}
+              item={postsList_[i].data}
+              handleAddSubmit={handleAddSubmit}
+              handleUpdateSubmit={handleUpdateSubmit}
+            >
+              <Comment.Group>{children}</Comment.Group>
+            </CommentItem>,
           )
-          return false
+        } else {
+          comments_.push(
+            <CommentItem
+              key={postsList_[i].data.uid}
+              item={postsList_[i].data}
+              handleAddSubmit={handleAddSubmit}
+              handleUpdateSubmit={handleUpdateSubmit}
+            />,
+          )
         }
-        return true
-      })
-      .map(item => (
-        <CommentItem
-          key={item.uid}
-          item={item}
-          handleAddSubmit={handleAddSubmit}
-          handleUpdateSubmit={handleUpdateSubmit}
-        />
-      ))
+      }
+      return comments_
+    }
+
+    if (treePosts[0].children.length > 0) {
+      comments = generateComments(treePosts[0].children)
+    }
+
+    rootComment = (
+      <Segment.Group>
+        <Segment>
+          <Comment.Group>
+            <CommentItem
+              item={treePosts[0].data}
+              handleAddSubmit={handleAddSubmit}
+              handleUpdateSubmit={handleUpdateSubmit}
+            />
+          </Comment.Group>
+        </Segment>
+      </Segment.Group>
+    )
+
+    // all pages comments / todo check for performance
+    // comments = posts.filter(function(item) {
+    //   if (item.level === 0) {
+    //     rootComment = (
+    //       <Segment.Group>
+    //         <Segment>
+    //           <Comment.Group>
+    //             <CommentItem
+    //               item={item}
+    //               handleAddSubmit={handleAddSubmit}
+    //               handleUpdateSubmit={handleUpdateSubmit}
+    //             />
+    //           </Comment.Group>
+    //         </Segment>
+    //       </Segment.Group>
+    //     )
+    //     return false
+    //   }
+    //   return true
+    // })
+    // .map(item => (
+    //   <CommentItem
+    //     key={item.uid}
+    //     item={item}
+    //     handleAddSubmit={handleAddSubmit}
+    //     handleUpdateSubmit={handleUpdateSubmit}
+    //   />
+    // ))
   }
 
   return (

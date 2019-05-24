@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FaComments } from 'react-icons/fa'
 import { Button, Comment, Form, Grid, Icon, List } from 'semantic-ui-react'
-import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import ReactMarkdown from 'react-markdown'
 import ContentEditor from 'components/ContentEditor'
@@ -103,6 +102,7 @@ function CommentItem(props) {
           </Form>
         )}
       </Comment.Content>
+      {props.children}
     </Comment>
   )
 }
