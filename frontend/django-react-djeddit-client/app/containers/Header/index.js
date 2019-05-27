@@ -27,6 +27,12 @@ import { useInjectSaga } from '../../utils/injectSaga'
 import saga from '../App/saga'
 import { TOPIC_URL_MASK } from '../App/urls'
 
+const conf = window.DJEDDIT_CONFIG
+let EMBEDDED_MODE = false
+if (conf) {
+  ;({ EMBEDDED_MODE } = conf)
+}
+
 const Header = ({ intl, location, signedInUser }) => {
   useInjectSaga({ key: 'app', saga }) // app level saga
   // console.log(location);
@@ -73,21 +79,25 @@ const Header = ({ intl, location, signedInUser }) => {
 
   return (
     <div>
-      <A href="/">
-        <Img src={Banner} alt="django-react-djeddit-client - Logo" />
-      </A>
+      {!EMBEDDED_MODE && (
+        <A href="/">
+          <Img src={Banner} alt="django-react-djeddit-client - Logo" />
+        </A>
+      )}
       <Menu secondary>
-        <Menu.Item
-          name={intl.formatMessage(messages.home)}
-          active={activeMenu === 'home'}
-          onClick={handleHomeClick}
-        />
+        {!EMBEDDED_MODE && (
+          <Menu.Item
+            name={intl.formatMessage(messages.home)}
+            active={activeMenu === 'home'}
+            onClick={handleHomeClick}
+          />
+        )}
         <Menu.Item
           name={intl.formatMessage(messages.topics)}
           active={activeMenu === 'topics'}
           onClick={handleTopicsClick}
         />
-        {signedInUser && (
+        {signedInUser && !EMBEDDED_MODE && (
           <React.Fragment>
             <Menu.Item
               name={intl.formatMessage(messages.newTopic)}
@@ -105,31 +115,33 @@ const Header = ({ intl, location, signedInUser }) => {
             )}
           </React.Fragment>
         )}
-        <Menu.Menu position="right">
-          {/* <Menu.Item> */}
-          {/* <Input icon='search' placeholder='Search...' /> */}
-          {/* </Menu.Item> */}
-          {signedInUser ? (
-            <Menu.Item
-              name={signedInUser.username}
-              // active={activeMenu === 'signup'}
-              // onClick={handleSignupClick}
-            />
-          ) : (
-            <React.Fragment>
+        {!EMBEDDED_MODE && (
+          <Menu.Menu position="right">
+            {/* <Menu.Item> */}
+            {/* <Input icon='search' placeholder='Search...' /> */}
+            {/* </Menu.Item> */}
+            {signedInUser ? (
               <Menu.Item
-                name="Sign in"
-                active={activeMenu === 'signup'}
-                onClick={handleSigninClick}
+                name={signedInUser.username}
+                // active={activeMenu === 'signup'}
+                // onClick={handleSignupClick}
               />
-              <Menu.Item
-                name="Sign Up"
-                active={activeMenu === 'signup'}
-                onClick={handleSignupClick}
-              />
-            </React.Fragment>
-          )}
-        </Menu.Menu>
+            ) : (
+              <React.Fragment>
+                <Menu.Item
+                  name="Sign in"
+                  active={activeMenu === 'signup'}
+                  onClick={handleSigninClick}
+                />
+                <Menu.Item
+                  name="Sign Up"
+                  active={activeMenu === 'signup'}
+                  onClick={handleSignupClick}
+                />
+              </React.Fragment>
+            )}
+          </Menu.Menu>
+        )}
       </Menu>
       {/* <NavBar> */}
       {/* <HeaderLink to='/'> */}
