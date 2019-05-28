@@ -22,6 +22,7 @@ import {
 import H2 from 'components/H2'
 // import ReposList from 'components/ReposList'
 // import AtPrefix from './AtPrefix'
+import { Redirect } from 'react-router-dom'
 import CenteredSection from './CenteredSection'
 // import Form from './Form'
 // import Input from './Input'
@@ -34,6 +35,12 @@ import reducer from './reducer'
 import saga from './saga'
 
 const key = 'home'
+
+const conf = window.DJEDDIT_CONFIG
+let EMBEDDED_MODE = false
+if (conf) {
+  ;({ EMBEDDED_MODE } = conf)
+}
 
 export function HomePage({
   username,
@@ -51,11 +58,13 @@ export function HomePage({
     if (username && username.trim().length > 0) onSubmitForm()
   }, [])
 
-  const reposListProps = {
-    loading,
-    error,
-    repos,
-  }
+  if (EMBEDDED_MODE) return <Redirect to="topics" />
+
+  // const reposListProps = {
+  //   loading,
+  //   error,
+  //   repos,
+  // }
 
   return (
     <article>
@@ -66,31 +75,31 @@ export function HomePage({
       <div>
         <CenteredSection>
           <H2>
-            {/*<FormattedMessage {...messages.startProjectHeader} />*/}
+            {/* <FormattedMessage {...messages.startProjectHeader} /> */}
             <FormattedMessage {...messages.djedditReactWelcome} />
           </H2>
-          <p>{/*<FormattedMessage {...messages.startProjectMessage} />*/}</p>
+          <p>{/* <FormattedMessage {...messages.startProjectMessage} /> */}</p>
         </CenteredSection>
         <Section>
-          {/*<H2>*/}
-          {/*<FormattedMessage {...messages.trymeHeader} />*/}
-          {/*</H2>*/}
-          {/*<Form onSubmit={onSubmitForm}>*/}
-          {/*<label htmlFor="username">*/}
-          {/*<FormattedMessage {...messages.trymeMessage} />*/}
-          {/*<AtPrefix>*/}
-          {/*<FormattedMessage {...messages.trymeAtPrefix} />*/}
-          {/*</AtPrefix>*/}
-          {/*<Input*/}
-          {/*id="username"*/}
-          {/*type="text"*/}
-          {/*placeholder="mxstbr"*/}
-          {/*value={username}*/}
-          {/*onChange={onChangeUsername}*/}
-          {/*/>*/}
-          {/*</label>*/}
-          {/*</Form>*/}
-          {/*<ReposList {...reposListProps} />*/}
+          {/* <H2> */}
+          {/* <FormattedMessage {...messages.trymeHeader} /> */}
+          {/* </H2> */}
+          {/* <Form onSubmit={onSubmitForm}> */}
+          {/* <label htmlFor="username"> */}
+          {/* <FormattedMessage {...messages.trymeMessage} /> */}
+          {/* <AtPrefix> */}
+          {/* <FormattedMessage {...messages.trymeAtPrefix} /> */}
+          {/* </AtPrefix> */}
+          {/* <Input */}
+          {/* id="username" */}
+          {/* type="text" */}
+          {/* placeholder="mxstbr" */}
+          {/* value={username} */}
+          {/* onChange={onChangeUsername} */}
+          {/* /> */}
+          {/* </label> */}
+          {/* </Form> */}
+          {/* <ReposList {...reposListProps} /> */}
         </Section>
       </div>
     </article>

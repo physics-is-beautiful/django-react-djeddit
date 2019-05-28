@@ -92,11 +92,13 @@ const Header = ({ intl, location, signedInUser }) => {
             onClick={handleHomeClick}
           />
         )}
-        <Menu.Item
-          name={intl.formatMessage(messages.topics)}
-          active={activeMenu === 'topics'}
-          onClick={handleTopicsClick}
-        />
+        {!EMBEDDED_MODE && (
+          <Menu.Item
+            name={intl.formatMessage(messages.topics)}
+            active={activeMenu === 'topics'}
+            onClick={handleTopicsClick}
+          />
+        )}
         {signedInUser && !EMBEDDED_MODE && (
           <React.Fragment>
             <Menu.Item

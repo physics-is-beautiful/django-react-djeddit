@@ -80,7 +80,7 @@ export function ThreadsList({
     if (hasMoreItems) {
       // if we call next page setHasMore item false and waiting for a server response
       setHasMoreItems(Boolean(false))
-      threadsActions.loadThreads(nextHref)
+      threadsActions.loadThreads(null, nextHref)
     }
   }
 

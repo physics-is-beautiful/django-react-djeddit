@@ -4,7 +4,9 @@ import request from 'utils/request'
 
 function getSignedInUser() {
   const conf = window.DJEDDIT_CONFIG
+
   let API_PROFILE_URL = `${API_PREFIX}users/me/`
+
   if (conf) {
     ;({ API_PROFILE_URL } = conf)
   }

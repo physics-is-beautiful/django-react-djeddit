@@ -32,7 +32,7 @@ import GlobalStyle from '../../global-styles'
 import { useInjectSaga } from '../../utils/injectSaga'
 import saga from './saga'
 // import { makeSelectError, makeSelectLoading, makeSelectRepos } from './selectors'
-import { makeSelectSignedInUser, makeSelectLoading } from './selectors'
+// import { makeSelectSignedInUser, makeSelectLoading } from './selectors'
 // import { makeSelectUsername } from '../HomePage/selectors'
 // import { changeUsername } from '../HomePage/actions'
 import { loadSignedInUser } from './actions'
@@ -88,7 +88,7 @@ function App({ loadSignedInUserAction, loading }) {
         />
         <Route path="" component={NotFoundPage} />
       </Switch>
-      <Footer />
+      {/*<Footer />*/}
       <GlobalStyle />
     </AppWrapper>
   )
