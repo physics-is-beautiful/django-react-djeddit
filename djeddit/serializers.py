@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -18,8 +19,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = tuple(
+            ['id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password']
+            + settings.DJEDDIT_USER_FIELDS if settings.DJEDDIT_USER_FIELDS else [])
+        extra_kwargs = {'password': {'write_only': True},
+                        get_user_model().get_email_field_name(): {'write_only': True}
+                        }
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -27,7 +32,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score']
-        read_only_fields = ('level', )
+        read_only_fields = ('level')
         model = Post
 
 
