@@ -43,7 +43,17 @@ module.exports = options => ({
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
-        use: 'file-loader',
+        loader: 'url-loader?limit=1000000',
+        // use: 'file-loader',
+        // options: {
+        //   limit() {
+        //     if (process.env.NODE_ENV === 'development') {
+        //       return '[path][name].[ext]'
+        //     }
+        //
+        //     return '[hash].[ext]'
+        //   },
+        // },
       },
       {
         test: /\.svg$/,

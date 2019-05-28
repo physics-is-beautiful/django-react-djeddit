@@ -16,6 +16,14 @@ function CommentItem(props) {
   const [replyFormShow, setReplyFormShow] = useState(false)
   const [editFormShow, setEditFormShow] = useState(false)
 
+  const conf = window.DJEDDIT_CONFIG
+
+  let USERNAME_FIELD = 'username'
+
+  if (conf) {
+    ;({ USERNAME_FIELD } = conf)
+  }
+
   const handleAddCommentValueChange = val => {
     setAddCommentValue(val)
   }
@@ -45,7 +53,7 @@ function CommentItem(props) {
         src="https://react.semantic-ui.com/images/avatar/small/joe.jpg"
       />
       <Comment.Content>
-        <Comment.Author>{props.item.created_by.username}</Comment.Author>
+        <Comment.Author>{props.item.created_by[USERNAME_FIELD]}</Comment.Author>
         <Comment.Metadata>
           <div>2 days ago</div>
           {/* <div> */}

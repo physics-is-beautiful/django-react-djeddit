@@ -71,7 +71,7 @@ export function ThreadPage({
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
-  useEffect(() => {
+    useEffect(() => {
     if (!topic) {
       // todo do we need topic?
       topicsActions.loadTopic(match.params.topicSlug)
