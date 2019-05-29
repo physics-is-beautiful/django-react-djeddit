@@ -40,7 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
-    # posts_in_tree_order = serializers.SerializerMethodField()
+    posts_in_tree_order = serializers.SerializerMethodField()
     # first post data
     content = serializers.CharField(write_only=True)
     topic_slug = serializers.CharField(write_only=True)
