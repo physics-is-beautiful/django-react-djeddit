@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "description": "django djeddit react client",
   "repository": {
     "type": "git",
@@ -97,6 +97,7 @@
     "react-router-dom": "5.0.0",
     "redux": "4.0.1",
     "redux-saga": "1.0.2",
+    "remark-math": "^1.0.6",
     "reselect": "4.0.0",
     "sanitize.css": "8.0.0",
     "semantic-ui-css": "^2.4.1",

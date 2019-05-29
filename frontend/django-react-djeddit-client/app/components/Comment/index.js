@@ -3,11 +3,33 @@ import PropTypes from 'prop-types'
 import { FaComments } from 'react-icons/fa'
 import { Button, Comment, Form, Grid, Icon, List } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl'
-import ReactMarkdown from 'react-markdown'
 import ContentEditor from 'components/ContentEditor'
+
+import ReactMarkdown from 'react-markdown'
+import MathJax from 'react-mathjax2'
+import RemarkMathPlugin from 'remark-math'
+
 import messages from '../../containers/Thread/messages'
 
 // see frontend/django-react-djeddit-client/app_old_structure/components/post.jsx
+
+const MarkdownMathRender = props => {
+  const newProps = {
+    ...props,
+    plugins: [RemarkMathPlugin],
+    renderers: {
+      ...props.renderers,
+      math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
+      inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
+    },
+  }
+
+  return (
+    <MathJax.Context input="tex">
+      <ReactMarkdown {...newProps} />
+    </MathJax.Context>
+  )
+}
 
 function CommentItem(props) {
   const [addCommentValue, setAddCommentValue] = useState('')
@@ -77,7 +99,7 @@ function CommentItem(props) {
               </Button>
             </Form>
           ) : (
-            <ReactMarkdown source={editCommentValue} />
+            <MarkdownMathRender source={editCommentValue} /> // <ReactMarkdown source={editCommentValue} />
           )}
         </Comment.Text>
         <Comment.Actions>
