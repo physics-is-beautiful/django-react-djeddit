@@ -46,11 +46,12 @@ class ThreadSerializer(serializers.ModelSerializer):
     topic_slug = serializers.CharField(write_only=True)
     op = PostSerializer(required=False)
 
-    # def get_posts_in_tree_order(self, obj):
-    #     posts_list = obj.op.get_descendants(include_self=True).select_related('created_by')
-    #     # djeddit have one root post due 'op = models.ForeignKey('Post')' field
-    #     serializer = PostSerializer(posts_list, many=True)
-    #     return serializer.data
+    # TODO remove in the future
+    def get_posts_in_tree_order(self, obj):
+        posts_list = obj.op.get_descendants(include_self=True).select_related('created_by')
+        # djeddit have one root post due 'op = models.ForeignKey('Post')' field
+        serializer = PostSerializer(posts_list, many=True)
+        return serializer.data
 
     def create(self, validated_data):
         # GET Topic
@@ -79,7 +80,7 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         # fields = ['title', 'id','slug', 'views', 'posts_in_tree_order', 'content', 'topic_slug', 'op']
-        fields = ['title', 'id', 'slug', 'views', 'content', 'topic_slug', 'op']
+        fields = ['title', 'id', 'slug', 'views', 'content', 'topic_slug', 'op', 'posts_in_tree_order']
         read_only_fields = ('slug', 'posts_in_tree_order', 'views', 'id')
 
 

@@ -99,7 +99,7 @@ const Header = ({ intl, location, signedInUser }) => {
             onClick={handleTopicsClick}
           />
         )}
-        {signedInUser && !EMBEDDED_MODE && (
+        {signedInUser && (
           <React.Fragment>
             <Menu.Item
               name={intl.formatMessage(messages.newTopic)}

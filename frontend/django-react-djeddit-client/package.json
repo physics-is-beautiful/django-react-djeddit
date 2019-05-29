@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "django djeddit react client",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "watch": "cross-env NODE_ENV=development webpack --config internals/webpack/webpack.dev.babel.js --color --progress --hide-modules --display-optimization-bailout --watch",
     "dist": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.dist.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:clean": "rimraf ./build",
-    "dist:clean": "rimraf ./dist",
+    "dist:clean": "rimraf ./dist/*",
     "start": "cross-env NODE_ENV=development node server",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start:production": "npm run test && npm run build && npm run start:prod",
