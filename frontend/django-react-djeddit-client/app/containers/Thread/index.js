@@ -84,7 +84,7 @@ export function ThreadPage({
     // reset on unmount
     return () => {
       // clear topics list while unmount
-      threadActions.loadPosts(false)
+      threadActions.postsLoaded(false)
     }
   }, [])
 
@@ -136,9 +136,14 @@ export function ThreadPage({
     threadActions.newPost(post)
   }
 
-  const handleUpdateSubmit = (post, value) => {
-    console.log(post, value)
+  const handleUpdateSubmit = (originalPost, value) => {
     //  update comment
+    const post = {
+      content: value,
+      uid: originalPost.uid,
+    }
+
+    threadActions.updatePost(post)
   }
 
   let comments = []

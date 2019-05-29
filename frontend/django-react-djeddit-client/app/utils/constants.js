@@ -8,4 +8,4 @@ if (conf) {
   ;({ API_URL_POSTFIX } = conf)
 }
 
-export const API_PREFIX = `/api/v1/${API_URL_POSTFIX}/`
+export const API_PREFIX = `/api/v1/${API_URL_POSTFIX}`

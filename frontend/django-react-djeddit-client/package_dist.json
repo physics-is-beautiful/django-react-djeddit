@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "django djeddit react client",
   "repository": {
     "type": "git",

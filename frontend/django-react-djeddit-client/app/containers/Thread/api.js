@@ -49,4 +49,19 @@ function newPostCall(post) {
   })
 }
 
-export const Api = { getThread, getPosts, newPostCall }
+function updatePostCall(post) {
+  const csrftoken = Cookies.get('csrftoken')
+
+  return request(`${API_PREFIX}posts/${post.uid}/`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: JSON.stringify(post),
+  })
+}
+
+export const Api = { getThread, getPosts, newPostCall, updatePostCall }

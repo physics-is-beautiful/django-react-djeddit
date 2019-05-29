@@ -19,9 +19,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
+        base_fields = ['id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password']
         fields = tuple(
-            ['id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password']
-            + settings.DJEDDIT_USER_FIELDS if settings.DJEDDIT_USER_FIELDS else [])
+            settings.DJEDDIT_USER_FIELDS + base_fields
+            if hasattr(settings, 'DJEDDIT_USER_FIELDS')
+            else base_fields
+        )
         extra_kwargs = {'password': {'write_only': True},
                         get_user_model().get_email_field_name(): {'write_only': True}
                         }

@@ -25,6 +25,9 @@ import {
   NEW_POST,
   NEW_POST_SUCCESS,
   NEW_POST_ERROR,
+  UPDATE_POST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_ERROR,
 } from './constants'
 
 /**
@@ -126,6 +129,27 @@ export function newPostSuccess(_newPost) {
 export function newPostError(error) {
   return {
     type: NEW_POST_ERROR,
+    error,
+  }
+}
+
+export function updatePost(post) {
+  return {
+    type: UPDATE_POST,
+    post,
+  }
+}
+
+export function updatePostSuccess(_updatePost) {
+  return {
+    type: UPDATE_POST_SUCCESS,
+    updatePost: _updatePost,
+  }
+}
+
+export function updatePostError(error) {
+  return {
+    type: UPDATE_POST_ERROR,
     error,
   }
 }

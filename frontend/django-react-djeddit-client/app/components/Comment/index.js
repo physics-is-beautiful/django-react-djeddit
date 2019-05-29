@@ -65,7 +65,7 @@ function CommentItem(props) {
             <Form
               onSubmit={() => {
                 setEditFormShow(false)
-                props.handleEditSubmit(props.item, addCommentValue)
+                props.handleUpdateSubmit(props.item, editCommentValue)
               }}
             >
               <ContentEditor
@@ -77,7 +77,7 @@ function CommentItem(props) {
               </Button>
             </Form>
           ) : (
-            <ReactMarkdown source={props.item.content} />
+            <ReactMarkdown source={editCommentValue} />
           )}
         </Comment.Text>
         <Comment.Actions>
@@ -118,7 +118,7 @@ function CommentItem(props) {
 CommentItem.propTypes = {
   item: PropTypes.any,
   handleAddSubmit: PropTypes.func,
-  handleEditSubmit: PropTypes.func,
+  handleUpdateSubmit: PropTypes.func,
 }
 
 export default CommentItem

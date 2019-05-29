@@ -7,10 +7,12 @@ import {
   postsLoadingError,
   newPostSuccess,
   newPostError,
+  updatePostSuccess,
+  updatePostError,
 } from './actions'
 
 import { Api } from './api'
-import { LOAD_POSTS, LOAD_THREAD, NEW_POST } from './constants'
+import { LOAD_POSTS, LOAD_THREAD, NEW_POST, UPDATE_POST } from './constants'
 
 export function* getThread(sagaArgs) {
   const { nextHref, topicSlug } = sagaArgs
@@ -51,6 +53,17 @@ export function* newPost(sagaArgs) {
   }
 }
 
+export function* updatePost(sagaArgs) {
+  const { post } = sagaArgs
+
+  try {
+    const updatePost1 = yield call(Api.updatePostCall, post)
+    yield put(updatePostSuccess(updatePost1))
+  } catch (err) {
+    yield put(updatePostError(err))
+  }
+}
+
 /**
  * Root saga manages watcher lifecycle
  */
@@ -63,5 +76,6 @@ export default function* threadData() {
     takeLatest(LOAD_THREAD, getThread),
     takeLatest(LOAD_POSTS, getPostsList),
     takeLatest(NEW_POST, newPost),
+    takeLatest(UPDATE_POST, updatePost),
   ])
 }

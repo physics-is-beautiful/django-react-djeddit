@@ -20,3 +20,7 @@ export const LOAD_POSTS_ERROR = 'djeddit/Thread/LOAD_POSTS_ERROR'
 export const NEW_POST = 'djeddit/Thread/NEW_POST'
 export const NEW_POST_SUCCESS = 'djeddit/Thread/NEW_POST_SUCCESS'
 export const NEW_POST_ERROR = 'djeddit/Thread/NEW_POST_ERROR'
+
+export const UPDATE_POST = 'djeddit/Thread/UPDATE_POST'
+export const UPDATE_POST_SUCCESS = 'djeddit/Thread/UPDATE_POST_SUCCESS'
+export const UPDATE_POST_ERROR = 'djeddit/Thread/UPDATE_POST_ERROR'
