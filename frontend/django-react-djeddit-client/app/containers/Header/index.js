@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import {
   FormattedMessage,
   injectIntl,
@@ -41,6 +41,36 @@ const Header = ({ intl, location, signedInUser }) => {
     location.pathname, // like: /course/123
     { path: TOPIC_URL_MASK },
   )
+  useEffect(() => {
+    if (location) {
+      switch (location.pathname) {
+        case '/': {
+          setActiveMenu('home')
+          break
+        }
+        case '/topics': {
+          setActiveMenu('topics')
+          break
+        }
+        case '/signup': {
+          setActiveMenu('signup')
+          break
+        }
+        case '/new-topic': {
+          setActiveMenu('new-topic')
+          break
+        }
+        case '/signin': {
+          setActiveMenu('signin')
+          break
+        }
+        default: {
+          setActiveMenu('home')
+          break
+        }
+      }
+    }
+  }, [location])
 
   // console.log(topicUrlMatch)
 
@@ -49,22 +79,22 @@ const Header = ({ intl, location, signedInUser }) => {
 
   const handleHomeClick = () => {
     history.push('/')
-    setActiveMenu('home')
+    // setActiveMenu('home')
   }
 
   const handleTopicsClick = () => {
     history.push('/topics')
-    setActiveMenu('topics')
+    // setActiveMenu('topics')
   }
 
   const handleSignupClick = () => {
     history.push('/signup')
-    setActiveMenu('signup')
+    // setActiveMenu('signup')
   }
 
   const handleNewTopicClick = () => {
     history.push('/new-topic')
-    setActiveMenu('new-topic')
+    // setActiveMenu('new-topic')
   }
 
   const handleNewThreadClick = topicSlug => {

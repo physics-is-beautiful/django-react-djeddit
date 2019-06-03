@@ -14,6 +14,7 @@ import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 
 import ThreadListItem from 'components/ThreadListItem'
+import Breadcrumb from 'components/Breadcrumb'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -64,6 +65,17 @@ export function ThreadsList({
   const [threads, setThreads] = useState([])
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
+
+  const breadcrumbSections = [
+    {
+      key: 'Topics',
+      content: 'Topics',
+      link: true,
+      onClick: () => {
+        history.push('/topics')
+      },
+    },
+  ]
 
   useEffect(() => {
     topicsActions.loadTopic(match.params.topicSlug)
@@ -117,6 +129,7 @@ export function ThreadsList({
         <title>Threads List</title>
         <meta name="description" content="Djeedit React threads List" />
       </Helmet>
+      <Breadcrumb sections={breadcrumbSections} />
       <div>
         <CenteredSection>
           <H2>

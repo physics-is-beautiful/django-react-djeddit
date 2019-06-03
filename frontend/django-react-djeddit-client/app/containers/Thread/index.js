@@ -16,6 +16,8 @@ import { Comment, Segment } from 'semantic-ui-react'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
+
+import Breadcrumb from 'components/Breadcrumb'
 import H2 from 'components/H2'
 import CommentItem from 'components/Comment'
 
@@ -46,6 +48,7 @@ import saga from './saga'
 
 import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
+import history from '../../utils/history'
 
 // import history from '../../utils/history'
 
@@ -71,9 +74,8 @@ export function ThreadPage({
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
-    useEffect(() => {
+  useEffect(() => {
     if (!topic) {
-      // todo do we need topic?
       topicsActions.loadTopic(match.params.topicSlug)
     }
     // load thread from server
@@ -231,6 +233,32 @@ export function ThreadPage({
     // ))
   }
 
+  const [breadcrumbSections, setBreadcrumbSections] = useState([])
+
+  useEffect(() => {
+    if (topic) {
+      // TODO generate this
+      setBreadcrumbSections([
+        {
+          key: 'Topics',
+          content: 'Topics',
+          link: true,
+          onClick: () => {
+            history.push('/topics')
+          },
+        },
+        {
+          key: topic.slug,
+          content: topic.title,
+          link: true,
+          onClick: () => {
+            history.push(`/topics/${topic.slug}`)
+          },
+        },
+      ])
+    }
+  }, [topic])
+
   return (
     <article>
       <Helmet>
@@ -238,6 +266,7 @@ export function ThreadPage({
         <title>Thread</title>
         <meta name="description" content="Djeedit React thread" />
       </Helmet>
+      <Breadcrumb sections={breadcrumbSections} />
       <div>
         <CenteredSection>
           <H2>

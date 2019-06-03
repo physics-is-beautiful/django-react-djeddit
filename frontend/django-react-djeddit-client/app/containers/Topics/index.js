@@ -44,6 +44,7 @@ export function TopicsList({ topicListActions, topicsList }) {
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
+
   useEffect(() => {
     // refresh topics from server
     topicListActions.loadTopics()
