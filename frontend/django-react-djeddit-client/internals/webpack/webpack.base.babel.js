@@ -24,7 +24,8 @@ module.exports = options => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: options.babelQuery,
+          // loader: 'file-loader',
+          // options: options.babelQuery,
         },
       },
       {

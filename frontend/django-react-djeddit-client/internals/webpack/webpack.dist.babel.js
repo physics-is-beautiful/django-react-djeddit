@@ -6,10 +6,14 @@ const OfflinePlugin = require('offline-plugin')
 const { HashedModuleIdsPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const CircularDependencyPlugin = require('circular-dependency-plugin')
 const webpack = require('webpack')
 
+// const dependencies = Object.keys(require('../../package.json').peerDependencies)
+
 module.exports = require('./webpack.base.babel')({
-  mode: 'production',
+  // mode: 'development',
+  mode: 'none',
 
   // In production, we skip all hot-reloading stuff
   entry: [
@@ -19,77 +23,83 @@ module.exports = require('./webpack.base.babel')({
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
-    filename: '[name].js',
+    filename: 'index.js',
     // filename: '[name].[chunkhash].js',
     // chunkFilename: '[name].[chunkhash].chunk.js',
     path: path.resolve(process.cwd(), 'dist'),
     libraryTarget: 'umd',
+    library: 'djeddit-react-client',
   },
 
   optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          warnings: false,
-          compress: {
-            comparisons: false,
-          },
-          parse: {},
-          mangle: true,
-          output: {
-            comments: false,
-            ascii_only: true,
-          },
-        },
-        parallel: true,
-        cache: true,
-        sourceMap: true,
-      }),
-    ],
-    nodeEnv: 'production',
-    sideEffects: true,
-    concatenateModules: true,
-    // runtimeChunk: 'single',
-    // splitChunks: {
-    //   chunks: 'all',
-    //   maxInitialRequests: 10,
-    //   minSize: 0,
-    //   cacheGroups: {
-    //     vendor: {
-    //       test: /[\\/]node_modules[\\/]/,
-    //       name(module) {
-    //         const packageName = module.context.match(
-    //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-    //         )[1]
-    //         return `npm.${packageName.replace('@', '')}`
-    //       },
-    //     },
-    //   },
-    // },
+    // We no not want to minimize our code.
+    minimize: false,
   },
+
+  // optimization: {
+  // minimize: true,
+  // minimizer: [
+  //   new TerserPlugin({
+  //     terserOptions: {
+  //       warnings: false,
+  //       compress: {
+  //         comparisons: false,
+  //       },
+  //       parse: {},
+  //       mangle: true,
+  //       output: {
+  //         comments: false,
+  //         ascii_only: true,
+  //       },
+  //     },
+  //     parallel: true,
+  //     cache: true,
+  //     sourceMap: true,
+  //   }),
+  // ],
+  // nodeEnv: 'production',
+  // sideEffects: true,
+  // concatenateModules: true,
+  // runtimeChunk: 'single',
+  // splitChunks: {
+  //   chunks: 'all',
+  //   maxInitialRequests: 10,
+  //   minSize: 0,
+  //   cacheGroups: {
+  //     vendor: {
+  //       test: /[\\/]node_modules[\\/]/,
+  //       name(module) {
+  //         const packageName = module.context.match(
+  //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+  //         )[1]
+  //         return `npm.${packageName.replace('@', '')}`
+  //       },
+  //     },
+  //   },
+  // },
+  // },
 
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
     }),
     // Minify and optimize the index.html
-    new HtmlWebpackPlugin({
-      template: 'app/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-      inject: true,
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: 'app/index.html',
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeRedundantAttributes: true,
+    //     useShortDoctype: true,
+    //     removeEmptyAttributes: true,
+    //     removeStyleLinkTypeAttributes: true,
+    //     keepClosingSlash: true,
+    //     minifyJS: true,
+    //     minifyCSS: true,
+    //     minifyURLs: true,
+    //   },
+    //   inject: true,
+    // }),
 
     // // Put it in the end to capture all the HtmlWebpackPlugin's
     // // assets manipulations and do leak its manipulations to HtmlWebpackPlugin
@@ -114,6 +124,11 @@ module.exports = require('./webpack.base.babel')({
     //   // Removes warning for about `additional` section usage
     //   safeToUseOptionalCaches: true,
     // }),
+
+    new CircularDependencyPlugin({
+      exclude: /a\.js|node_modules/, // exclude node_modules
+      failOnError: false, // show a warning when there is a circular dependency
+    }),
 
     new CompressionPlugin({
       algorithm: 'gzip',
@@ -154,9 +169,25 @@ module.exports = require('./webpack.base.babel')({
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
+  // externals: { substract: dependencies },
+  // externals: [...dependencies],
   externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
+    externals: {
+      react: {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react',
+      },
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom',
+      },
+    },
+    // react: 'React',
+    // 'react-dom': 'ReactDOM',
     // 'semantic-ui-react': 'semantic-ui-react',
     // redux: 'redux',
     // 'semantic-ui-css': 'semantic-ui-css',
