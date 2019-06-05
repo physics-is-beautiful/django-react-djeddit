@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FaComments } from 'react-icons/fa'
-import { Button, Comment, Form, Grid, Icon, List } from 'semantic-ui-react'
+// import { Button, Comment, Form, Grid, Icon, List } from 'semantic-ui-react'
+import { Container } from 'react-bootstrap/Container'
+import { Row } from 'react-bootstrap/Row'
+import { Col } from 'react-bootstrap/Col'
 import { FormattedMessage } from 'react-intl'
 import ContentEditor from 'components/ContentEditor'
 

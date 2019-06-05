@@ -1,8 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FaComments } from 'react-icons/fa'
-import { Grid, List } from 'semantic-ui-react'
+
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 import styled from 'styled-components'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Container from 'react-bootstrap/Container'
 
 const CounterText = styled.div`
   font-size: 0.7rem;
@@ -10,23 +15,23 @@ const CounterText = styled.div`
 
 function ThreadListItem(props) {
   return (
-    <List.Item onClick={props.onClick}>
-      <Grid verticalAlign="middle">
-        <Grid.Column width={2}>
-          <FaComments size={32} />
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <List.Content>
+    <ListGroup.Item onClick={props.onClick}>
+      <Container verticalAlign="middle">
+        <Row>
+          <Col width={1}>
+            <FaComments size={32} />
+          </Col>
+          <Col width={8}>
             <h4>{props.item.title}</h4>
-          </List.Content>
-          <List.Content>{props.item.description}</List.Content>
-        </Grid.Column>
-        <Grid.Column width={2}>
-          <CounterText>123</CounterText>
-          <CounterText>Comments</CounterText>
-        </Grid.Column>
-      </Grid>
-    </List.Item>
+            {props.item.description}
+          </Col>
+          <Col width={1}>
+            <CounterText>123</CounterText>
+            <CounterText>Comments</CounterText>
+          </Col>
+        </Row>
+      </Container>
+    </ListGroup.Item>
   )
 }
 

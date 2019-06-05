@@ -19,7 +19,7 @@ import Breadcrumb from 'components/Breadcrumb'
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
-import { List } from 'semantic-ui-react'
+import ListGroup from 'react-bootstrap/ListGroup'
 import {
   makeSelectThreadsList,
   // makeSelectLoading,
@@ -144,9 +144,7 @@ export function ThreadsList({
             hasMore={hasMoreItems}
             // loader={<div key={this.state.nextHref} style={{clear: 'both'}} />} // fix https://github.com/CassetteRocks/react-infinite-scroller/issues/14#issuecomment-225835845
           >
-            <List selection celled>
-              {items}
-            </List>
+            <ListGroup>{items}</ListGroup>
             {threadsList && threadsList.count === 0 && (
               <h4>There are no threads to show</h4>
             )}
