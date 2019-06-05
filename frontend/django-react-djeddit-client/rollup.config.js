@@ -34,6 +34,23 @@ export default {
       plugins: ['@babel/external-helpers'],
     }),
     resolve(),
-    commonjs(),
+    commonjs({
+      // namedExports: {
+      //   'react-dom': ['unstable_batchedUpdates'],
+      // },
+      // include: [
+      //   'node_modules/react/**',
+      //   'node_modules/react-dom/**',
+      //   'node_modules/prop-types/**',
+      //   'node_modules/create-react-class/**', // adding the module with that "default not exported by" message to this includes list, made that message go away
+      // ],
+    }),
+  ],
+  external: [
+    'react',
+    'react-dom',
+    'react-is',
+    'prop-types',
+    'styled-components',
   ],
 }

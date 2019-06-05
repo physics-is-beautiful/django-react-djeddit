@@ -17,15 +17,15 @@ const deTranslationMessages = require('./translations/de.json')
 addLocaleData(enLocaleData)
 addLocaleData(deLocaleData)
 
-const DEFAULT_LOCALE = 'en'
+export const DEFAULT_LOCALE = 'en'
 
 // prettier-ignore
-const appLocales = [
+export const appLocales = [
   'en',
   'de',
 ];
 
-const formatTranslationMessages = (locale, messages) => {
+export const formatTranslationMessages = (locale, messages) => {
   const defaultFormattedMessages =
     locale !== DEFAULT_LOCALE
       ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
@@ -40,7 +40,7 @@ const formatTranslationMessages = (locale, messages) => {
   return Object.keys(messages).reduce(flattenFormattedMessages, {})
 }
 
-const translationMessages = {
+export const translationMessages = {
   en: formatTranslationMessages('en', enTranslationMessages),
   de: formatTranslationMessages('de', deTranslationMessages),
 }
@@ -49,9 +49,4 @@ const translationMessages = {
 // exports.formatTranslationMessages = formatTranslationMessages
 // exports.translationMessages = translationMessages
 // exports.DEFAULT_LOCALE = DEFAULT_LOCALE
-
-// export formatTranslationMessages
-// export appLocales
-//   translationMessages,
-//   DEFAULT_LOCALE,
 
