@@ -51,6 +51,6 @@ export default {
     'react-dom',
     'react-is',
     'prop-types',
-    'styled-components',
+    // 'styled-components',
   ],
 }
