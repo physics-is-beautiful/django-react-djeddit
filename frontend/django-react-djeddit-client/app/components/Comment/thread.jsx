@@ -4,7 +4,7 @@
 //
 // import PropTypes from 'prop-types'
 //
-// import { Post } from './post'
+// import { RootPost } from './post'
 // import { ReplyForm } from './replyForm'
 //
 // export class Thread extends React.Component {
@@ -28,7 +28,7 @@
 //           {/* TODO: add threadline if needed */}
 //         </div>
 //         <div style={{ position: 'relative' }}>
-//           <Post
+//           <RootPost
 //             post={post}
 //             onSubmitReplay={onSubmitReplay}
 //             onSubmitEdit={onSubmitEdit}

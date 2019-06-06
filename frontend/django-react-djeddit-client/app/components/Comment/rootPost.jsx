@@ -8,32 +8,11 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 // import RMathJax from 'react-mathjax'
 
-import MathJax from 'react-mathjax2'
-
-import RemarkMathPlugin from 'remark-math'
 import { ReplyForm } from './replyForm'
 import { EditForm } from './editForm'
 import { renderMathJs } from './utils'
 
-const MarkdownMathRender = props => {
-  const newProps = {
-    ...props,
-    plugins: [RemarkMathPlugin],
-    renderers: {
-      ...props.renderers,
-      math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
-      inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
-    },
-  }
-
-  return (
-    <MathJax.Context input="tex">
-      <ReactMarkdown {...newProps} />
-    </MathJax.Context>
-  )
-}
-
-export class Post extends React.Component {
+export class RootPost extends React.Component {
   constructor(props) {
     super(props)
 
@@ -139,9 +118,11 @@ export class Post extends React.Component {
                             onToggleForm={this.toggleEditForm}
                           />
                         </div>
-                        {this.state.editFormShow ? null : (
-                          <MarkdownMathRender source={this.state.content} />
-                        )}
+                        {this.state.editFormShow
+                          ? null
+                          : renderMathJs(
+                            <ReactMarkdown source={this.state.content} />,
+                          )}
                       </div>
                       <div className="djeddit-post-item-footer">
                         <div className="djeddit-score">
@@ -219,7 +200,7 @@ export class Post extends React.Component {
   }
 }
 
-Post.propTypes = {
+RootPost.propTypes = {
   post: PropTypes.object.isRequired,
   onSubmitReplay: PropTypes.func.isRequired,
   onSubmitEdit: PropTypes.func.isRequired,

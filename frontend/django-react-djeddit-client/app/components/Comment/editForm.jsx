@@ -15,7 +15,7 @@ export class EditForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      content: '',
+      content: props.parentPost.content,
       mdeTab: 'write',
     }
 
@@ -34,13 +34,13 @@ export class EditForm extends React.Component {
       uid: this.props.parentPost.uid,
       // parent: this.props.parentPost.uid
     })
-    this.setState({ content: '' })
+    // this.setState({ content: '' })
   }
 
-  componentWillReceiveProps(nextProps) {
-    // refresh with reload
-    this.setState({ content: nextProps.parentPost.content })
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   // refresh with reload
+  //   this.setState({ content: nextProps.parentPost.content })
+  // }
 
   handleTabChange = tab => {
     this.setState({ mdeTab: tab })

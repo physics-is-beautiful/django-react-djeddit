@@ -54,7 +54,9 @@ import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
 import history from '../../utils/history'
 import { Post } from '../../components/Comment/post'
-import { ReplyForm } from '../../components/Comment/replyForm'
+import { RootPost } from '../../components/Comment/rootPost'
+
+// import { ReplyForm } from '../../components/Comment/replyForm'
 
 // import history from '../../utils/history'
 
@@ -166,48 +168,17 @@ export function ThreadPage({
   let rootComment = null
 
   if (posts.length > 0) {
-    rootComment = <MarkdownMathRender>{posts[0].content}</MarkdownMathRender>
+    rootComment = (
+      <RootPost
+        post={posts[0]}
+        onSubmitReplay={handleAddSubmit}
+        onSubmitEdit={handleUpdateSubmit}
+        currentProfile={{ get_absolute_url: 'fsd', display_name: 'name' }}
+        changePostVote={() => {}}
+        onDelete={() => {}}
+      />
+    )
   }
-
-  //
-  // // todo move to the postsList posts effect
-  // if (posts.length > 0) {
-  //   const treePosts = arrayToTree(posts, { id: 'uid', parentId: 'parent' })
-  //
-  //   const generateComments = postsList_ => {
-  //     const comments_ = []
-  //     for (let i = 0; i < postsList_.length; i += 1) {
-  //       // root comments
-  //       if (postsList_[i].children.length > 0) {
-  //         const children = generateComments(postsList_[i].children)
-  //         comments_.push(
-  //           <CommentItem
-  //             key={postsList_[i].data.uid}
-  //             item={postsList_[i].data}
-  //             handleAddSubmit={handleAddSubmit}
-  //             handleUpdateSubmit={handleUpdateSubmit}
-  //           >
-  //             <Comment.Group>{children}</Comment.Group>
-  //           </CommentItem>,
-  //         )
-  //       } else {
-  //         comments_.push(
-  //           <CommentItem
-  //             key={postsList_[i].data.uid}
-  //             item={postsList_[i].data}
-  //             handleAddSubmit={handleAddSubmit}
-  //             handleUpdateSubmit={handleUpdateSubmit}
-  //           />,
-  //         )
-  //       }
-  //     }
-  //     return comments_
-  //   }
-  //
-  //   if (treePosts[0].children.length > 0) {
-  //     comments = generateComments(treePosts[0].children)
-  //   }
-  //
 
   const renderPost = (post, onSubmitReplay, onSubmitEdit) => {
     const widthRem = `${post.level}rem`
@@ -299,20 +270,20 @@ export function ThreadPage({
         </CenteredSection>
         {/* root post */}
         {rootComment}
-        <div>
-          <div>
-            {posts && posts.length > 0 ? (
-              <ReplyForm
-                parentPost={posts[0]}
-                currentProfile={{
-                  get_absolute_url: 'fsd',
-                  display_name: 'name',
-                }}
-                onSubmitPost={handleAddSubmit}
-              />
-            ) : null}
-          </div>
-        </div>
+        {/* <div> */}
+        {/* <div> */}
+        {/* {posts && posts.length > 0 ? ( */}
+        {/* <ReplyForm */}
+        {/* parentPost={posts[0]} */}
+        {/* currentProfile={{ */}
+        {/* get_absolute_url: 'fsd', */}
+        {/* display_name: 'name', */}
+        {/* }} */}
+        {/* onSubmitPost={handleAddSubmit} */}
+        {/* /> */}
+        {/* ) : null} */}
+        {/* </div> */}
+        {/* </div> */}
         <Section>
           <InfiniteScroll
             pageStart={0}
