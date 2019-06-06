@@ -31,75 +31,75 @@ module.exports = require('./webpack.base.babel')({
     library: 'djeddit-react-client',
   },
 
-  optimization: {
-    // We no not want to minimize our code.
-    minimize: false,
-  },
-
   // optimization: {
-  // minimize: true,
-  // minimizer: [
-  //   new TerserPlugin({
-  //     terserOptions: {
-  //       warnings: false,
-  //       compress: {
-  //         comparisons: false,
-  //       },
-  //       parse: {},
-  //       mangle: true,
-  //       output: {
-  //         comments: false,
-  //         ascii_only: true,
-  //       },
-  //     },
-  //     parallel: true,
-  //     cache: true,
-  //     sourceMap: true,
-  //   }),
-  // ],
-  // nodeEnv: 'production',
-  // sideEffects: true,
-  // concatenateModules: true,
-  // runtimeChunk: 'single',
-  // splitChunks: {
-  //   chunks: 'all',
-  //   maxInitialRequests: 10,
-  //   minSize: 0,
-  //   cacheGroups: {
-  //     vendor: {
-  //       test: /[\\/]node_modules[\\/]/,
-  //       name(module) {
-  //         const packageName = module.context.match(
-  //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-  //         )[1]
-  //         return `npm.${packageName.replace('@', '')}`
-  //       },
-  //     },
-  //   },
+  //   // We no not want to minimize our code.
+  //   minimize: false,
   // },
-  // },
+
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          warnings: false,
+          compress: {
+            comparisons: false,
+          },
+          parse: {},
+          mangle: true,
+          output: {
+            comments: false,
+            ascii_only: true,
+          },
+        },
+        parallel: true,
+        cache: true,
+        sourceMap: true,
+      }),
+    ],
+    // nodeEnv: 'production',
+    // sideEffects: true,
+    // concatenateModules: true,
+    // runtimeChunk: 'single',
+    // splitChunks: {
+    //   chunks: 'all',
+    //   maxInitialRequests: 10,
+    //   minSize: 0,
+    //   cacheGroups: {
+    //     vendor: {
+    //       test: /[\\/]node_modules[\\/]/,
+    //       name(module) {
+    //         const packageName = module.context.match(
+    //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+    //         )[1]
+    //         return `npm.${packageName.replace('@', '')}`
+    //       },
+    //     },
+    //   },
+    // },
+  },
 
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
     }),
     // Minify and optimize the index.html
-    // new HtmlWebpackPlugin({
-    //   template: 'app/index.html',
-    //   minify: {
-    //     removeComments: true,
-    //     collapseWhitespace: true,
-    //     removeRedundantAttributes: true,
-    //     useShortDoctype: true,
-    //     removeEmptyAttributes: true,
-    //     removeStyleLinkTypeAttributes: true,
-    //     keepClosingSlash: true,
-    //     minifyJS: true,
-    //     minifyCSS: true,
-    //     minifyURLs: true,
-    //   },
-    //   inject: true,
-    // }),
+    new HtmlWebpackPlugin({
+      template: 'app/index.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+      inject: true,
+    }),
 
     // // Put it in the end to capture all the HtmlWebpackPlugin's
     // // assets manipulations and do leak its manipulations to HtmlWebpackPlugin
@@ -168,28 +168,5 @@ module.exports = require('./webpack.base.babel')({
   performance: {
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
-  },
-  // externals: { substract: dependencies },
-  // externals: [...dependencies],
-  externals: {
-    externals: {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react',
-      },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom',
-      },
-    },
-    // react: 'React',
-    // 'react-dom': 'ReactDOM',
-    // 'semantic-ui-react': 'semantic-ui-react',
-    // redux: 'redux',
-    // 'semantic-ui-css': 'semantic-ui-css',
   },
 })

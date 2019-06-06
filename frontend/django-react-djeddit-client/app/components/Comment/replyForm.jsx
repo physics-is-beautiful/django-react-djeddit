@@ -89,7 +89,7 @@ export class ReplyForm extends React.Component {
             )}
             <ReactMde
               onChange={this.handleChangeContent}
-              value={this.state.value}
+              value={this.state.content}
               selectedTab={this.state.mdeTab}
               onTabChange={this.handleTabChange}
               generateMarkdownPreview={markdown =>

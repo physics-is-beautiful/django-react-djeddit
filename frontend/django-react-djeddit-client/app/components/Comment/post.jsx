@@ -100,7 +100,7 @@ export class Post extends React.Component {
                         href={this.props.post.created_by.get_absolute_url}
                         target="_blank"
                       >
-                        {this.props.post.created_by.username}
+                        {this.props.post.created_by.display_name}
                       </a>
                     ) : (
                       'Guest'

@@ -8,6 +8,7 @@ const DjedditStyle = createGlobalStyle`
 body {
   background: #f6f6f6;
   font-family: "Museosansrounded", sans-serif;
+  font-size: 1.2rem;
 }
 
 #wrap {

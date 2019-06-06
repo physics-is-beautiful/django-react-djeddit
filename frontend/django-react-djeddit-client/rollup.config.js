@@ -49,6 +49,7 @@ export default {
   external: [
     'react',
     'react-dom',
+    'react-bootstrap',
     'react-is',
     'prop-types',
     // 'styled-components',
