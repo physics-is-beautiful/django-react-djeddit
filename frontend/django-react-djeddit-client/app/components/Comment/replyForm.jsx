@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col'
 import ReactMde from 'react-mde'
 import { renderMathJs } from './utils'
 import 'react-mde/lib/styles/css/react-mde-all.css'
+import * as Showdown from 'showdown'
 
 export class ReplyForm extends React.Component {
   constructor(props) {
@@ -26,6 +27,10 @@ export class ReplyForm extends React.Component {
     this.setState({ content })
   }
 
+  handleTabChange = tab => {
+    this.setState({ mdeTab: tab })
+  }
+
   handleSubmit(event) {
     event.preventDefault()
     this.props.onSubmitPost({
@@ -36,6 +41,13 @@ export class ReplyForm extends React.Component {
   }
 
   render() {
+    const markdownConverter = new Showdown.Converter({
+      tables: true,
+      simplifiedAutoLink: true,
+      strikethrough: true,
+      tasklists: true,
+    })
+
     return (
       <Row>
         <Col md={11}>
@@ -81,7 +93,7 @@ export class ReplyForm extends React.Component {
               selectedTab={this.state.mdeTab}
               onTabChange={this.handleTabChange}
               generateMarkdownPreview={markdown =>
-                Promise.resolve(this.converter.makeHtml(markdown))
+                Promise.resolve(markdownConverter.makeHtml(markdown))
               }
             />
             <br />

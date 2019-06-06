@@ -29,6 +29,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import PropTypes from 'prop-types'
 // import GlobalStyle from '../../global-styles'
+import DjedditStyle from '../../djeddit-styles'
 import { useInjectSaga } from '../../utils/injectSaga'
 import saga from './saga'
 // import { makeSelectError, makeSelectLoading, makeSelectRepos } from './selectors'
@@ -89,6 +90,7 @@ function App({ loadSignedInUserAction, loading }) {
         <Route path="" component={NotFoundPage} />
       </Switch>
       {/*<Footer />*/}
+      <DjedditStyle />
       {/*<GlobalStyle />*/}
     </AppWrapper>
   )

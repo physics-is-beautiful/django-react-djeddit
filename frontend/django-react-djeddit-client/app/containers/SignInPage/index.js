@@ -10,8 +10,10 @@ import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, Form } from 'semantic-ui-react'
+// import { Button, Form } from 'semantic-ui-react'
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 // import {
@@ -24,8 +26,6 @@ import H2 from 'components/H2'
 import CenteredSection from './CenteredSection'
 import Section from './Section'
 import messages from './messages'
-// import { loadRepos } from '../App/actions'
-// import { signIn } from './actions'
 import * as signinCreators from './actions'
 // import { makeSelectUser } from './selectors'
 import reducer from './reducer'
@@ -38,7 +38,7 @@ export function SignInPage({
   // loading,
   // error,
   // repos,
-  //onSubmitForm,
+  // onSubmitForm,
   signInActions,
   intl,
   // onChangeUsername,
@@ -73,7 +73,14 @@ export function SignInPage({
     return errors
   }
 
-  const handleChange = (event, { name, value }) => {
+  // const handleChange = (event, { name, value }) => {
+  //   console.log(event);
+  //   setFormData(prevState => ({ ...prevState, [name]: value }))
+  // }
+
+  const handleChange = event => {
+    const { name } = event.target
+    const { value } = event.target
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
@@ -91,8 +98,9 @@ export function SignInPage({
     setErrors(validationErrors)
   }, [formData])
 
-  const handleSubmit = () => {
-    // onSubmitForm(...formData)
+  const handleSubmit = event => {
+    event.preventDefault()
+    event.stopPropagation()
     signInActions.signIn(formData)
   }
 
@@ -115,31 +123,25 @@ export function SignInPage({
         </CenteredSection>
         <Section>
           <Form onSubmit={handleSubmit}>
-            <Form.Field required>
-              <Form.Input
+            <Form.Group>
+              <Form.Control
+                required
                 label={intl.formatMessage(messages.login)}
                 value={formData.login}
                 onChange={handleChange}
                 name="login"
               />
-            </Form.Field>
-            {/*<Form.Field required>*/}
-              {/*<Form.Input*/}
-                {/*label={intl.formatMessage(messages.email)}*/}
-                {/*value={formData.email}*/}
-                {/*onChange={handleChange}*/}
-                {/*name="email"*/}
-              {/*/>*/}
-            {/*</Form.Field>*/}
-            <Form.Field required>
-              <Form.Input
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                required
                 label={intl.formatMessage(messages.password)}
                 value={formData.password}
                 type="password"
                 name="password"
                 onChange={handleChange}
               />
-            </Form.Field>
+            </Form.Group>
             <Button type="submit" disabled={submitDisabled}>
               <FormattedMessage {...messages.submitButton} />
             </Button>

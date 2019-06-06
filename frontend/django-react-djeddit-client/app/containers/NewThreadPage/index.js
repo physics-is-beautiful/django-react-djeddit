@@ -10,7 +10,10 @@ import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, Form } from 'semantic-ui-react'
+// import { Button, Form } from 'semantic-ui-react'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 
@@ -86,7 +89,12 @@ export function NewThreadPage({
     return validationErrors
   }
 
-  const handleChange = (event, { name, value }) => {
+  // const handleChange = (event, { name, value }) => {
+  //   setFormData(prevState => ({ ...prevState, [name]: value }))
+  // }
+  const handleChange = event => {
+    const { name } = event.target
+    const { value } = event.target
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
@@ -108,8 +116,9 @@ export function NewThreadPage({
     setErrors(validationErrors)
   }, [formData])
 
-  const handleSubmit = () => {
-    // onSubmitForm(...formData)
+  const handleSubmit = event => {
+    event.preventDefault()
+    event.stopPropagation()
     newThreadActions.newThread(formData)
   }
 
@@ -149,39 +158,25 @@ export function NewThreadPage({
         </CenteredSection>
         <Section>
           <Form onSubmit={handleSubmit}>
-            <Form.Field required>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.title} />
               </label>
-              <Form.Input
+              <Form.Control
                 // label={intl.formatMessage(messages.title)}
+                type="text"
+                required
                 value={formData.title}
                 onChange={handleChange}
                 name="title"
               />
-            </Form.Field>
-            <Form.Field required>
+            </Form.Group>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.content} />
               </label>
               <ContentEditor onContentChange={handleContentChange} />
-              {/* <ReactMde */}
-              {/* onChange={handleContentChange} */}
-              {/* value={formData.content} */}
-              {/* onTabChange={handleTabChange} */}
-              {/* selectedTab={mdeTab} */}
-              {/* generateMarkdownPreview={markdown => */}
-              {/* Promise.resolve(markdownConverter.makeHtml(markdown)) */}
-              {/* } */}
-              {/* /> */}
-              {/* <Form.Input */}
-              {/* // label={intl.formatMessage(messages.description)} */}
-              {/* value={formData.description} */}
-              {/* type="textarea" */}
-              {/* name="description" */}
-              {/* onChange={handleChange} */}
-              {/* /> */}
-            </Form.Field>
+            </Form.Group>
             <Button type="submit" disabled={submitDisabled}>
               <FormattedMessage {...messages.submitButton} />
             </Button>

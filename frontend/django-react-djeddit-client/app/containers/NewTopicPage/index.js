@@ -11,7 +11,9 @@ import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, Form } from 'semantic-ui-react'
+// import { Button, Form } from 'semantic-ui-react'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -72,7 +74,13 @@ export function NewTopicPage({
     return errors
   }
 
-  const handleChange = (event, { name, value }) => {
+  // const handleChange = (event, { name, value }) => {
+  //   setFormData(prevState => ({ ...prevState, [name]: value }))
+  // }
+
+  const handleChange = event => {
+    const { name } = event.target
+    const { value } = event.target
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
@@ -90,8 +98,9 @@ export function NewTopicPage({
     setErrors(validationErrors)
   }, [formData])
 
-  const handleSubmit = () => {
-    // onSubmitForm(...formData)
+  const handleSubmit = event => {
+    event.preventDefault()
+    event.stopPropagation()
     newTopicActions.newTopic(formData)
   }
 
@@ -123,29 +132,31 @@ export function NewTopicPage({
         </CenteredSection>
         <Section>
           <Form onSubmit={handleSubmit}>
-            <Form.Field required>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.title} />
               </label>
-              <Form.Input
+              <Form.Control
+                required
+                type="text"
                 // label={intl.formatMessage(messages.title)}
                 value={formData.title}
                 onChange={handleChange}
                 name="title"
               />
-            </Form.Field>
-            <Form.Field>
+            </Form.Group>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.description} />
               </label>
-              <Form.Input
+              <Form.Control
                 // label={intl.formatMessage(messages.description)}
                 value={formData.description}
                 type="textarea"
                 name="description"
                 onChange={handleChange}
               />
-            </Form.Field>
+            </Form.Group>
             <Button type="submit" disabled={submitDisabled}>
               <FormattedMessage {...messages.submitButton} />
             </Button>

@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FaComments } from 'react-icons/fa'
-import { Grid, List } from 'semantic-ui-react'
+
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Container from 'react-bootstrap/Container'
+
 import styled from 'styled-components'
 
 const CounterText = styled.div`
@@ -10,23 +15,23 @@ const CounterText = styled.div`
 
 function TopicListItem(props) {
   return (
-    <List.Item onClick={props.onClick}>
-      <Grid verticalAlign="middle">
-        <Grid.Column width={2}>
-          <FaComments size={32} />
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <List.Content>
+    <ListGroup.Item action onClick={props.onClick}>
+      <Container>
+        <Row>
+          <Col md={1}>
+            <FaComments size={32} />
+          </Col>
+          <Col md={10}>
             <h4>{props.item.title}</h4>
-          </List.Content>
-          <List.Content>{props.item.description}</List.Content>
-        </Grid.Column>
-        <Grid.Column width={2}>
-          <CounterText>123</CounterText>
-          <CounterText>Threads</CounterText>
-        </Grid.Column>
-      </Grid>
-    </List.Item>
+            {props.item.description}
+          </Col>
+          <Col md={1}>
+            <CounterText>123</CounterText>
+            <CounterText>Threads</CounterText>
+          </Col>
+        </Row>
+      </Container>
+    </ListGroup.Item>
   )
 }
 

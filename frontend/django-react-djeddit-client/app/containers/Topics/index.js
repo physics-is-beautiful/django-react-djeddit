@@ -18,7 +18,9 @@ import TopicListItem from 'components/TopicListItem'
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 import H2 from 'components/H2'
-import { List } from 'semantic-ui-react'
+// import { List } from 'semantic-ui-react'
+import ListGroup from 'react-bootstrap/ListGroup'
+
 import {
   makeSelectTopicsList,
   // makeSelectLoading,
@@ -43,7 +45,6 @@ export function TopicsList({ topicListActions, topicsList }) {
   const [topics, setTopics] = useState([])
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
-
 
   useEffect(() => {
     // refresh topics from server
@@ -114,9 +115,7 @@ export function TopicsList({ topicListActions, topicsList }) {
             hasMore={hasMoreItems}
             // loader={<div key={this.state.nextHref} style={{clear: 'both'}} />} // fix https://github.com/CassetteRocks/react-infinite-scroller/issues/14#issuecomment-225835845
           >
-            <List selection celled>
-              {items}
-            </List>
+            <ListGroup>{items}</ListGroup>
           </InfiniteScroll>
         </Section>
       </div>

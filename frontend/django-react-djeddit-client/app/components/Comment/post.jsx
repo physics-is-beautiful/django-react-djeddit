@@ -19,6 +19,7 @@ export class Post extends React.Component {
     this.state = {
       replyFormShow: false,
       editFormShow: false,
+      content: this.props.post.content,
     }
 
     this.onSubmitReplay = this.onSubmitReplay.bind(this)
@@ -78,13 +79,13 @@ export class Post extends React.Component {
                         href={this.props.post.created_by.get_absolute_url}
                         target="_blank"
                       >
-                        {this.props.post.created_by.display_name}
+                        {this.props.post.created_by.username}
                       </a>
                     ) : (
                       'Guest'
                     )}
                   </Col>
-                  <Col md={2} sm={3} xs={3}>
+                  <Col md={2} sm={3} xs={4}>
                     <Moment fromNow>{this.props.post.created_on}</Moment>
                   </Col>
                   <Col md={2} sm={3} xs={4}>
@@ -110,16 +111,17 @@ export class Post extends React.Component {
                           <EditForm
                             parentPost={this.props.post}
                             currentProfile={this.props.currentProfile}
-                            onSubmitPost={this.onSubmitEdit}
+                            onSubmitPost={args => {
+                              this.setState({ content: args.content })
+                              this.onSubmitEdit(args)
+                            }}
                             onToggleForm={this.toggleEditForm}
                           />
                         </div>
                         {this.state.editFormShow
                           ? null
                           : renderMathJs(
-                            <ReactMarkdown
-                              source={this.props.post.content}
-                            />,
+                            <ReactMarkdown source={this.state.content} />,
                           )}
                       </div>
                       <div className="djeddit-post-item-footer">
@@ -139,10 +141,7 @@ export class Post extends React.Component {
                             onClick={() => this.upDownClick(-1)}
                           />
                         </div>
-                        <div
-                          className="btn-group btn-group-xs fixed-50"
-                          role="group"
-                        >
+                        <div className="btn-group btn-group-xs" role="group">
                           <button
                             onClick={this.toggleEditForm}
                             className="btn btn-secondary"
@@ -173,10 +172,7 @@ export class Post extends React.Component {
                 </Row>
                 <Row>
                   <Col sm={12} md={12}>
-                    <div
-                      className="btn-group btn-group-xs fixed-50"
-                      role="group"
-                    >
+                    <div className="btn-group btn-group-xs" role="group">
                       {/* <span className='pib-link' onClick={this.toggleReplyForm}>Reply</span> */}
                       {/* <span className='pib-link' onClick={this.toggleReplyForm}>Share</span> */}
                     </div>

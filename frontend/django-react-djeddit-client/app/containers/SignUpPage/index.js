@@ -10,7 +10,9 @@ import { injectIntl, FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import { connect } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+// import { Button, Form } from 'semantic-ui-react'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
@@ -38,7 +40,7 @@ export function SignUpPage({
   // loading,
   // error,
   // repos,
-  //onSubmitForm,
+  // onSubmitForm,
   signUpActions,
   intl,
   // onChangeUsername,
@@ -72,7 +74,13 @@ export function SignUpPage({
     return errors
   }
 
-  const handleChange = (event, { name, value }) => {
+  // const handleChange = (event, { name, value }) => {
+  //   setFormData(prevState => ({ ...prevState, [name]: value }))
+  // }
+
+  const handleChange = event => {
+    const { name } = event.target
+    const { value } = event.target
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
@@ -90,8 +98,9 @@ export function SignUpPage({
     setErrors(validationErrors)
   }, [formData])
 
-  const handleSubmit = () => {
-    // onSubmitForm(...formData)
+  const handleSubmit = event => {
+    event.preventDefault()
+    event.stopPropagation()
     signUpActions.signUp(formData)
   }
 
@@ -114,30 +123,34 @@ export function SignUpPage({
         </CenteredSection>
         <Section>
           <Form onSubmit={handleSubmit}>
-            <Form.Field required>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.username} />
               </label>
-              <Form.Input
+              <Form.Control
                 // label={intl.formatMessage(messages.username)}
+                required
+                type="text"
                 value={formData.username}
                 onChange={handleChange}
                 name="username"
               />
               <FormattedMessage {...messages.usernameDescription} />
-            </Form.Field>
-            <Form.Field required>
+            </Form.Group>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.email} />
               </label>
-              <Form.Input
+              <Form.Control
+                required
                 // label={intl.formatMessage(messages.email)}
                 value={formData.email}
                 onChange={handleChange}
+                type="text"
                 name="email"
               />
-            </Form.Field>
-            <Form.Field required>
+            </Form.Group>
+            <Form.Group required>
               <label>
                 <FormattedHTMLMessage {...messages.password} />
               </label>
@@ -149,13 +162,14 @@ export function SignUpPage({
                 onChange={handleChange}
               />
               <FormattedHTMLMessage {...messages.passwordDescription} />
-            </Form.Field>
-            <Form.Field required>
+            </Form.Group>
+            <Form.Field>
               <label>
                 <FormattedHTMLMessage {...messages.passwordConfirmation} />
               </label>
-              <Form.Input
+              <Form.Control
                 // label={intl.formatMessage(messages.passwordConfirmation)}
+                required
                 type="password"
                 name="password2"
                 value={formData.password2}

@@ -5,7 +5,9 @@ import {
   intlShape,
   FormattedRelative,
 } from 'react-intl'
-import { Input, Menu } from 'semantic-ui-react'
+// import { Menu } from 'semantic-ui-react'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
 
 import PropTypes from 'prop-types'
 import history from 'utils/history'
@@ -114,67 +116,77 @@ const Header = ({ intl, location, signedInUser }) => {
           <Img src={Banner} alt="django-react-djeddit-client - Logo" />
         </A>
       )}
-      <Menu secondary>
+      <Navbar>
+        <Nav className="mr-auto">
+          {!EMBEDDED_MODE && (
+            <Nav.Link
+              name={intl.formatMessage(messages.home)}
+              active={activeMenu === 'home'}
+              onClick={handleHomeClick}
+            >
+              {intl.formatMessage(messages.home)}
+            </Nav.Link>
+          )}
+          {!EMBEDDED_MODE && (
+            <Nav.Link
+              name={intl.formatMessage(messages.topics)}
+              active={activeMenu === 'topics'}
+              onClick={handleTopicsClick}
+            >
+              {intl.formatMessage(messages.topics)}
+            </Nav.Link>
+          )}
+          {signedInUser && (
+            <React.Fragment>
+              <Nav.Link
+                name={intl.formatMessage(messages.newTopic)}
+                active={activeMenu === 'new-topic'}
+                onClick={handleNewTopicClick}
+              >
+                {intl.formatMessage(messages.newTopic)}
+              </Nav.Link>
+              {topicUrlMatch && (
+                <Nav.Link
+                  name={intl.formatMessage(messages.newThread)}
+                  active={activeMenu === 'new-thread'}
+                  onClick={() =>
+                    handleNewThreadClick(topicUrlMatch.params.topicSlug)
+                  }
+                >
+                  {intl.formatMessage(messages.newThread)}
+                </Nav.Link>
+              )}
+            </React.Fragment>
+          )}
+        </Nav>
         {!EMBEDDED_MODE && (
-          <Menu.Item
-            name={intl.formatMessage(messages.home)}
-            active={activeMenu === 'home'}
-            onClick={handleHomeClick}
-          />
-        )}
-        {!EMBEDDED_MODE && (
-          <Menu.Item
-            name={intl.formatMessage(messages.topics)}
-            active={activeMenu === 'topics'}
-            onClick={handleTopicsClick}
-          />
-        )}
-        {signedInUser && (
-          <React.Fragment>
-            <Menu.Item
-              name={intl.formatMessage(messages.newTopic)}
-              active={activeMenu === 'new-topic'}
-              onClick={handleNewTopicClick}
-            />
-            {topicUrlMatch && (
-              <Menu.Item
-                name={intl.formatMessage(messages.newThread)}
-                active={activeMenu === 'new-thread'}
-                onClick={() =>
-                  handleNewThreadClick(topicUrlMatch.params.topicSlug)
-                }
-              />
-            )}
-          </React.Fragment>
-        )}
-        {!EMBEDDED_MODE && (
-          <Menu.Menu position="right">
-            {/* <Menu.Item> */}
+          <Nav>
+            {/* <Nav.Link> */}
             {/* <Input icon='search' placeholder='Search...' /> */}
-            {/* </Menu.Item> */}
+            {/* </Nav.Link> */}
             {signedInUser ? (
-              <Menu.Item
-                name={signedInUser.username}
-                // active={activeMenu === 'signup'}
-                // onClick={handleSignupClick}
-              />
+              <Navbar.Text>{signedInUser.username}</Navbar.Text>
             ) : (
               <React.Fragment>
-                <Menu.Item
+                <Nav.Link
                   name="Sign in"
                   active={activeMenu === 'signup'}
                   onClick={handleSigninClick}
-                />
-                <Menu.Item
+                >
+                  Sign in
+                </Nav.Link>
+                <Nav.Link
                   name="Sign Up"
                   active={activeMenu === 'signup'}
                   onClick={handleSignupClick}
-                />
+                >
+                  Sign Up
+                </Nav.Link>
               </React.Fragment>
             )}
-          </Menu.Menu>
+          </Nav>
         )}
-      </Menu>
+      </Navbar>
       {/* <NavBar> */}
       {/* <HeaderLink to='/'> */}
       {/* <FormattedMessage {...messages.home} /> */}

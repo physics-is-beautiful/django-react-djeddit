@@ -70,8 +70,10 @@ export function ThreadsList({
     {
       key: 'Topics',
       content: 'Topics',
-      link: true,
-      onClick: () => {
+      href: '/topics',
+      // link: true,
+      onClick: evt => {
+        evt.preventDefault()
         history.push('/topics')
       },
     },

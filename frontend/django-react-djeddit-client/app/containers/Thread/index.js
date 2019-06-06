@@ -12,16 +12,20 @@ import { connect } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroller'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { Comment, Segment } from 'semantic-ui-react'
+// import { Comment, Segment } from 'semantic-ui-react'
 
 import { useInjectReducer } from 'utils/injectReducer'
 import { useInjectSaga } from 'utils/injectSaga'
 
 import Breadcrumb from 'components/Breadcrumb'
 import H2 from 'components/H2'
-import CommentItem from 'components/Comment'
+// import CommentItem from 'components/Comment'
+// import arrayToTree from './arrayToTree'
 
-import arrayToTree from './arrayToTree'
+import ReactMarkdown from 'react-markdown'
+import MathJax from 'react-mathjax2'
+import RemarkMathPlugin from 'remark-math'
+import SectionSheet from './SectionSheet'
 
 import {
   makeSelectThread,
@@ -49,11 +53,31 @@ import saga from './saga'
 import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
 import history from '../../utils/history'
+import { Post } from '../../components/Comment/post'
+import { ReplyForm } from '../../components/Comment/replyForm'
 
 // import history from '../../utils/history'
 
 const threadKey = 'thread'
 const topicsKey = 'topics'
+
+const MarkdownMathRender = props => {
+  const newProps = {
+    ...props,
+    plugins: [RemarkMathPlugin],
+    renderers: {
+      ...props.renderers,
+      math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
+      inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
+    },
+  }
+
+  return (
+    <MathJax.Context input="tex">
+      <ReactMarkdown {...newProps} />
+    </MathJax.Context>
+  )
+}
 
 export function ThreadPage({
   threadActions,
@@ -130,108 +154,103 @@ export function ThreadPage({
     }
   }, [newPost])
 
-  const handleAddSubmit = (parentPost, value) => {
-    const post = {
-      content: value,
-      parent: parentPost.uid,
-    }
-    threadActions.newPost(post)
+  const handleAddSubmit = args => {
+    threadActions.newPost(args)
   }
 
-  const handleUpdateSubmit = (originalPost, value) => {
-    //  update comment
-    const post = {
-      content: value,
-      uid: originalPost.uid,
-    }
-
-    threadActions.updatePost(post)
+  const handleUpdateSubmit = args => {
+    threadActions.updatePost(args)
   }
 
-  let comments = []
+  // let comments = []
   let rootComment = null
 
-  // todo move to the postsList posts effect
   if (posts.length > 0) {
-    const treePosts = arrayToTree(posts, { id: 'uid', parentId: 'parent' })
-
-    const generateComments = postsList_ => {
-      const comments_ = []
-      for (let i = 0; i < postsList_.length; i++) {
-        // root comments
-        if (postsList_[i].children.length > 0) {
-          const children = generateComments(postsList_[i].children)
-          comments_.push(
-            <CommentItem
-              key={postsList_[i].data.uid}
-              item={postsList_[i].data}
-              handleAddSubmit={handleAddSubmit}
-              handleUpdateSubmit={handleUpdateSubmit}
-            >
-              <Comment.Group>{children}</Comment.Group>
-            </CommentItem>,
-          )
-        } else {
-          comments_.push(
-            <CommentItem
-              key={postsList_[i].data.uid}
-              item={postsList_[i].data}
-              handleAddSubmit={handleAddSubmit}
-              handleUpdateSubmit={handleUpdateSubmit}
-            />,
-          )
-        }
-      }
-      return comments_
-    }
-
-    if (treePosts[0].children.length > 0) {
-      comments = generateComments(treePosts[0].children)
-    }
-
-    rootComment = (
-      <Segment.Group>
-        <Segment>
-          <Comment.Group>
-            <CommentItem
-              item={treePosts[0].data}
-              handleAddSubmit={handleAddSubmit}
-              handleUpdateSubmit={handleUpdateSubmit}
-            />
-          </Comment.Group>
-        </Segment>
-      </Segment.Group>
-    )
-
-    // all pages comments / todo check for performance
-    // comments = posts.filter(function(item) {
-    //   if (item.level === 0) {
-    //     rootComment = (
-    //       <Segment.Group>
-    //         <Segment>
-    //           <Comment.Group>
-    //             <CommentItem
-    //               item={item}
-    //               handleAddSubmit={handleAddSubmit}
-    //               handleUpdateSubmit={handleUpdateSubmit}
-    //             />
-    //           </Comment.Group>
-    //         </Segment>
-    //       </Segment.Group>
-    //     )
-    //     return false
-    //   }
-    //   return true
-    // })
-    // .map(item => (
-    //   <CommentItem
-    //     key={item.uid}
-    //     item={item}
-    //     handleAddSubmit={handleAddSubmit}
-    //     handleUpdateSubmit={handleUpdateSubmit}
-    //   />
-    // ))
+    rootComment = <MarkdownMathRender>{posts[0].content}</MarkdownMathRender>
   }
+
+  //
+  // // todo move to the postsList posts effect
+  // if (posts.length > 0) {
+  //   const treePosts = arrayToTree(posts, { id: 'uid', parentId: 'parent' })
+  //
+  //   const generateComments = postsList_ => {
+  //     const comments_ = []
+  //     for (let i = 0; i < postsList_.length; i += 1) {
+  //       // root comments
+  //       if (postsList_[i].children.length > 0) {
+  //         const children = generateComments(postsList_[i].children)
+  //         comments_.push(
+  //           <CommentItem
+  //             key={postsList_[i].data.uid}
+  //             item={postsList_[i].data}
+  //             handleAddSubmit={handleAddSubmit}
+  //             handleUpdateSubmit={handleUpdateSubmit}
+  //           >
+  //             <Comment.Group>{children}</Comment.Group>
+  //           </CommentItem>,
+  //         )
+  //       } else {
+  //         comments_.push(
+  //           <CommentItem
+  //             key={postsList_[i].data.uid}
+  //             item={postsList_[i].data}
+  //             handleAddSubmit={handleAddSubmit}
+  //             handleUpdateSubmit={handleUpdateSubmit}
+  //           />,
+  //         )
+  //       }
+  //     }
+  //     return comments_
+  //   }
+  //
+  //   if (treePosts[0].children.length > 0) {
+  //     comments = generateComments(treePosts[0].children)
+  //   }
+  //
+
+  const renderPost = (post, onSubmitReplay, onSubmitEdit) => {
+    const widthRem = `${post.level}rem`
+
+    if (post.level === 0) {
+      return null
+    }
+
+    return (
+      <div key={post.uid} style={{ paddingLeft: widthRem }}>
+        <div
+          style={{
+            width: widthRem,
+            display: 'inline-block',
+            height: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {/* TODO: add threadline if needed */}
+        </div>
+        <div style={{ position: 'relative' }}>
+          <Post
+            post={post}
+            onSubmitReplay={onSubmitReplay}
+            onSubmitEdit={onSubmitEdit}
+            currentProfile={{ get_absolute_url: 'fsd', display_name: 'name' }}
+            changePostVote={() => {}}
+            onDelete={() => {}}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // all pages comments / todo check for performance
+  const comments = posts
+    .filter(function(item) {
+      if (item.level === 0) {
+        return false
+      }
+      return true
+    })
+    .map(item => renderPost(item, handleAddSubmit, handleUpdateSubmit))
 
   const [breadcrumbSections, setBreadcrumbSections] = useState([])
 
@@ -242,16 +261,20 @@ export function ThreadPage({
         {
           key: 'Topics',
           content: 'Topics',
-          link: true,
-          onClick: () => {
+          href: '/topics',
+          // link: true,
+          onClick: evt => {
+            evt.preventDefault()
             history.push('/topics')
           },
         },
         {
           key: topic.slug,
           content: topic.title,
-          link: true,
-          onClick: () => {
+          href: `/topics/${topic.slug}`,
+          // link: true,
+          onClick: evt => {
+            evt.preventDefault()
             history.push(`/topics/${topic.slug}`)
           },
         },
@@ -276,6 +299,20 @@ export function ThreadPage({
         </CenteredSection>
         {/* root post */}
         {rootComment}
+        <div>
+          <div>
+            {posts && posts.length > 0 ? (
+              <ReplyForm
+                parentPost={posts[0]}
+                currentProfile={{
+                  get_absolute_url: 'fsd',
+                  display_name: 'name',
+                }}
+                onSubmitPost={handleAddSubmit}
+              />
+            ) : null}
+          </div>
+        </div>
         <Section>
           <InfiniteScroll
             pageStart={0}
@@ -283,10 +320,8 @@ export function ThreadPage({
             hasMore={hasMoreItems}
             // loader={<div key={this.state.nextHref} style={{clear: 'both'}} />} // fix https://github.com/CassetteRocks/react-infinite-scroller/issues/14#issuecomment-225835845
           >
-            <Comment.Group threaded>{comments}</Comment.Group>
-            {/* <List selection celled> */}
-            {/* {comments} */}
-            {/* </List> */}
+            {/* <Comment.Group threaded>{comments}</Comment.Group> */}
+            {comments}
             {postsList && postsList.count === 0 && (
               <h4>There are no comments to show</h4>
             )}

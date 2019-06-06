@@ -15,17 +15,17 @@ const CounterText = styled.div`
 
 function ThreadListItem(props) {
   return (
-    <ListGroup.Item onClick={props.onClick}>
-      <Container verticalAlign="middle">
+    <ListGroup.Item action onClick={props.onClick}>
+      <Container>
         <Row>
-          <Col width={1}>
+          <Col md={1}>
             <FaComments size={32} />
           </Col>
-          <Col width={8}>
+          <Col md={10}>
             <h4>{props.item.title}</h4>
             {props.item.description}
           </Col>
-          <Col width={1}>
+          <Col md={1}>
             <CounterText>123</CounterText>
             <CounterText>Comments</CounterText>
           </Col>
