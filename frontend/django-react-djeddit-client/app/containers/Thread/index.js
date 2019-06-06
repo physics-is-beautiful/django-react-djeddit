@@ -63,23 +63,23 @@ import { RootPost } from '../../components/Comment/rootPost'
 const threadKey = 'thread'
 const topicsKey = 'topics'
 
-const MarkdownMathRender = props => {
-  const newProps = {
-    ...props,
-    plugins: [RemarkMathPlugin],
-    renderers: {
-      ...props.renderers,
-      math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
-      inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
-    },
-  }
-
-  return (
-    <MathJax.Context input="tex">
-      <ReactMarkdown {...newProps} />
-    </MathJax.Context>
-  )
-}
+// const MarkdownMathRender = props => {
+//   const newProps = {
+//     ...props,
+//     plugins: [RemarkMathPlugin],
+//     renderers: {
+//       ...props.renderers,
+//       math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
+//       inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
+//     },
+//   }
+//
+//   return (
+//     <MathJax.Context input="tex">
+//       <ReactMarkdown {...newProps} />
+//     </MathJax.Context>
+//   )
+// }
 
 export function ThreadPage({
   threadActions,
@@ -89,6 +89,7 @@ export function ThreadPage({
   newPost,
   thread,
   topic,
+  embedMode,
 }) {
   useInjectReducer({ key: threadKey, reducer })
   useInjectSaga({ key: threadKey, saga })
@@ -318,6 +319,7 @@ ThreadPage.propTypes = {
   postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  embedMode: PropTypes.bool,
 }
 
 const mapStateToProps = createStructuredSelector({

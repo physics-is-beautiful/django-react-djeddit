@@ -27,16 +27,9 @@ urlpatterns = [
     url(r'^api/v1/', include(djeddit_urls_api)),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    # it should served by nginx on production
-    # url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
-    # (?P<path>.*)
-    # url(r'^$', RedirectView.as_view(url='/index.html')),
     url(r'^$', serve, {
         'path': 'index.html',
     }),
-    # url(r'^(?:signup|topics|new-topic|signin)$', ensure_csrf_cookie(serve), {
-    #     'path': 'index.html',
-    # }),
     # exclude url with dot (files extension)
     url(r'^[^.]*$', ensure_csrf_cookie(serve), {
          'path': 'index.html',

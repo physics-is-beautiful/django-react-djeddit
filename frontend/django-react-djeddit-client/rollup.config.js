@@ -9,16 +9,18 @@ import svgr from '@svgr/rollup'
 import pkg from './package.json'
 
 export default {
-  input: 'app/app.js',
+  input: 'app/ThreadComponent.js',
   output: [
     {
       file: pkg.main,
       format: 'umd',
+      name: 'ThreadComponent',
       sourcemap: true,
     },
     {
       file: pkg.module,
       format: 'es',
+      name: 'ThreadComponent',
       sourcemap: true,
     },
   ],

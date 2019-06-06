@@ -3,11 +3,15 @@ import { createGlobalStyle } from 'styled-components'
 const DjedditStyle = createGlobalStyle`
   html, body {
   height: 100%;
+  font-size: 12px;
 }
 
 body {
   background: #f6f6f6;
   font-family: "Museosansrounded", sans-serif;
+}
+
+#app {
   font-size: 1.2rem;
 }
 
