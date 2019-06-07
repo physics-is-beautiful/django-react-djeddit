@@ -14,18 +14,18 @@ import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 // import { Comment, Segment } from 'semantic-ui-react'
 
-import { useInjectReducer } from 'utils/injectReducer'
-import { useInjectSaga } from 'utils/injectSaga'
+import { useInjectReducer } from '../../utils/injectReducer'
+import { useInjectSaga } from '../../utils/injectSaga'
 
-import Breadcrumb from 'components/Breadcrumb'
-import H2 from 'components/H2'
+import Breadcrumb from '../../components/Breadcrumb'
+import H2 from '../../components/H2'
 // import CommentItem from 'components/Comment'
 // import arrayToTree from './arrayToTree'
 
-import ReactMarkdown from 'react-markdown'
-import MathJax from 'react-mathjax2'
-import RemarkMathPlugin from 'remark-math'
-import SectionSheet from './SectionSheet'
+// import ReactMarkdown from 'react-markdown'
+// import MathJax from 'react-mathjax2'
+// import RemarkMathPlugin from 'remark-math'
+// import SectionSheet from './SectionSheet'
 
 import {
   makeSelectThread,

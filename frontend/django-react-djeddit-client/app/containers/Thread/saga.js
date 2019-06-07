@@ -20,7 +20,7 @@ export function* getThread(sagaArgs) {
   // const username = yield select(makeSelectUsername())
 
   try {
-    // Call our request helper (see 'utils/request')
+    // Call our request helper (see '../../utils/request')
     // const repos = yield call(request, requestURL)
 
     const threadList = yield call(Api.getThread, topicSlug, nextHref)

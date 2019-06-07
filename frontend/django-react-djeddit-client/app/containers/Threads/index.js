@@ -13,12 +13,12 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { bindActionCreators, compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 
-import ThreadListItem from 'components/ThreadListItem'
-import Breadcrumb from 'components/Breadcrumb'
+import ThreadListItem from '../../components/ThreadListItem'
+import Breadcrumb from '../../components/Breadcrumb'
 
-import { useInjectReducer } from 'utils/injectReducer'
-import { useInjectSaga } from 'utils/injectSaga'
-import H2 from 'components/H2'
+import { useInjectReducer } from '../../utils/injectReducer'
+import { useInjectSaga } from '../../utils/injectSaga'
+import H2 from '../../components/H2'
 import ListGroup from 'react-bootstrap/ListGroup'
 import {
   makeSelectThreadsList,

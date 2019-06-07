@@ -15,8 +15,8 @@ import { createStructuredSelector } from 'reselect'
 
 import TopicListItem from 'components/TopicListItem'
 
-import { useInjectReducer } from 'utils/injectReducer'
-import { useInjectSaga } from 'utils/injectSaga'
+import { useInjectReducer } from '../../utils/injectReducer'
+import { useInjectSaga } from '../../utils/injectSaga'
 import H2 from 'components/H2'
 // import { List } from 'semantic-ui-react'
 import ListGroup from 'react-bootstrap/ListGroup'

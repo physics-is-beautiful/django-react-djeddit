@@ -1,6 +1,6 @@
-import request from 'utils/request'
+import request from '../../utils/request'
 
-import { API_PREFIX } from 'utils/constants'
+import { API_PREFIX } from '../../utils/constants'
 
 import Cookies from 'js-cookie'
 

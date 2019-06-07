@@ -1,6 +1,6 @@
-import { API_PREFIX } from 'utils/constants'
+import { API_PREFIX } from '../../utils/constants'
 
-import request from 'utils/request'
+import request from '../../utils/request'
 
 function getThreads(topicSlug, nextHref) {
   let url

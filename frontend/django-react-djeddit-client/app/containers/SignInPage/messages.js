@@ -5,7 +5,7 @@
  */
 import { defineMessages } from 'react-intl'
 
-export const scope = 'boilerplate.containers.HomePage'
+export const scope = 'boilerplate.containers.SignInPage'
 
 export default defineMessages({
   signinHeader: {

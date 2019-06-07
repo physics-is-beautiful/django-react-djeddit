@@ -1,6 +1,5 @@
-import request from 'utils/request'
-
 import Cookies from 'js-cookie'
+import request from '../../utils/request'
 
 function signInCall(data) {
   const csrftoken = Cookies.get('csrftoken')

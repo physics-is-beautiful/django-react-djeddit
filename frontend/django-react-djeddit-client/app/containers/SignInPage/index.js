@@ -14,8 +14,8 @@ import { createStructuredSelector } from 'reselect'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useInjectReducer } from 'utils/injectReducer'
-import { useInjectSaga } from 'utils/injectSaga'
+import { useInjectReducer } from '../../utils/injectReducer'
+import { useInjectSaga } from '../../utils/injectSaga'
 // import {
 //   makeSelectRepos,
 //   makeSelectLoading,

@@ -4,6 +4,7 @@ import external from 'rollup-plugin-peer-deps-external'
 import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
+import json from 'rollup-plugin-json'
 import svgr from '@svgr/rollup'
 
 import pkg from './package.json'
@@ -13,7 +14,7 @@ export default {
   output: [
     {
       file: pkg.main,
-      format: 'umd',
+      format: 'amd',
       name: 'ThreadComponent',
       sourcemap: true,
     },
@@ -36,9 +37,10 @@ export default {
       plugins: ['@babel/external-helpers'],
     }),
     resolve(),
+    json(),
     commonjs({
       // namedExports: {
-      //   'react-dom': ['unstable_batchedUpdates'],
+      // 'react-dom': ['unstable_batchedUpdates'],
       // },
       // include: [
       //   'node_modules/react/**',
@@ -54,6 +56,7 @@ export default {
     'react-bootstrap',
     'react-is',
     'prop-types',
-    // 'styled-components',
+    'lodash',
+    'styled-components',
   ],
 }

@@ -1,15 +1,14 @@
 import React from 'react'
 
 import PropTypes from 'prop-types'
-import ReactMarkdown from 'react-markdown'
 
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 import ReactMde from 'react-mde'
-import { renderMathJs } from './utils'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-import * as Showdown from 'showdown'
+// import * as Showdown from 'showdown'
+import Showdown from 'showdown'
 
 export class ReplyForm extends React.Component {
   constructor(props) {

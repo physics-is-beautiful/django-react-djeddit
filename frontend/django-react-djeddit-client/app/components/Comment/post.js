@@ -6,14 +6,12 @@ import ReactMarkdown from 'react-markdown'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-// import RMathJax from 'react-mathjax'
 
 import MathJax from 'react-mathjax2'
 
 import RemarkMathPlugin from 'remark-math'
 import { ReplyForm } from './replyForm'
 import { EditForm } from './editForm'
-import { renderMathJs } from './utils'
 
 const MarkdownMathRender = props => {
   const newProps = {

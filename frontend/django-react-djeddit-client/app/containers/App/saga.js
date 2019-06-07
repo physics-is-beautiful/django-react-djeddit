@@ -6,7 +6,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { LOAD_SIGNED_IN_USER } from './constants'
 import { signedInUserLoaded, signedInLoadingError } from './actions'
 
-// import request from 'utils/request'
+// import request from '../../utils/request'
 // import { makeSelectUsername } from 'containers/HomePage/selectors'
 
 import { Api } from './api'

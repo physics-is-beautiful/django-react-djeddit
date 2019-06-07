@@ -14,15 +14,15 @@ import { Provider } from 'react-redux'
 // import history from 'utils/history'
 import 'sanitize.css/sanitize.css'
 
-import ThreadPage from 'containers/Thread'
+import ThreadPage from './containers/Thread'
 
 // Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider'
+// import LanguageProvider from 'containers/LanguageProvider'
 
 import configureStore from './configureStore'
 
 // Import i18n messages
-import { translationMessages } from './i18n'
+// import { translationMessages } from './i18n'
 
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
@@ -37,11 +37,11 @@ import { translationMessages } from './i18n'
 const initialState = {}
 const store = configureStore(initialState)
 
-const render = messages => (
+const ThreadComponent = () => (
   <Provider store={store}>
-    <LanguageProvider messages={messages}>
-      <ThreadPage embedMode />
-    </LanguageProvider>
+    {/*<LanguageProvider messages={messages}>*/}
+      <ThreadPage embedMode={true} />
+    {/*</LanguageProvider>*/}
   </Provider>
 )
 
@@ -70,6 +70,6 @@ const render = messages => (
 //   render(translationMessages)
 // }
 
-const ThreadComponent = () => render(translationMessages)
+// const ThreadComponent = () => render(translationMessages)
 
 export default ThreadComponent
