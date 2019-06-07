@@ -68,133 +68,145 @@ export class RootPost extends React.Component {
   render() {
     return (
       <div>
-        {this.props.post ? (
-          <Container fluid style={{ padding: 0 }}>
-            <Row>
-              <Col sm={11} md={11}>
-                <Row className="gray-text">
-                  <Col md={1} sm={2} xs={4}>
-                    {this.props.post.created_by ? (
-                      <a
-                        href={this.props.post.created_by.get_absolute_url}
-                        target="_blank"
-                      >
-                        {this.props.post.created_by.display_name}
-                      </a>
-                    ) : (
-                      'Guest'
-                    )}
-                  </Col>
-                  <Col md={2} sm={3} xs={4}>
-                    <Moment fromNow>{this.props.post.created_on}</Moment>
-                  </Col>
-                  <Col md={2} sm={3} xs={4}>
-                    {this.props.post.modified_on ? (
-                      <span>
-                        edited{' '}
-                        <Moment fromNow>{this.props.post.modified_on}</Moment>
-                      </span>
-                    ) : null}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm={12} md={12}>
-                    {/* djeddit part */}
-                    <div className="postcol">
-                      <div className="post-content">
-                        {/* fix for markdown editor */}
-                        <div
-                          style={{
-                            display: this.state.editFormShow ? 'block' : 'none',
-                          }}
+        {this.props.post &&
+          (!this.props.showReplyFormOnly ? (
+            <Container fluid style={{ padding: 0 }}>
+              <Row>
+                <Col sm={11} md={11}>
+                  <Row className="gray-text">
+                    <Col md={1} sm={2} xs={4}>
+                      {this.props.post.created_by ? (
+                        <a
+                          href={this.props.post.created_by.get_absolute_url}
+                          target="_blank"
                         >
-                          <EditForm
-                            parentPost={this.props.post}
-                            currentProfile={this.props.currentProfile}
-                            onSubmitPost={args => {
-                              this.setState({ content: args.content })
-                              this.onSubmitEdit(args)
+                          {this.props.post.created_by.display_name}
+                        </a>
+                      ) : (
+                        'Guest'
+                      )}
+                    </Col>
+                    <Col md={2} sm={3} xs={4}>
+                      <Moment fromNow>{this.props.post.created_on}</Moment>
+                    </Col>
+                    <Col md={2} sm={3} xs={4}>
+                      {this.props.post.modified_on ? (
+                        <span>
+                          edited{' '}
+                          <Moment fromNow>
+                            {this.props.post.modified_on}
+                          </Moment>
+                        </span>
+                      ) : null}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col sm={12} md={12}>
+                      {/* djeddit part */}
+                      <div className="postcol">
+                        <div className="post-content">
+                          {/* fix for markdown editor */}
+                          <div
+                            style={{
+                              display: this.state.editFormShow
+                                ? 'block'
+                                : 'none',
                             }}
-                            onToggleForm={this.toggleEditForm}
-                          />
+                          >
+                            <EditForm
+                              parentPost={this.props.post}
+                              currentProfile={this.props.currentProfile}
+                              onSubmitPost={args => {
+                                this.setState({ content: args.content })
+                                this.onSubmitEdit(args)
+                              }}
+                              onToggleForm={this.toggleEditForm}
+                            />
+                          </div>
+                          {this.state.editFormShow
+                            ? null
+                            : renderMathJs(
+                              <ReactMarkdown source={this.state.content} />,
+                              )}
                         </div>
-                        {this.state.editFormShow
-                          ? null
-                          : renderMathJs(
-                            <ReactMarkdown source={this.state.content} />,
-                          )}
+                        <div className="djeddit-post-item-footer">
+                          <div className="djeddit-score">
+                            {/* TODO replace with react-icons */}
+                            <i
+                              style={{ cursor: 'pointer' }}
+                              className="fas fa-arrow-up djeddit-score-upvote  "
+                              onClick={() => this.upDownClick(1)}
+                            />
+                            <span className=" djeddit-score-number">
+                              {this.props.post.score}
+                            </span>
+                            <i
+                              style={{ cursor: 'pointer' }}
+                              className="fas fa-arrow-down djeddit-score-downvote "
+                              onClick={() => this.upDownClick(-1)}
+                            />
+                          </div>
+                          <div className="btn-group btn-group-xs" role="group">
+                            <button
+                              onClick={this.toggleEditForm}
+                              className="btn btn-secondary"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={this.toggleReplyForm}
+                              className="btn btn-secondary"
+                            >
+                              Reply
+                            </button>
+                            {/* <button */}
+                            {/* onClick={this.toggleReplyForm} */}
+                            {/* className='btn btn-secondary'> */}
+                            {/* Parent */}
+                            {/* </button> */}
+                            <button
+                              onClick={this.deleteComment}
+                              className="btn btn-secondary"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="djeddit-post-item-footer">
-                        <div className="djeddit-score">
-                          {/* TODO replace with react-icons */}
-                          <i
-                            style={{ cursor: 'pointer' }}
-                            className="fas fa-arrow-up djeddit-score-upvote  "
-                            onClick={() => this.upDownClick(1)}
-                          />
-                          <span className=" djeddit-score-number">
-                            {this.props.post.score}
-                          </span>
-                          <i
-                            style={{ cursor: 'pointer' }}
-                            className="fas fa-arrow-down djeddit-score-downvote "
-                            onClick={() => this.upDownClick(-1)}
-                          />
-                        </div>
-                        <div className="btn-group btn-group-xs" role="group">
-                          <button
-                            onClick={this.toggleEditForm}
-                            className="btn btn-secondary"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={this.toggleReplyForm}
-                            className="btn btn-secondary"
-                          >
-                            Reply
-                          </button>
-                          {/* <button */}
-                          {/* onClick={this.toggleReplyForm} */}
-                          {/* className='btn btn-secondary'> */}
-                          {/* Parent */}
-                          {/* </button> */}
-                          <button
-                            onClick={this.deleteComment}
-                            className="btn btn-secondary"
-                          >
-                            Delete
-                          </button>
-                        </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col sm={12} md={12}>
+                      <div className="btn-group btn-group-xs" role="group">
+                        {/* <span className='pib-link' onClick={this.toggleReplyForm}>Reply</span> */}
+                        {/* <span className='pib-link' onClick={this.toggleReplyForm}>Share</span> */}
                       </div>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm={12} md={12}>
-                    <div className="btn-group btn-group-xs" role="group">
-                      {/* <span className='pib-link' onClick={this.toggleReplyForm}>Reply</span> */}
-                      {/* <span className='pib-link' onClick={this.toggleReplyForm}>Share</span> */}
-                    </div>
-                  </Col>
-                </Row>
-                {/* fix for markdown editor */}
-                <div
-                  style={{
-                    display: this.state.replyFormShow ? 'block' : 'none',
-                  }}
-                >
-                  <ReplyForm
-                    parentPost={this.props.post}
-                    currentProfile={this.props.currentProfile}
-                    onSubmitPost={this.onSubmitReplay}
-                    onToggleForm={this.toggleReplyForm}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        ) : null}
+                    </Col>
+                  </Row>
+                  {/* fix for markdown editor */}
+                  <div
+                    style={{
+                      display: this.state.replyFormShow ? 'block' : 'none',
+                    }}
+                  >
+                    <ReplyForm
+                      parentPost={this.props.post}
+                      currentProfile={this.props.currentProfile}
+                      onSubmitPost={this.onSubmitReplay}
+                      onToggleForm={this.toggleReplyForm}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+          ) : (
+            <ReplyForm
+              parentPost={this.props.post}
+              currentProfile={this.props.currentProfile}
+              onSubmitPost={this.onSubmitReplay}
+              onToggleForm={this.toggleReplyForm}
+            />
+          ))}
       </div>
     )
   }
@@ -207,4 +219,5 @@ RootPost.propTypes = {
   currentProfile: PropTypes.object.isRequired,
   changePostVote: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  showReplyFormOnly: PropTypes.bool,
 }

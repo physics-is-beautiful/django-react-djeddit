@@ -183,6 +183,7 @@ export function ThreadPage({
         currentProfile={{ get_absolute_url: 'fsd', display_name: 'name' }}
         changePostVote={() => {}}
         onDelete={() => {}}
+        showReplyFormOnly={Boolean(threadId)}
       />
     )
   }
@@ -262,12 +263,16 @@ export function ThreadPage({
 
   return (
     <article>
-      <Helmet>
-        {/* TODO add titles */}
-        <title>Thread</title>
-        <meta name="description" content="Djeedit React thread" />
-      </Helmet>
-      <Breadcrumb sections={breadcrumbSections} />
+      {!threadId && (
+        <React.Fragment>
+          <Helmet>
+            {/* TODO add titles */}
+            <title>Thread</title>
+            <meta name="description" content="Djeedit React thread" />
+          </Helmet>
+          <Breadcrumb sections={breadcrumbSections} />
+        </React.Fragment>
+      )}
       <div>
         <CenteredSection>
           <H2>

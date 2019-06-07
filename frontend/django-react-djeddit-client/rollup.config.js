@@ -42,7 +42,7 @@ export default {
     json(),
     commonjs({
       // namedExports: {
-      // 'react-dom': ['unstable_batchedUpdates'],
+      //   'node_modules/react-bootstrap/Container.js': ['default'],
       // },
       exclude: [
         'node_modules/react/**',
