@@ -20,6 +20,7 @@ import ThreadPage from './containers/Thread'
 // import LanguageProvider from 'containers/LanguageProvider'
 
 import configureStore from './configureStore'
+import PropTypes from 'prop-types'
 
 // Import i18n messages
 // import { translationMessages } from './i18n'
@@ -37,13 +38,9 @@ import configureStore from './configureStore'
 const initialState = {}
 const store = configureStore(initialState)
 
-const ThreadComponent = () => (
-  <Provider store={store}>
-    {/*<LanguageProvider messages={messages}>*/}
-      <ThreadPage embedMode={true} />
-    {/*</LanguageProvider>*/}
-  </Provider>
-)
+
+/* <LanguageProvider messages={messages}> */
+/* </LanguageProvider> */
 
 // export default ThreadComponent = <Provider store={store}>
 //       <LanguageProvider messages={messages}>
@@ -72,4 +69,14 @@ const ThreadComponent = () => (
 
 // const ThreadComponent = () => render(translationMessages)
 
-export default ThreadComponent
+export function ThreadComponent({ threadId }) {
+  return (
+    <Provider store={store}>
+      <ThreadPage threadId={threadId} />
+    </Provider>
+  )
+}
+
+ThreadComponent.propTypes = {
+  threadId: PropTypes.number,
+}

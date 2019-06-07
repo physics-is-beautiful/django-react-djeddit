@@ -13,6 +13,14 @@ import RemarkMathPlugin from 'remark-math'
 import { ReplyForm } from './replyForm'
 import { EditForm } from './editForm'
 
+const conf = window.DJEDDIT_CONFIG
+
+let USERNAME_FIELD = 'username'
+
+if (conf) {
+  ;({ USERNAME_FIELD } = conf)
+}
+
 const MarkdownMathRender = props => {
   const newProps = {
     ...props,
@@ -98,7 +106,7 @@ export class Post extends React.Component {
                         href={this.props.post.created_by.get_absolute_url}
                         target="_blank"
                       >
-                        {this.props.post.created_by.display_name}
+                        {this.props.post.created_by[USERNAME_FIELD]}
                       </a>
                     ) : (
                       'Guest'

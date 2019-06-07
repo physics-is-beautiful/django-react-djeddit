@@ -89,7 +89,7 @@ export function ThreadPage({
   newPost,
   thread,
   topic,
-  embedMode,
+  threadId,
 }) {
   useInjectReducer({ key: threadKey, reducer })
   useInjectSaga({ key: threadKey, saga })
@@ -102,13 +102,19 @@ export function ThreadPage({
   const [nextHref, setNextHref] = useState(null)
 
   useEffect(() => {
-    if (!topic) {
-      topicsActions.loadTopic(match.params.topicSlug)
+    if (match) {
+      // loaded as SPA
+      if (!topic) {
+        topicsActions.loadTopic(match.params.topicSlug)
+      }
+      // load thread from server
+      threadActions.loadThread(match.params.threadId)
+      // load posts of thread from server
+      threadActions.loadPosts(match.params.threadId)
+    } else {
+      // loaded as Component
+      threadActions.loadPosts(threadId)
     }
-    // load thread from server
-    threadActions.loadThread(match.params.threadId)
-    // load posts of thread from server
-    threadActions.loadPosts(match.params.threadId)
 
     // reset on unmount
     return () => {
@@ -319,7 +325,7 @@ ThreadPage.propTypes = {
   postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  embedMode: PropTypes.bool,
+  threadId: PropTypes.number,
 }
 
 const mapStateToProps = createStructuredSelector({

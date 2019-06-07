@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import json from 'rollup-plugin-json'
+
 import svgr from '@svgr/rollup'
 
 import pkg from './package.json'
@@ -26,9 +27,10 @@ export default {
     },
   ],
   plugins: [
-    external(),
+    external(), // exclude peer deps
     postcss({
-      modules: true,
+      // modules: true,
+      extensions: ['.css'],
     }),
     url({ exclude: ['**/*.svg'] }),
     svgr(),
@@ -42,6 +44,11 @@ export default {
       // namedExports: {
       // 'react-dom': ['unstable_batchedUpdates'],
       // },
+      exclude: [
+        'node_modules/react/**',
+        'node_modules/react-dom/**',
+        // 'node_modules/react-bootstrap/**',
+      ],
       // include: [
       //   'node_modules/react/**',
       //   'node_modules/react-dom/**',

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import PropTypes from 'prop-types'
-import ReactMarkdown from 'react-markdown'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
@@ -9,7 +8,6 @@ import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 
 import Showdown from 'showdown'
-import { renderMathJs } from './utils'
 
 export class EditForm extends React.Component {
   constructor(props) {
