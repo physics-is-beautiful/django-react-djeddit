@@ -40,13 +40,18 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    # TODO remove in the future!
     posts_in_tree_order = serializers.SerializerMethodField()
     # first post data
     content = serializers.CharField(write_only=True)
     topic_slug = serializers.CharField(write_only=True)
+    posts_counter = serializers.SerializerMethodField(read_only=True)
     op = PostSerializer(required=False)
 
-    # TODO remove in the future
+    def get_posts_counter(self, obj):
+        return obj.op.get_descendant_count()
+
+    # TODO remove in the future!
     def get_posts_in_tree_order(self, obj):
         posts_list = obj.op.get_descendants(include_self=True).select_related('created_by')
         # djeddit have one root post due 'op = models.ForeignKey('Post')' field
@@ -80,15 +85,19 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         # fields = ['title', 'id','slug', 'views', 'posts_in_tree_order', 'content', 'topic_slug', 'op']
-        fields = ['title', 'id', 'slug', 'views', 'content', 'topic_slug', 'op', 'posts_in_tree_order']
+        fields = ['title', 'posts_counter', 'id', 'slug', 'views', 'content', 'topic_slug', 'op', 'posts_in_tree_order']
         read_only_fields = ('slug', 'posts_in_tree_order', 'views', 'id')
 
 
 class TopicsSerializer(serializers.ModelSerializer):
+    threads_counter = serializers.SerializerMethodField(read_only=True)
+
+    def get_threads_counter(self, obj):
+        return obj.thread.count()
 
     class Meta:
         model = Topic
-        fields = ['title', 'slug', 'description']
+        fields = ['title', 'slug', 'description', 'threads_counter']
 
 
 

@@ -26,7 +26,7 @@ function ThreadListItem(props) {
             {props.item.description}
           </Col>
           <Col md={1}>
-            <CounterText>123</CounterText>
+            <CounterText>{props.item.posts_counter}</CounterText>
             <CounterText>Comments</CounterText>
           </Col>
         </Row>

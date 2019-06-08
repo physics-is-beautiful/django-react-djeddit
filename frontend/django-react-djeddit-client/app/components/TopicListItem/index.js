@@ -26,7 +26,7 @@ function TopicListItem(props) {
             {props.item.description}
           </Col>
           <Col md={1}>
-            <CounterText>123</CounterText>
+            <CounterText>{props.item.threads_counter}</CounterText>
             <CounterText>Threads</CounterText>
           </Col>
         </Row>
