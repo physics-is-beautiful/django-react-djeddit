@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "django djeddit react client",
   "files": [
     "dist",
@@ -101,6 +101,7 @@
     "react-infinite-scroller": "^1.2.4",
     "react-intl": "2.8.0",
     "react-markdown": "^4.0.8",
+    "react-bootstrap": "^1.0.0-beta.9",
     "react-mathjax2": "0.0.2",
     "react-mde": "^7.3.2",
     "react-redux": "7.0.2",
@@ -169,7 +170,6 @@
     "pre-commit": "1.2.2",
     "prettier": "1.17.0",
     "react-app-polyfill": "0.2.2",
-    "react-bootstrap": "^1.0.0-beta.9",
     "react-test-renderer": "16.8.6",
     "react-testing-library": "6.1.2",
     "rimraf": "2.6.3",
