@@ -34,16 +34,49 @@ export default {
     }),
     url({ exclude: ['**/*.svg'] }),
     svgr(),
-    babel({
-      exclude: 'node_modules/**',
-      plugins: ['@babel/external-helpers'],
-    }),
     resolve(),
     json(),
+    babel({
+      // exclude: 'node_modules/**',
+      // exclude: 'node_modules/@babel/runtime/**',
+      babelrc: false,
+      presets: [
+        '@babel/react',
+        [
+          '@babel/env',
+          {
+            modules: false,
+            // useBuiltIns: 'usage',
+            // corejs: '2',
+            targets: {
+              chrome: '61',
+            },
+          },
+        ],
+      ],
+      plugins: [
+        // '@babel/external-helpers',
+        [
+          '@babel/transform-runtime',
+          {
+            // corejs: 2,
+            corejs: false,
+            helpers: true,
+            regenerator: false,
+            useESModules: true,
+          },
+        ],
+        '@babel/proposal-object-rest-spread',
+      ],
+      runtimeHelpers: true,
+    }),
     commonjs({
-      // namedExports: {
-      //   'node_modules/react-bootstrap/Container.js': ['default'],
-      // },
+      namedExports: {
+        // 'node_modules/@babel/runtime/helpers/typeof.js': ['default'],
+        // 'node_modules/@babel/runtime-corejs2/core-js/object/assign.js': [
+        //   'default',
+        // ],
+      },
       exclude: [
         'node_modules/**',
         // 'node_modules/react/**',
@@ -91,5 +124,8 @@ export default {
     'intl-messageformat',
     'intl-relativeformat',
     '@react-bootstrap',
+    // '@babel/polyfill',
+    // '@babel/runtime-corejs2/core-js/object/',
+    // '@babel/runtime',
   ],
 }
