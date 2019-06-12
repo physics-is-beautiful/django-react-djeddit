@@ -62,7 +62,7 @@ class Topic(NamedModel):
         return Thread.objects.filter(topic=self).count()
 
     def save(self, *args, **kwargs):
-        self.slug = self._gen_slug(self.title)
+        self.slug = self.gen_slug(self.title)
         super(Topic, self).save(*args, **kwargs)
 
     @staticmethod
@@ -124,7 +124,7 @@ class Thread(NamedModel):
         self.slug = self._genSlug()
         super(Thread, self).save(*args, **kwargs)
 
-    # TODO Not correct function, see Topic._gen_slug
+    # TODO Not correct function, see Topic.gen_slug
     def _genSlug(self):
         slug = slugify(self.title, to_lower=True, max_length=180)
         return slug
