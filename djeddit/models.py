@@ -65,7 +65,8 @@ class Topic(NamedModel):
         self.slug = self._gen_slug(self.title)
         super(Topic, self).save(*args, **kwargs)
 
-    def _gen_slug(self, title, try_count=0):
+    @staticmethod
+    def gen_slug(title, try_count=0):
 
         if try_count != 0:
             slug = slugify("{} {}".format(title, try_count), to_lower=True, max_length=180)
@@ -78,7 +79,7 @@ class Topic(NamedModel):
             return slug
         # if topic is exist
         try_count += 1
-        return self._gen_slug(title, try_count)
+        return Topic.gen_slug(title, try_count)
 
     @property
     def urlTitle(self):
