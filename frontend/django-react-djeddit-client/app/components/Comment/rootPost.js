@@ -12,6 +12,14 @@ import { ReplyForm } from './replyForm'
 import { EditForm } from './editForm'
 import { renderMathJs } from './utils'
 
+const conf = window.DJEDDIT_CONFIG
+
+let USERNAME_FIELD = 'username'
+
+if (conf) {
+  ;({ USERNAME_FIELD } = conf)
+}
+
 export class RootPost extends React.Component {
   constructor(props) {
     super(props)
@@ -80,7 +88,7 @@ export class RootPost extends React.Component {
                           href={this.props.post.created_by.get_absolute_url}
                           target="_blank"
                         >
-                          {this.props.post.created_by.display_name}
+                          {this.props.post.created_by[USERNAME_FIELD]}
                         </a>
                       ) : (
                         'Guest'

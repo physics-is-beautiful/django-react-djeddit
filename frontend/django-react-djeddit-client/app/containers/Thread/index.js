@@ -52,9 +52,15 @@ import saga from './saga'
 
 import topicsReducer from '../Topics/reducer'
 import topicsSaga from '../Topics/saga'
+
+import appReducer from '../App/reducer'
+import appSaga from '../App/saga'
+
 import history from '../../utils/history'
 import { Post } from '../../components/Comment/post'
 import { RootPost } from '../../components/Comment/rootPost'
+import { makeSelectSignedInUser } from '../App/selectors'
+import { loadSignedInUser } from '../App/actions'
 
 // import { ReplyForm } from '../../components/Comment/replyForm'
 
@@ -62,6 +68,7 @@ import { RootPost } from '../../components/Comment/rootPost'
 
 const threadKey = 'thread'
 const topicsKey = 'topics'
+const appKey = 'app'
 
 // const MarkdownMathRender = props => {
 //   const newProps = {
@@ -89,6 +96,7 @@ export function ThreadPage({
   newPost,
   thread,
   topic,
+  signedInUser,
   threadId,
 }) {
   useInjectReducer({ key: threadKey, reducer })
@@ -97,9 +105,64 @@ export function ThreadPage({
   useInjectReducer({ key: topicsKey, reducer: topicsReducer })
   useInjectSaga({ key: topicsKey, saga: topicsSaga })
 
+  useInjectSaga({ key: appKey, saga: appSaga })
+  useInjectReducer({ key: appKey, reducer: appReducer })
+
   const [posts, setPosts] = useState([])
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
+
+  const [breadcrumbSections, setBreadcrumbSections] = useState([])
+
+  useEffect(() => {
+    if (topic) {
+      // TODO generate this
+      setBreadcrumbSections([
+        {
+          key: 'Topics',
+          content: 'Topics',
+          href: '/topics',
+          // link: true,
+          onClick: evt => {
+            evt.preventDefault()
+            history.push('/topics')
+          },
+        },
+        {
+          key: topic.slug,
+          content: topic.title,
+          href: `/topics/${topic.slug}`,
+          // link: true,
+          onClick: evt => {
+            evt.preventDefault()
+            history.push(`/topics/${topic.slug}`)
+          },
+        },
+      ])
+    }
+  }, [topic])
+
+  useEffect(() => {
+    if (!signedInUser) {
+      loadSignedInUser()
+    }
+  }, [])
+
+  useEffect(() => {
+    // loaded as Component / threadId changed
+    // clearList()
+    threadActions.loadPosts(threadId)
+    return () => {
+      // clear topics list berfore threadId
+      clearTopicsList()
+    }
+  }, [threadId])
+
+  const clearTopicsList = () => {
+    setHasMoreItems(false)
+    setPosts([])
+    threadActions.postsLoaded(false)
+  }
 
   useEffect(() => {
     if (match) {
@@ -111,26 +174,13 @@ export function ThreadPage({
       threadActions.loadThread(match.params.threadId)
       // load posts of thread from server
       threadActions.loadPosts(match.params.threadId)
-    } else {
-      // loaded as Component
-      threadActions.loadPosts(threadId)
     }
 
     // reset on unmount
     return () => {
-      // clear topics list while unmount
-      threadActions.postsLoaded(false)
+      clearTopicsList()
     }
   }, [])
-
-  // load next page comments
-  const loadNextPage = () => {
-    if (hasMoreItems) {
-      // if we call next page setHasMore item false and waiting for a server response
-      setHasMoreItems(Boolean(false))
-      threadActions.loadPosts(match.params.threadId, nextHref)
-    }
-  }
 
   useEffect(() => {
     function mergeUnique(a, b, prop) {
@@ -156,7 +206,6 @@ export function ThreadPage({
     if (newPost) {
       // find last index with
       const parentIndex = posts.findIndex(x => x.uid === newPost.parent)
-      // console.log('parent index' + parentIndex);
       const postsCopy = [...posts]
       postsCopy.splice(parentIndex + 1, 0, newPost)
       setPosts(postsCopy)
@@ -180,7 +229,7 @@ export function ThreadPage({
         post={posts[0]}
         onSubmitReplay={handleAddSubmit}
         onSubmitEdit={handleUpdateSubmit}
-        currentProfile={{ get_absolute_url: 'fsd', display_name: 'name' }}
+        currentProfile={signedInUser || {}}
         changePostVote={() => {}}
         onDelete={() => {}}
         showReplyFormOnly={Boolean(threadId)}
@@ -212,13 +261,22 @@ export function ThreadPage({
             post={post}
             onSubmitReplay={onSubmitReplay}
             onSubmitEdit={onSubmitEdit}
-            currentProfile={{ get_absolute_url: 'fsd', display_name: 'name' }}
+            currentProfile={signedInUser || {}}
             changePostVote={() => {}}
             onDelete={() => {}}
           />
         </div>
       </div>
     )
+  }
+
+  // load next page comments
+  const loadNextPage = () => {
+    if (hasMoreItems) {
+      // if we call next page setHasMore item false and waiting for a server response
+      setHasMoreItems(Boolean(false))
+      threadActions.loadPosts(threadId || match.params.threadId, nextHref)
+    }
   }
 
   // all pages comments / todo check for performance
@@ -230,36 +288,6 @@ export function ThreadPage({
       return true
     })
     .map(item => renderPost(item, handleAddSubmit, handleUpdateSubmit))
-
-  const [breadcrumbSections, setBreadcrumbSections] = useState([])
-
-  useEffect(() => {
-    if (topic) {
-      // TODO generate this
-      setBreadcrumbSections([
-        {
-          key: 'Topics',
-          content: 'Topics',
-          href: '/topics',
-          // link: true,
-          onClick: evt => {
-            evt.preventDefault()
-            history.push('/topics')
-          },
-        },
-        {
-          key: topic.slug,
-          content: topic.title,
-          href: `/topics/${topic.slug}`,
-          // link: true,
-          onClick: evt => {
-            evt.preventDefault()
-            history.push(`/topics/${topic.slug}`)
-          },
-        },
-      ])
-    }
-  }, [topic])
 
   return (
     <article>
@@ -330,6 +358,7 @@ ThreadPage.propTypes = {
   postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   threadId: PropTypes.number,
 }
 
@@ -338,7 +367,7 @@ const mapStateToProps = createStructuredSelector({
   topic: makeSelectTopic(),
   thread: makeSelectThread(),
   newPost: makeSelectNewPost(),
-  // username: makeSelectUsername(),
+  signedInUser: makeSelectSignedInUser(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),
 })
