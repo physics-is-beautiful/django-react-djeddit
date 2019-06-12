@@ -66,12 +66,16 @@ class Topic(NamedModel):
         super(Topic, self).save(*args, **kwargs)
 
     @staticmethod
-    def gen_slug(title, try_count=0):
+    def gen_slug(title, try_count=0, unique=True):
 
         if try_count != 0:
             slug = slugify("{} {}".format(title, try_count), to_lower=True, max_length=180)
         else:
             slug = slugify(title, to_lower=True, max_length=180)
+
+        if not unique:
+            return slug
+
         # try fo find existing Thread
         try:
             Topic.objects.get(slug=slug)
