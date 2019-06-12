@@ -154,14 +154,15 @@ export function ThreadPage({
     threadActions.loadPosts(threadId)
     return () => {
       // clear topics list berfore threadId
-      clearTopicsList()
+      clearThread()
     }
   }, [threadId])
 
-  const clearTopicsList = () => {
+  const clearThread = () => {
     setHasMoreItems(false)
     setPosts([])
     threadActions.postsLoaded(false)
+    threadActions.newPostSuccess(null)
   }
 
   useEffect(() => {
@@ -178,7 +179,7 @@ export function ThreadPage({
 
     // reset on unmount
     return () => {
-      clearTopicsList()
+      clearThread()
     }
   }, [])
 
