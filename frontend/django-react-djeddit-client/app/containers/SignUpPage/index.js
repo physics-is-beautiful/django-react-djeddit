@@ -154,8 +154,9 @@ export function SignUpPage({
               <label>
                 <FormattedHTMLMessage {...messages.password} />
               </label>
-              <Form.Input
+              <Form.Control
                 // label={intl.formatMessage(messages.password)}
+                required
                 value={formData.password}
                 type="password"
                 name="password1"
@@ -163,7 +164,7 @@ export function SignUpPage({
               />
               <FormattedHTMLMessage {...messages.passwordDescription} />
             </Form.Group>
-            <Form.Field>
+            <Form.Group>
               <label>
                 <FormattedHTMLMessage {...messages.passwordConfirmation} />
               </label>
@@ -176,7 +177,7 @@ export function SignUpPage({
                 onChange={handleChange}
               />
               <FormattedMessage {...messages.passwordConfirmationDescription} />
-            </Form.Field>
+            </Form.Group>
             <Button type="submit" disabled={submitDisabled}>
               <FormattedMessage {...messages.submitButton} />
             </Button>
