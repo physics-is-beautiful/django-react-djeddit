@@ -11,7 +11,7 @@ function getSignedInUser() {
     ;({ API_PROFILE_URL } = conf)
   }
 
-  const respone = request(API_PROFILE_URL, {
+  const response = request(API_PROFILE_URL, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -19,7 +19,7 @@ function getSignedInUser() {
       'X-Requested-With': 'XMLHttpRequest',
     },
   })
-  return respone
+  return response
 }
 
 export const Api = { getSignedInUser }

@@ -1,8 +1,7 @@
-import request from '../../utils/request'
-
-import { API_PREFIX } from '../../utils/constants'
-
 import Cookies from 'js-cookie'
+
+import request from '../../utils/request'
+import { API_PREFIX } from '../../utils/constants'
 
 function newTopicCall(data) {
   const csrftoken = Cookies.get('csrftoken')

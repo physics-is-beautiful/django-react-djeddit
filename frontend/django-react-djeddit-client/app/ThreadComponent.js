@@ -7,7 +7,8 @@
 
 // Import all the third party stuff
 import React from 'react'
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 // import { ConnectedRouter } from 'connected-react-router'
 // import FontFaceObserver from 'fontfaceobserver'
@@ -20,7 +21,6 @@ import ThreadPage from './containers/Thread'
 // import LanguageProvider from 'containers/LanguageProvider'
 
 import configureStore from './configureStore'
-import PropTypes from 'prop-types'
 
 // Import i18n messages
 // import { translationMessages } from './i18n'
@@ -37,7 +37,6 @@ import PropTypes from 'prop-types'
 // Create redux store with history
 const initialState = {}
 const store = configureStore(initialState)
-
 
 /* <LanguageProvider messages={messages}> */
 /* </LanguageProvider> */

@@ -6,11 +6,13 @@ import ReactMarkdown from 'react-markdown'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import MathJax from 'react-mathjax2'
 // import RMathJax from 'react-mathjax'
 
+import RemarkMathPlugin from 'remark-math'
 import { ReplyForm } from './replyForm'
 import { EditForm } from './editForm'
-import { renderMathJs } from './utils'
+// import { renderMathJs } from './utils'
 
 const conf = window.DJEDDIT_CONFIG
 
@@ -18,6 +20,25 @@ let USERNAME_FIELD = 'username'
 
 if (conf) {
   ;({ USERNAME_FIELD } = conf)
+}
+
+// TODO move MarkdownMathRender to utils
+const MarkdownMathRender = props => {
+  const newProps = {
+    ...props,
+    plugins: [RemarkMathPlugin],
+    renderers: {
+      ...props.renderers,
+      math: _props => <MathJax.Node>{_props.value}</MathJax.Node>,
+      inlineMath: _props => <MathJax.Node inline>{_props.value}</MathJax.Node>,
+    },
+  }
+
+  return (
+    <MathJax.Context input="tex">
+      <ReactMarkdown {...newProps} />
+    </MathJax.Context>
+  )
 }
 
 export class RootPost extends React.Component {
@@ -101,9 +122,7 @@ export class RootPost extends React.Component {
                       {this.props.post.modified_on ? (
                         <span>
                           edited{' '}
-                          <Moment fromNow>
-                            {this.props.post.modified_on}
-                          </Moment>
+                          <Moment fromNow>{this.props.post.modified_on}</Moment>
                         </span>
                       ) : null}
                     </Col>
@@ -131,11 +150,12 @@ export class RootPost extends React.Component {
                               onToggleForm={this.toggleEditForm}
                             />
                           </div>
-                          {this.state.editFormShow
-                            ? null
-                            : renderMathJs(
-                              <ReactMarkdown source={this.state.content} />,
-                              )}
+                          {this.state.editFormShow ? null : (
+                            <MarkdownMathRender source={this.state.content} />
+                          )}
+                          {/* renderMathJs( */}
+                          {/* <ReactMarkdown source={this.state.content} />, */}
+                          {/* )} */}
                         </div>
                         <div className="djeddit-post-item-footer">
                           <div className="djeddit-score">
@@ -154,31 +174,40 @@ export class RootPost extends React.Component {
                               onClick={() => this.upDownClick(-1)}
                             />
                           </div>
-                          <div className="btn-group btn-group-xs" role="group">
-                            <button
-                              onClick={this.toggleEditForm}
-                              className="btn btn-secondary"
+                          {this.props.currentProfile ? (
+                            <div
+                              className="btn-group btn-group-xs"
+                              role="group"
                             >
-                              Edit
-                            </button>
-                            <button
-                              onClick={this.toggleReplyForm}
-                              className="btn btn-secondary"
-                            >
-                              Reply
-                            </button>
-                            {/* <button */}
-                            {/* onClick={this.toggleReplyForm} */}
-                            {/* className='btn btn-secondary'> */}
-                            {/* Parent */}
-                            {/* </button> */}
-                            <button
-                              onClick={this.deleteComment}
-                              className="btn btn-secondary"
-                            >
-                              Delete
-                            </button>
-                          </div>
+                              <button
+                                onClick={this.toggleEditForm}
+                                className="btn btn-secondary"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={this.toggleReplyForm}
+                                className="btn btn-secondary"
+                              >
+                                Reply
+                              </button>
+                              {/* <button */}
+                              {/* onClick={this.toggleReplyForm} */}
+                              {/* className='btn btn-secondary'> */}
+                              {/* Parent */}
+                              {/* </button> */}
+                              <button
+                                onClick={this.deleteComment}
+                                className="btn btn-secondary"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          ) : (
+                            <span>
+                              Please register or login to post a comment
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Col>
@@ -224,7 +253,7 @@ RootPost.propTypes = {
   post: PropTypes.object.isRequired,
   onSubmitReplay: PropTypes.func.isRequired,
   onSubmitEdit: PropTypes.func.isRequired,
-  currentProfile: PropTypes.object.isRequired,
+  currentProfile: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   changePostVote: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   showReplyFormOnly: PropTypes.bool,

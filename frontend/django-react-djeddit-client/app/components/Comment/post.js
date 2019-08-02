@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
 import MathJax from 'react-mathjax2'
 
 import RemarkMathPlugin from 'remark-math'
@@ -21,6 +20,7 @@ if (conf) {
   ;({ USERNAME_FIELD } = conf)
 }
 
+// TODO move MarkdownMathRender to utils
 const MarkdownMathRender = props => {
   const newProps = {
     ...props,
@@ -93,6 +93,9 @@ export class Post extends React.Component {
   }
 
   render() {
+    
+    console.log(this.props.currentProfile);
+    
     return (
       <div>
         {this.props.post ? (
@@ -166,31 +169,38 @@ export class Post extends React.Component {
                             onClick={() => this.upDownClick(-1)}
                           />
                         </div>
-                        <div className="btn-group btn-group-xs" role="group">
-                          <button
-                            onClick={this.toggleEditForm}
-                            className="btn btn-secondary"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={this.toggleReplyForm}
-                            className="btn btn-secondary"
-                          >
-                            Reply
-                          </button>
-                          {/* <button */}
-                          {/* onClick={this.toggleReplyForm} */}
-                          {/* className='btn btn-secondary'> */}
-                          {/* Parent */}
-                          {/* </button> */}
-                          <button
-                            onClick={this.deleteComment}
-                            className="btn btn-secondary"
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        {/* TODO add edit/delete rights */}
+                        {this.props.currentProfile ? (
+                          <div className="btn-group btn-group-xs" role="group">
+                            <button
+                              onClick={this.toggleEditForm}
+                              className="btn btn-secondary"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={this.toggleReplyForm}
+                              className="btn btn-secondary"
+                            >
+                              Reply
+                            </button>
+                            {/* <button */}
+                            {/* onClick={this.toggleReplyForm} */}
+                            {/* className='btn btn-secondary'> */}
+                            {/* Parent */}
+                            {/* </button> */}
+                            <button
+                              onClick={this.deleteComment}
+                              className="btn btn-secondary"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        ) : (
+                          <span>
+                            Please register or login to post a comment
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Col>
@@ -229,7 +239,7 @@ Post.propTypes = {
   post: PropTypes.object.isRequired,
   onSubmitReplay: PropTypes.func.isRequired,
   onSubmitEdit: PropTypes.func.isRequired,
-  currentProfile: PropTypes.object.isRequired,
+  currentProfile: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   changePostVote: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }

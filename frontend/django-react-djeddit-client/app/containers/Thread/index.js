@@ -150,8 +150,9 @@ export function ThreadPage({
 
   useEffect(() => {
     // loaded as Component / threadId changed
-    // clearList()
-    threadActions.loadPosts(threadId)
+    if (threadId) {
+      threadActions.loadPosts(threadId)
+    }
     return () => {
       // clear topics list berfore threadId
       clearThread()
@@ -230,7 +231,7 @@ export function ThreadPage({
         post={posts[0]}
         onSubmitReplay={handleAddSubmit}
         onSubmitEdit={handleUpdateSubmit}
-        currentProfile={signedInUser || {}}
+        currentProfile={signedInUser || null}
         changePostVote={() => {}}
         onDelete={() => {}}
         showReplyFormOnly={Boolean(threadId)}
@@ -262,7 +263,7 @@ export function ThreadPage({
             post={post}
             onSubmitReplay={onSubmitReplay}
             onSubmitEdit={onSubmitEdit}
-            currentProfile={signedInUser || {}}
+            currentProfile={signedInUser || null}
             changePostVote={() => {}}
             onDelete={() => {}}
           />

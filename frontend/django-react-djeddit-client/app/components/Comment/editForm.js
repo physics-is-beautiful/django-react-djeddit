@@ -171,7 +171,7 @@ export class EditForm extends React.Component {
 
 EditForm.propTypes = {
   parentPost: PropTypes.object.isRequired,
-  currentProfile: PropTypes.object.isRequired,
+  currentProfile: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   onSubmitPost: PropTypes.func.isRequired,
   onToggleForm: PropTypes.func,
 }
