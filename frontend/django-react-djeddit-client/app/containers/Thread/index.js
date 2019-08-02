@@ -98,6 +98,7 @@ export function ThreadPage({
   topic,
   signedInUser,
   threadId,
+  anonAsUserObject, // TODO move it to djeddit settings
 }) {
   useInjectReducer({ key: threadKey, reducer })
   useInjectSaga({ key: threadKey, saga })
@@ -144,7 +145,7 @@ export function ThreadPage({
 
   useEffect(() => {
     if (!signedInUser) {
-      loadSignedInUser()
+      loadSignedInUser() // try to reload user (used in Thread Component)
     }
   }, [])
 
@@ -222,6 +223,18 @@ export function ThreadPage({
     threadActions.updatePost(args)
   }
 
+  const getSignedInUser = () => {
+    if (
+      !signedInUser ||
+      (anonAsUserObject &&
+        hasOwnProperty(signedInUser, 'is_anonymous') &&
+        signedInUser.is_anonymous)
+    ) {
+      return null
+    }
+    return signedInUser
+  }
+
   // let comments = []
   let rootComment = null
 
@@ -231,7 +244,7 @@ export function ThreadPage({
         post={posts[0]}
         onSubmitReplay={handleAddSubmit}
         onSubmitEdit={handleUpdateSubmit}
-        currentProfile={signedInUser || null}
+        currentProfile={getSignedInUser()}
         changePostVote={() => {}}
         onDelete={() => {}}
         showReplyFormOnly={Boolean(threadId)}
@@ -263,7 +276,7 @@ export function ThreadPage({
             post={post}
             onSubmitReplay={onSubmitReplay}
             onSubmitEdit={onSubmitEdit}
-            currentProfile={signedInUser || null}
+            currentProfile={getSignedInUser()}
             changePostVote={() => {}}
             onDelete={() => {}}
           />
@@ -362,6 +375,7 @@ ThreadPage.propTypes = {
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   threadId: PropTypes.number,
+  anonAsUserObject: PropTypes.bool,
 }
 
 const mapStateToProps = createStructuredSelector({

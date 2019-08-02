@@ -68,14 +68,21 @@ const store = configureStore(initialState)
 
 // const ThreadComponent = () => render(translationMessages)
 
-export function ThreadComponent({ threadId }) {
+/** *
+ * @param threadId
+ * @param anonUserObject use anonUserObject if true with is_anonymous attr {"is_anonymous":true}
+ * @returns {*}
+ * @constructor
+ */
+export function ThreadComponent({ threadId, anonAsUserObject = false }) {
   return (
     <Provider store={store}>
-      <ThreadPage threadId={threadId} />
+      <ThreadPage threadId={threadId} anonAsUserObject={anonAsUserObject} />
     </Provider>
   )
 }
 
 ThreadComponent.propTypes = {
   threadId: PropTypes.number,
+  anonAsUserObject: PropTypes.bool,
 }

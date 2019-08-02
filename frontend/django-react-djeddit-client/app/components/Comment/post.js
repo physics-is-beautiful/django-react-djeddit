@@ -93,9 +93,6 @@ export class Post extends React.Component {
   }
 
   render() {
-    
-    console.log(this.props.currentProfile);
-    
     return (
       <div>
         {this.props.post ? (
