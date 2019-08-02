@@ -232,6 +232,7 @@ export function ThreadPage({
     ) {
       return null
     }
+
     return signedInUser
   }
 
@@ -325,20 +326,6 @@ export function ThreadPage({
         </CenteredSection>
         {/* root post */}
         {rootComment}
-        {/* <div> */}
-        {/* <div> */}
-        {/* {posts && posts.length > 0 ? ( */}
-        {/* <ReplyForm */}
-        {/* parentPost={posts[0]} */}
-        {/* currentProfile={{ */}
-        {/* get_absolute_url: 'fsd', */}
-        {/* display_name: 'name', */}
-        {/* }} */}
-        {/* onSubmitPost={handleAddSubmit} */}
-        {/* /> */}
-        {/* ) : null} */}
-        {/* </div> */}
-        {/* </div> */}
         <Section>
           <InfiniteScroll
             pageStart={0}

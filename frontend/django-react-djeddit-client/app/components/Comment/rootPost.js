@@ -237,12 +237,14 @@ export class RootPost extends React.Component {
               </Row>
             </Container>
           ) : (
-            <ReplyForm
-              parentPost={this.props.post}
-              currentProfile={this.props.currentProfile}
-              onSubmitPost={this.onSubmitReplay}
-              onToggleForm={this.toggleReplyForm}
-            />
+            this.props.currentProfile && ( // show only for logged in user
+              <ReplyForm
+                parentPost={this.props.post}
+                currentProfile={this.props.currentProfile}
+                onSubmitPost={this.onSubmitReplay}
+                onToggleForm={this.toggleReplyForm}
+              />
+            )
           ))}
       </div>
     )
