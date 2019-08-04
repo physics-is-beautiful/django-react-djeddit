@@ -46,6 +46,7 @@ import Section from './Section'
 import messages from './messages'
 import * as threadActionsCreator from './actions'
 import * as topicsActionsCreator from '../Topics/actions'
+import * as appActionsCreator from '../App/actions'
 
 import reducer from './reducer'
 import saga from './saga'
@@ -60,7 +61,6 @@ import history from '../../utils/history'
 import { Post } from '../../components/Comment/post'
 import { RootPost } from '../../components/Comment/rootPost'
 import { makeSelectSignedInUser } from '../App/selectors'
-import { loadSignedInUser } from '../App/actions'
 
 // import { ReplyForm } from '../../components/Comment/replyForm'
 
@@ -91,6 +91,7 @@ const appKey = 'app'
 export function ThreadPage({
   threadActions,
   topicsActions,
+  appActions,
   match,
   postsList,
   newPost,
@@ -145,7 +146,7 @@ export function ThreadPage({
 
   useEffect(() => {
     if (!signedInUser) {
-      loadSignedInUser() // try to reload user (used in Thread Component)
+      appActions.loadSignedInUser()
     }
   }, [])
 
@@ -224,11 +225,15 @@ export function ThreadPage({
   }
 
   const getSignedInUser = () => {
+    if (!signedInUser) {
+      return null
+    }
     if (
-      !signedInUser ||
-      (anonAsUserObject &&
-        hasOwnProperty(signedInUser, 'is_anonymous') &&
-        signedInUser.is_anonymous)
+      // if user loads as object with {is_anonymous: true} attr
+      signedInUser &&
+      anonAsUserObject &&
+      Object.prototype.hasOwnProperty.call(signedInUser, 'is_anonymous') &&
+      signedInUser.is_anonymous
     ) {
       return null
     }
@@ -352,6 +357,9 @@ ThreadPage.propTypes = {
     postsLoaded: PropTypes.func.isRequired,
     newPost: PropTypes.func.isRequired,
   }).isRequired,
+  appActions: PropTypes.shape({
+    loadSignedInUser: PropTypes.func.isRequired,
+  }).isRequired,
   topicsActions: PropTypes.shape({
     loadTopic: PropTypes.func.isRequired,
   }).isRequired,
@@ -379,6 +387,7 @@ export function mapDispatchToProps(dispatch) {
   return {
     threadActions: bindActionCreators(threadActionsCreator, dispatch),
     topicsActions: bindActionCreators(topicsActionsCreator, dispatch),
+    appActions: bindActionCreators(appActionsCreator, dispatch),
   }
 }
 
