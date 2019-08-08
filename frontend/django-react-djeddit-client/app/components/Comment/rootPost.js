@@ -151,7 +151,13 @@ export class RootPost extends React.Component {
                             />
                           </div>
                           {this.state.editFormShow ? null : (
-                            <MarkdownMathRender source={this.state.content} />
+                            <div className="mde-preview">
+                              <div className="mde-preview-content">
+                                <MarkdownMathRender
+                                  source={this.state.content}
+                                />
+                              </div>
+                            </div>
                           )}
                           {/* renderMathJs( */}
                           {/* <ReactMarkdown source={this.state.content} />, */}

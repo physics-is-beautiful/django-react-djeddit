@@ -146,7 +146,11 @@ export class Post extends React.Component {
                           />
                         </div>
                         {this.state.editFormShow ? null : (
-                          <MarkdownMathRender source={this.state.content} />
+                          <div className="mde-preview">
+                            <div className="mde-preview-content">
+                              <MarkdownMathRender source={this.state.content} />
+                            </div>
+                          </div>
                         )}
                       </div>
                       <div className="djeddit-post-item-footer">
