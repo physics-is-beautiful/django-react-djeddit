@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -132,32 +133,42 @@ export class EditForm extends React.Component {
               {/* </div> */}
               <div className="btn-group btn-group-xs" role="group">
                 {this.props.parentPost.level === 0 ? (
-                  <button
-                    className={`common-button${
-                      this.state.content === '' ? ' disabled-button' : ''
-                    }`}
-                    type="submit"
-                    disabled={this.state.content === ''}
-                  >
+                  <Button disabled={this.state.content === ''} type="submit">
                     Comment
-                  </button>
+                    {/* <button */}
+                    {/* className={`common-button${ */}
+                    {/* this.state.content === '' ? ' disabled-button' : '' */}
+                    {/* }`} */}
+                    {/* type="submit" */}
+                    {/* disabled={this.state.content === ''} */}
+                    {/* > */}
+                    {/* Comment */}
+                    {/* </button> */}
+                  </Button>
                 ) : (
                   <span>
-                    <button
-                      className="common-button"
-                      type="submit"
-                      disabled={this.state.content === ''}
-                    >
+                    <Button type="submit" disabled={this.state.content === ''}>
                       Edit
-                    </button>
+                    </Button>
                     &nbsp;
-                    <span
-                      className="pib-link"
-                      type="reset"
-                      onClick={this.props.onToggleForm}
-                    >
+                    <Button type="reset" onClick={this.props.onToggleForm}>
                       Cancel
-                    </span>
+                    </Button>
+                    {/* <button */}
+                    {/* className="common-button" */}
+                    {/* type="submit" */}
+                    {/* disabled={this.state.content === ''} */}
+                    {/* > */}
+                    {/* Edit */}
+                    {/* </button> */}
+                    {/* &nbsp; */}
+                    {/* <span */}
+                    {/* className="pib-link" */}
+                    {/* type="reset" */}
+                    {/* onClick={this.props.onToggleForm} */}
+                    {/* > */}
+                    {/* Cancel */}
+                    {/* </span> */}
                   </span>
                 )}
               </div>
