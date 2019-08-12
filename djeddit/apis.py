@@ -103,8 +103,12 @@ class PostViewSet(mixins.CreateModelMixin,
     @action(methods=['POST'],
             detail=True, )
     def vote(self, request, *args, **kwargs):
-        if request.user.is_anonymous():
-            raise PermissionDenied
+        if type(request.user.is_anonymous) == bool:
+            if request.user.is_anonymous:  # >= django 2.0
+                raise PermissionDenied
+        else:
+            if request.user.is_anonymous():
+                raise PermissionDenied
 
         try:
             vote = request.data['vote']
@@ -132,7 +136,3 @@ class PostViewSet(mixins.CreateModelMixin,
         # return new post instance
         serializer = self.get_serializer(post)
         return Response(serializer.data)
-
-
-
-
