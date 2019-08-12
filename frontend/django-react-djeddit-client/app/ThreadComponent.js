@@ -22,22 +22,6 @@ import ThreadPage from './containers/Thread'
 
 import configureStore from './configureStore'
 
-// Import i18n messages
-// import { translationMessages } from './i18n'
-
-// Observe loading of Open Sans (to remove open sans, remove the <link> tag in
-// the index.html file and this observer)
-// const openSansObserver = new FontFaceObserver('Open Sans', {})
-//
-// // When Open Sans is loaded, add a font-family using Open Sans to the body
-// openSansObserver.load().then(() => {
-//   document.body.classList.add('fontLoaded')
-// })
-
-// Create redux store with history
-const initialState = {}
-const store = configureStore(initialState)
-
 /* <LanguageProvider messages={messages}> */
 /* </LanguageProvider> */
 
@@ -68,16 +52,32 @@ const store = configureStore(initialState)
 
 // const ThreadComponent = () => render(translationMessages)
 
+// Import i18n messages
+// import { translationMessages } from './i18n'
+
+// Observe loading of Open Sans (to remove open sans, remove the <link> tag in
+// the index.html file and this observer)
+// const openSansObserver = new FontFaceObserver('Open Sans', {})
+//
+// // When Open Sans is loaded, add a font-family using Open Sans to the body
+// openSansObserver.load().then(() => {
+//   document.body.classList.add('fontLoaded')
+// })
+
+// Create redux store with history
+const initialState = {}
+const store = configureStore(initialState)
+
 /** *
  * @param threadId
  * @param anonUserObject use anonUserObject if true with is_anonymous attr {"is_anonymous":true}
  * @returns {*}
  * @constructor
  */
-export function ThreadComponent({ threadId, anonAsUserObject = true }) {
+export function ThreadComponent({ threadId }) {
   return (
     <Provider store={store}>
-      <ThreadPage threadId={threadId} anonAsUserObject={anonAsUserObject} />
+      <ThreadPage threadId={threadId} />
     </Provider>
   )
 }

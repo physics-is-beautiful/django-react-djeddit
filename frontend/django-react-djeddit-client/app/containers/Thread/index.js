@@ -61,6 +61,7 @@ import history from '../../utils/history'
 import { Post } from '../../components/Comment/post'
 import { RootPost } from '../../components/Comment/rootPost'
 import { makeSelectSignedInUser } from '../App/selectors'
+import { settings } from '../../settings'
 
 // import { ReplyForm } from '../../components/Comment/replyForm'
 
@@ -99,7 +100,7 @@ export function ThreadPage({
   topic,
   signedInUser,
   threadId,
-  anonAsUserObject, // TODO move it to djeddit settings
+  anonAsUserObject = settings.anonAsUserObject,
 }) {
   useInjectReducer({ key: threadKey, reducer })
   useInjectSaga({ key: threadKey, saga })
