@@ -115,6 +115,7 @@ export default {
     'styled-components',
     'showdown',
     'react-mde',
+    'react-bootstrap/Button',
     'react-bootstrap/Container',
     'react-bootstrap/Row',
     'react-bootstrap/Col',

@@ -224,10 +224,11 @@ export function ThreadPage({
     threadActions.updatePost(args)
   }
 
-  const getSignedInUser = () => {
+  const getCurrentUser = () => {
     if (!signedInUser) {
       return null
     }
+
     if (
       // if user loads as object with {is_anonymous: true} attr
       signedInUser &&
@@ -250,7 +251,7 @@ export function ThreadPage({
         post={posts[0]}
         onSubmitReplay={handleAddSubmit}
         onSubmitEdit={handleUpdateSubmit}
-        currentProfile={getSignedInUser()}
+        currentProfile={getCurrentUser()}
         changePostVote={() => {}}
         onDelete={() => {}}
         showReplyFormOnly={Boolean(threadId)}
@@ -282,7 +283,7 @@ export function ThreadPage({
             post={post}
             onSubmitReplay={onSubmitReplay}
             onSubmitEdit={onSubmitEdit}
-            currentProfile={getSignedInUser()}
+            currentProfile={getCurrentUser()}
             changePostVote={() => {}}
             onDelete={() => {}}
           />

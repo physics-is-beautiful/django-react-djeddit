@@ -74,7 +74,7 @@ const store = configureStore(initialState)
  * @returns {*}
  * @constructor
  */
-export function ThreadComponent({ threadId, anonAsUserObject = false }) {
+export function ThreadComponent({ threadId, anonAsUserObject = true }) {
   return (
     <Provider store={store}>
       <ThreadPage threadId={threadId} anonAsUserObject={anonAsUserObject} />
