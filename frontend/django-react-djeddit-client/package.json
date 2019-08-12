@@ -1,6 +1,6 @@
 {
   "name": "@vermus/django-react-djeddit-client",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "django djeddit react client",
   "files": [
     "dist",
@@ -90,7 +90,7 @@
     "invariant": "2.2.4",
     "ip": "1.1.5",
     "js-cookie": "^2.2.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "minimist": "1.2.0",
     "moment": "^2.22.2",
     "prop-types": "15.7.2",
