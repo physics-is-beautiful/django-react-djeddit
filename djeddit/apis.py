@@ -5,12 +5,12 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions, mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
 
 from django_filters import rest_framework as filters
 
 from .permissions import EditDeleteByOwnerOrStaff
-from .models import Thread, Post, Topic
+from .models import Thread, Post, Topic, UserPostVote
 from .serializers import ThreadSerializer, PostSerializer, UserSerializer, TopicsSerializer
 
 try:
@@ -99,6 +99,39 @@ class PostViewSet(mixins.CreateModelMixin,
                 notify.send(self.request.user, recipient=post.parent.created_by,
                             verb='replied to your comment in thread',
                             target=post.parent.thread, action_object=post)
+
+    @action(methods=['POST'],
+            detail=True, )
+    def vote(self, request, *args, **kwargs):
+        if request.user.is_anonymous():
+            raise PermissionDenied
+
+        try:
+            vote = request.data['vote']
+        except KeyError:
+            raise ValidationError
+
+        if vote not in (1, -1):
+            raise ValidationError
+
+        post = self.get_object()
+
+        try:
+            user_post_vote = UserPostVote.objects.get(user=request.user, post=post)
+            user_post_vote.val = max(min(int(vote), 1), -1)
+            user_post_vote.save()
+        except UserPostVote.DoesNotExist:
+            UserPostVote.objects.create(user=request.user, post=post, val=max(min(int(vote), 1), -1))
+
+        # recalculate post votes
+        post.upvotes = UserPostVote.objects.filter(post=post, val=1).count()
+        post.downvotes = UserPostVote.objects.filter(post=post, val=-1).count()
+        post.save(update_fields=['_upvotes', '_downvotes'])
+        post.refresh_from_db()  # fix for reload modified_on date
+
+        # return new post instance
+        serializer = self.get_serializer(post)
+        return Response(serializer.data)
 
 
 

@@ -18,6 +18,7 @@ import {
   NEW_POST,
   NEW_POST_SUCCESS,
   NEW_POST_ERROR,
+  UPDATE_POST_SUCCESS,
 } from './constants'
 
 // The initial state of the App
@@ -25,6 +26,7 @@ export const initialState = {
   thread: false,
   postsList: false,
   newPost: false,
+  updatedPost: null,
 }
 
 // TODO refactor this
@@ -78,6 +80,11 @@ const threadReducer = (state = initialState, action) =>
 
       case NEW_POST_ERROR:
         draft.error = action.error
+        draft.loading = false
+        break
+
+      case UPDATE_POST_SUCCESS:
+        draft.updatedPost = action.updatedPost
         draft.loading = false
         break
     }

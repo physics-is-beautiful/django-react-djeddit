@@ -28,6 +28,7 @@ import {
   UPDATE_POST,
   UPDATE_POST_SUCCESS,
   UPDATE_POST_ERROR,
+  VOTE_POST,
 } from './constants'
 
 /**
@@ -140,10 +141,10 @@ export function updatePost(post) {
   }
 }
 
-export function updatePostSuccess(_updatePost) {
+export function updatePostSuccess(_updatedPost) {
   return {
     type: UPDATE_POST_SUCCESS,
-    updatePost: _updatePost,
+    updatedPost: _updatedPost,
   }
 }
 
@@ -151,5 +152,13 @@ export function updatePostError(error) {
   return {
     type: UPDATE_POST_ERROR,
     error,
+  }
+}
+
+export function votePost(post, vote) {
+  return {
+    type: VOTE_POST,
+    post,
+    vote,
   }
 }

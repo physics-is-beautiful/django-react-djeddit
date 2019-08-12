@@ -25,4 +25,16 @@ const makeSelectNewPost = () =>
     threadState => threadState.newPost,
   )
 
-export { selectThread, makeSelectThread, makeSelectPosts, makeSelectNewPost }
+const makeSelectUpdatedPost = () =>
+  createSelector(
+    selectThread,
+    threadState => threadState.updatedPost,
+  )
+
+export {
+  selectThread,
+  makeSelectThread,
+  makeSelectPosts,
+  makeSelectNewPost,
+  makeSelectUpdatedPost,
+}

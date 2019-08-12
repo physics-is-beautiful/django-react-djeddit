@@ -31,6 +31,7 @@ import {
   makeSelectThread,
   makeSelectPosts,
   makeSelectNewPost,
+  makeSelectUpdatedPost,
   // makeSelectLoading,
   // makeSelectError,
 } from './selectors'
@@ -43,7 +44,7 @@ import {
 
 import CenteredSection from './CenteredSection'
 import Section from './Section'
-import messages from './messages'
+// import messages from './messages'
 import * as threadActionsCreator from './actions'
 import * as topicsActionsCreator from '../Topics/actions'
 import * as appActionsCreator from '../App/actions'
@@ -94,8 +95,9 @@ export function ThreadPage({
   topicsActions,
   appActions,
   match,
-  postsList,
+  postsList, // post list from server
   newPost,
+  updatedPost,
   thread,
   topic,
   signedInUser,
@@ -111,7 +113,7 @@ export function ThreadPage({
   useInjectSaga({ key: appKey, saga: appSaga })
   useInjectReducer({ key: appKey, reducer: appReducer })
 
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]) // posts list loaded in a client side
   const [hasMoreItems, setHasMoreItems] = useState(false)
   const [nextHref, setNextHref] = useState(null)
 
@@ -144,6 +146,20 @@ export function ThreadPage({
       ])
     }
   }, [topic])
+
+  // post was updated from server
+  useEffect(() => {
+    if (updatedPost) {
+      setPosts(
+        posts.map(item => {
+          if (updatedPost.uid === item.uid) {
+            return updatedPost
+          }
+          return item
+        }),
+      )
+    }
+  }, [updatedPost])
 
   useEffect(() => {
     if (!signedInUser) {
@@ -196,7 +212,7 @@ export function ThreadPage({
     }
 
     if (postsList) {
-      // remove existing comments in exist (newPost) with loaded
+      // remove existing comments
       setPosts(
         mergeUnique(posts, postsList.results, 'uid'),
         // [...posts, ...postsList.results]
@@ -225,6 +241,11 @@ export function ThreadPage({
     threadActions.updatePost(args)
   }
 
+  const handleVote = (...args) => {
+    threadActions.votePost(...args)
+  }
+
+  // it is better to use this func as checkUserAuth (in post/root post) fixme
   const getCurrentUser = () => {
     if (!signedInUser) {
       return null
@@ -253,7 +274,9 @@ export function ThreadPage({
         onSubmitReplay={handleAddSubmit}
         onSubmitEdit={handleUpdateSubmit}
         currentProfile={getCurrentUser()}
-        changePostVote={() => {}}
+        changePostVote={(...args) => {
+          handleVote(...args)
+        }}
         onDelete={() => {}}
         showReplyFormOnly={Boolean(threadId)}
       />
@@ -280,12 +303,15 @@ export function ThreadPage({
           {/* TODO: add threadline if needed */}
         </div>
         <div style={{ position: 'relative' }}>
+          {/* TODO: add react memo effect */}
           <Post
             post={post}
             onSubmitReplay={onSubmitReplay}
             onSubmitEdit={onSubmitEdit}
             currentProfile={getCurrentUser()}
-            changePostVote={() => {}}
+            changePostVote={(...args) => {
+              handleVote(...args)
+            }}
             onDelete={() => {}}
           />
         </div>
@@ -358,6 +384,7 @@ ThreadPage.propTypes = {
     loadPosts: PropTypes.func.isRequired,
     postsLoaded: PropTypes.func.isRequired,
     newPost: PropTypes.func.isRequired,
+    votePost: PropTypes.func.isRequired,
   }).isRequired,
   appActions: PropTypes.shape({
     loadSignedInUser: PropTypes.func.isRequired,
@@ -370,6 +397,7 @@ ThreadPage.propTypes = {
   postsList: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  updatedPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   threadId: PropTypes.number,
   anonAsUserObject: PropTypes.bool,
@@ -380,6 +408,7 @@ const mapStateToProps = createStructuredSelector({
   topic: makeSelectTopic(),
   thread: makeSelectThread(),
   newPost: makeSelectNewPost(),
+  updatedPost: makeSelectUpdatedPost(),
   signedInUser: makeSelectSignedInUser(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),

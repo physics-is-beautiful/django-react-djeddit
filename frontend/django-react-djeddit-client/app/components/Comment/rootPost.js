@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import MathJax from 'react-mathjax2'
 // import RMathJax from 'react-mathjax'
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa'
 
 import RemarkMathPlugin from 'remark-math'
 import { ReplyForm } from './replyForm'
@@ -55,7 +56,7 @@ export class RootPost extends React.Component {
     this.onSubmitEdit = this.onSubmitEdit.bind(this)
     this.toggleReplyForm = this.toggleReplyForm.bind(this)
     this.toggleEditForm = this.toggleEditForm.bind(this)
-    this.upDownClick = this.upDownClick.bind(this)
+    this.onVoteClick = this.onVoteClick.bind(this)
     this.editComment = this.editComment.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
   }
@@ -90,7 +91,7 @@ export class RootPost extends React.Component {
     this.setState({ editFormShow: !this.state.editFormShow })
   }
 
-  upDownClick(value) {
+  onVoteClick(value) {
     this.props.changePostVote(this.props.post, value)
   }
 
@@ -166,18 +167,26 @@ export class RootPost extends React.Component {
                         <div className="djeddit-post-item-footer">
                           <div className="djeddit-score">
                             {/* TODO replace with react-icons */}
-                            <i
-                              style={{ cursor: 'pointer' }}
-                              className="fas fa-arrow-up djeddit-score-upvote  "
-                              onClick={() => this.upDownClick(1)}
+                            {/* <i */}
+                            {/* style={{ cursor: 'pointer' }} */}
+                            {/* className="fas fa-arrow-up djeddit-score-upvote  " */}
+                            {/* onClick={() => this.upDownClick(1)} */}
+                            {/* /> */}
+                            <FaArrowUp
+                              onClick={() => this.onVoteClick(1)}
+                              style={{ cursor: 'pointer', margin: '0 .5rem' }}
                             />
                             <span className=" djeddit-score-number">
                               {this.props.post.score}
                             </span>
-                            <i
-                              style={{ cursor: 'pointer' }}
-                              className="fas fa-arrow-down djeddit-score-downvote "
-                              onClick={() => this.upDownClick(-1)}
+                            {/* <i */}
+                            {/* style={{ cursor: 'pointer' }} */}
+                            {/* className="fas fa-arrow-down djeddit-score-downvote " */}
+                            {/* onClick={() => this.upDownClick(-1)} */}
+                            {/* /> */}
+                            <FaArrowDown
+                              onClick={() => this.onVoteClick(-1)}
+                              style={{ cursor: 'pointer', margin: '0 .5rem' }}
                             />
                           </div>
                           {this.props.currentProfile ? (

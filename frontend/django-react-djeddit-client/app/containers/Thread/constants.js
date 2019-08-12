@@ -24,3 +24,5 @@ export const NEW_POST_ERROR = 'djeddit/Thread/NEW_POST_ERROR'
 export const UPDATE_POST = 'djeddit/Thread/UPDATE_POST'
 export const UPDATE_POST_SUCCESS = 'djeddit/Thread/UPDATE_POST_SUCCESS'
 export const UPDATE_POST_ERROR = 'djeddit/Thread/UPDATE_POST_ERROR'
+
+export const VOTE_POST = 'djeddit/Thread/VOTE_POST'
