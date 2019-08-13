@@ -67,7 +67,7 @@ class ThreadCommentsFilter(filters.FilterSet):
             )
         else:
             return thread.op.get_descendants(include_self=True)\
-                .annotate(user_vote=Max('user_post_votes__val', filter=Q(user=self.request.user)))
+                .annotate(user_vote=Max('user_post_votes__val', filter=Q(user_post_votes__user=self.request.user)))
 
     def thread_filter(self, queryset, name, value):
         try:
