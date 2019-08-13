@@ -51,23 +51,32 @@ class ThreadCommentsFilter(filters.FilterSet):
     # TODO wee need to get it from serializer class
     def get_queryset(self, thread):
         # get current user post value
+
+        qs = thread.op.get_descendants(include_self=True).select_related('created_by')
+
         import django
         dj_version = django.get_version()
         if int(dj_version.split('.')[0]) < 2:
-            return thread.op.get_descendants(include_self=True).select_related('created_by').annotate(
-                user_vote=
-                Subquery(
-                    UserPostVote.objects.filter(
-                        user=self.request.user,
-                        post=OuterRef('pk')
-                    ).annotate(cnt=Max('val'))
-                     .values('cnt'),
-                    output_field=IntegerField()
+            if self.request.user.is_anonymous():
+                return qs
+            else:
+                return qs.annotate(
+                    user_vote=
+                    Subquery(
+                        UserPostVote.objects.filter(
+                            user=self.request.user,
+                            post=OuterRef('pk')
+                        ).annotate(cnt=Max('val'))
+                         .values('cnt'),
+                        output_field=IntegerField()
+                    )
                 )
-            )
         else:
-            return thread.op.get_descendants(include_self=True)\
-                .annotate(user_vote=Max('user_post_votes__val', filter=Q(user_post_votes__user=self.request.user)))
+            if self.request.user.is_anonymous:
+                return qs
+            else:
+                return thread.op.get_descendants(include_self=True)\
+                    .annotate(user_vote=Max('user_post_votes__val', filter=Q(user_post_votes__user=self.request.user)))
 
     def thread_filter(self, queryset, name, value):
         try:
