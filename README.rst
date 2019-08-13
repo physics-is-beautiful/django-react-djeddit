@@ -9,8 +9,8 @@ This application is fork of django-djeddit.
 * MathJax support
 * Embed Thread component
 
-.. image:: https://raw.githubusercontent.com/physics-is-beautiful/django-react-djeddit/master/media/drc1.jpg
-.. image:: https://raw.githubusercontent.com/physics-is-beautiful/django-react-djeddit/master/media/drc21.jpg
+.. image:: https://github.com/physics-is-beautiful/django-react-djeddit/blob/master/media/drc1.png?raw=true
+.. image:: https://github.com/physics-is-beautiful/django-react-djeddit/blob/master/media/drc2.png?raw=true
 
 =============================
 django-djeddit

@@ -25,6 +25,8 @@ import {
   NEW_POST,
   NEW_POST_SUCCESS,
   NEW_POST_ERROR,
+  DELETE_POST,
+  DELETE_POST_SUCCESS,
   UPDATE_POST,
   UPDATE_POST_SUCCESS,
   UPDATE_POST_ERROR,
@@ -160,5 +162,19 @@ export function votePost(post, vote) {
     type: VOTE_POST,
     post,
     vote,
+  }
+}
+
+export function deletePost(post) {
+  return {
+    type: DELETE_POST,
+    post,
+  }
+}
+
+export function deletePostSuccess(_deletedPost) {
+  return {
+    type: DELETE_POST_SUCCESS,
+    deletedPost: _deletedPost,
   }
 }

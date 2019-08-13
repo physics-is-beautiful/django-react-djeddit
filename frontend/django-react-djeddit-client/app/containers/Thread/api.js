@@ -64,6 +64,21 @@ function updatePostCall(post) {
   })
 }
 
+function deletePostCall(post) {
+  const csrftoken = Cookies.get('csrftoken')
+
+  return request(`${API_PREFIX}posts/${post.uid}/`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: JSON.stringify(post),
+  })
+}
+
 function votePostCall(post, vote) {
   const csrftoken = Cookies.get('csrftoken')
 
@@ -84,5 +99,6 @@ export const Api = {
   getPosts,
   newPostCall,
   updatePostCall,
+  deletePostCall,
   votePostCall,
 }

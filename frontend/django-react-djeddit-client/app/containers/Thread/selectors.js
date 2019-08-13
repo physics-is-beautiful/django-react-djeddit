@@ -31,10 +31,17 @@ const makeSelectUpdatedPost = () =>
     threadState => threadState.updatedPost,
   )
 
+const makeSelectDeletedPost = () =>
+  createSelector(
+    selectThread,
+    threadState => threadState.deletedPost,
+  )
+
 export {
   selectThread,
   makeSelectThread,
   makeSelectPosts,
   makeSelectNewPost,
   makeSelectUpdatedPost,
+  makeSelectDeletedPost,
 }

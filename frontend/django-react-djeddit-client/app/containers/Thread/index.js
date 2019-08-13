@@ -32,6 +32,7 @@ import {
   makeSelectPosts,
   makeSelectNewPost,
   makeSelectUpdatedPost,
+  makeSelectDeletedPost,
   // makeSelectLoading,
   // makeSelectError,
 } from './selectors'
@@ -98,6 +99,7 @@ export function ThreadPage({
   postsList, // post list from server
   newPost,
   updatedPost,
+  deletedPost,
   thread,
   topic,
   signedInUser,
@@ -233,12 +235,23 @@ export function ThreadPage({
     }
   }, [newPost])
 
+  useEffect(() => {
+    //  remove delete post
+    if (deletedPost) {
+      setPosts(posts.filter(item => deletedPost.uid !== item.uid))
+    }
+  }, [deletedPost])
+
   const handleAddSubmit = args => {
     threadActions.newPost(args)
   }
 
   const handleUpdateSubmit = args => {
     threadActions.updatePost(args)
+  }
+
+  const handleDeleteSubmit = args => {
+    threadActions.deletePost(args)
   }
 
   const handleVote = (...args) => {
@@ -277,13 +290,13 @@ export function ThreadPage({
         changePostVote={(...args) => {
           handleVote(...args)
         }}
-        onDelete={() => {}}
+        onDelete={handleDeleteSubmit}
         showReplyFormOnly={Boolean(threadId)}
       />
     )
   }
 
-  const renderPost = (post, onSubmitReplay, onSubmitEdit) => {
+  const renderPost = (post, onSubmitReplay, onSubmitEdit, onSubmitDelete) => {
     const widthRem = `${post.level}rem`
 
     if (post.level === 0) {
@@ -312,7 +325,7 @@ export function ThreadPage({
             changePostVote={(...args) => {
               handleVote(...args)
             }}
-            onDelete={() => {}}
+            onDelete={onSubmitDelete}
           />
         </div>
       </div>
@@ -336,7 +349,9 @@ export function ThreadPage({
       }
       return true
     })
-    .map(item => renderPost(item, handleAddSubmit, handleUpdateSubmit))
+    .map(item =>
+      renderPost(item, handleAddSubmit, handleUpdateSubmit, handleDeleteSubmit),
+    )
 
   return (
     <article>
@@ -383,6 +398,8 @@ ThreadPage.propTypes = {
     loadThread: PropTypes.func.isRequired,
     loadPosts: PropTypes.func.isRequired,
     postsLoaded: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired,
     newPost: PropTypes.func.isRequired,
     votePost: PropTypes.func.isRequired,
   }).isRequired,
@@ -398,6 +415,7 @@ ThreadPage.propTypes = {
   topic: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   newPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   updatedPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  deletedPost: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   signedInUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   threadId: PropTypes.number,
   anonAsUserObject: PropTypes.bool,
@@ -409,6 +427,7 @@ const mapStateToProps = createStructuredSelector({
   thread: makeSelectThread(),
   newPost: makeSelectNewPost(),
   updatedPost: makeSelectUpdatedPost(),
+  deletedPost: makeSelectDeletedPost(),
   signedInUser: makeSelectSignedInUser(),
   // loading: makeSelectLoading(),
   // error: makeSelectError(),

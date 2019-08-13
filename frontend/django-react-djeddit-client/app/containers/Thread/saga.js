@@ -9,6 +9,7 @@ import {
   newPostError,
   updatePostSuccess,
   updatePostError,
+  deletePostSuccess,
 } from './actions'
 
 import { Api } from './api'
@@ -18,6 +19,7 @@ import {
   NEW_POST,
   UPDATE_POST,
   VOTE_POST,
+  DELETE_POST,
 } from './constants'
 
 export function* getThread(sagaArgs) {
@@ -81,6 +83,15 @@ export function* votePost(sagaArgs) {
   }
 }
 
+export function* deletePost(sagaArgs) {
+  const { post } = sagaArgs
+
+  try {
+    yield call(Api.deletePostCall, post)
+    yield put(deletePostSuccess(post))
+  } catch (err) {}
+}
+
 /**
  * Root saga manages watcher lifecycle
  */
@@ -94,6 +105,7 @@ export default function* threadData() {
     takeLatest(LOAD_POSTS, getPostsList),
     takeLatest(NEW_POST, newPost),
     takeLatest(UPDATE_POST, updatePost),
+    takeLatest(DELETE_POST, deletePost),
     takeLatest(VOTE_POST, votePost),
   ])
 }

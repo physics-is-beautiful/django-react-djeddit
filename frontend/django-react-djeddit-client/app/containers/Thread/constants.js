@@ -25,4 +25,7 @@ export const UPDATE_POST = 'djeddit/Thread/UPDATE_POST'
 export const UPDATE_POST_SUCCESS = 'djeddit/Thread/UPDATE_POST_SUCCESS'
 export const UPDATE_POST_ERROR = 'djeddit/Thread/UPDATE_POST_ERROR'
 
+export const DELETE_POST = 'djeddit/Thread/DELETE_POST'
+export const DELETE_POST_SUCCESS = 'djeddit/Thread/DELETE_POST_SUCCESS'
+
 export const VOTE_POST = 'djeddit/Thread/VOTE_POST'

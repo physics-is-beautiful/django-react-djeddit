@@ -19,6 +19,7 @@ import {
   NEW_POST_SUCCESS,
   NEW_POST_ERROR,
   UPDATE_POST_SUCCESS,
+  DELETE_POST_SUCCESS,
 } from './constants'
 
 // The initial state of the App
@@ -86,6 +87,10 @@ const threadReducer = (state = initialState, action) =>
       case UPDATE_POST_SUCCESS:
         draft.updatedPost = action.updatedPost
         draft.loading = false
+        break
+
+      case DELETE_POST_SUCCESS:
+        draft.deletedPost = action.deletedPost
         break
     }
   })

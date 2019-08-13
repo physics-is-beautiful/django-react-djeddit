@@ -41,20 +41,22 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.user_vote if hasattr(obj, 'user_vote') and obj.user_vote else 0
 
     def get_user_can_edit(self, obj):
-        if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
-            return True
+        if 'request' in self.context:
+            if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
+                return True
 
-        if self.context['request'].user == obj.created_by:
-            return True
+            if self.context['request'].user == obj.created_by:
+                return True
 
         return False
 
     def get_user_can_delete(self, obj):
-        if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
-            return True
+        if 'request' in self.context:
+            if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
+                return True
 
-        if self.context['request'].user == obj.created_by:
-            return True
+            if self.context['request'].user == obj.created_by:
+                return True
 
         return False
 
@@ -95,10 +97,10 @@ class ThreadSerializer(serializers.ModelSerializer):
         content = validated_data.pop('content', None)
 
         # CREATE Post
-        post_serializer = PostSerializer(data={'content': content, 'created_by': self.context['request'].user.id})
+        post_serializer = PostSerializer(data={'content': content})
 
         if post_serializer.is_valid(raise_exception=True):
-            post = post_serializer.save()
+            post = post_serializer.save(created_by=self.context['request'].user)
 
         validated_data['op'] = post
         validated_data['topic'] = topic
