@@ -166,27 +166,26 @@ export class RootPost extends React.Component {
                         </div>
                         <div className="djeddit-post-item-footer">
                           <div className="djeddit-score">
-                            {/* TODO replace with react-icons */}
-                            {/* <i */}
-                            {/* style={{ cursor: 'pointer' }} */}
-                            {/* className="fas fa-arrow-up djeddit-score-upvote  " */}
-                            {/* onClick={() => this.upDownClick(1)} */}
-                            {/* /> */}
                             <FaArrowUp
                               onClick={() => this.onVoteClick(1)}
-                              style={{ cursor: 'pointer', margin: '0 .5rem' }}
+                              style={{
+                                cursor: 'pointer',
+                                margin: '0 .5rem',
+                                color:
+                                  this.props.post.user_vote === 1 && 'blue',
+                              }}
                             />
                             <span className=" djeddit-score-number">
                               {this.props.post.score}
                             </span>
-                            {/* <i */}
-                            {/* style={{ cursor: 'pointer' }} */}
-                            {/* className="fas fa-arrow-down djeddit-score-downvote " */}
-                            {/* onClick={() => this.upDownClick(-1)} */}
-                            {/* /> */}
                             <FaArrowDown
                               onClick={() => this.onVoteClick(-1)}
-                              style={{ cursor: 'pointer', margin: '0 .5rem' }}
+                              style={{
+                                cursor: 'pointer',
+                                margin: '0 .5rem',
+                                color:
+                                  this.props.post.user_vote === -1 && 'blue',
+                              }}
                             />
                           </div>
                           {this.props.currentProfile ? (

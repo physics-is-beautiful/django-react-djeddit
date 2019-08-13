@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Q, Max, IntegerField, Subquery, OuterRef
 
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
@@ -47,13 +48,34 @@ class ThreadCommentsFilter(filters.FilterSet):
         method='thread_filter',
     )
 
+    # TODO wee need to get it from serializer class
+    def get_queryset(self, thread):
+        # get current user post value
+        import django
+        dj_version = django.get_version()
+        if int(dj_version.split('.')[0]) < 2:
+            return thread.op.get_descendants(include_self=True).select_related('created_by').annotate(
+                user_vote=
+                Subquery(
+                    UserPostVote.objects.filter(
+                        user=self.request.user,
+                        post=OuterRef('pk')
+                    ).annotate(cnt=Max('val'))
+                     .values('cnt'),
+                    output_field=IntegerField()
+                )
+            )
+        else:
+            return thread.op.get_descendants(include_self=True)\
+                .annotate(user_vote=Max('user_post_votes__val', filter=Q(user=self.request.user)))
+
     def thread_filter(self, queryset, name, value):
         try:
             thread = Thread.objects.get(id=value)
         except Thread.DoesNotExist:
             raise NotFound('Thread not found')
 
-        return thread.op.get_descendants(include_self=True).select_related('created_by')
+        return self.get_queryset(thread)
 
     class Meta:
         model = Post
@@ -85,7 +107,7 @@ class PostViewSet(mixins.CreateModelMixin,
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, EditDeleteByOwnerOrStaff)
     serializer_class = PostSerializer
     # queryset = Post.objects.select_related('created_by__profile').all()
-    queryset = Post.objects.all()
+    queryset = Post.objects.all()  # look at ThreadCommentsFilter
     pagination_class = StandardResultsSetPagination
     lookup_field = 'uid'
     filter_backends = (filters.DjangoFilterBackend,)
@@ -132,6 +154,12 @@ class PostViewSet(mixins.CreateModelMixin,
         post.downvotes = UserPostVote.objects.filter(post=post, val=-1).count()
         post.save(update_fields=['_upvotes', '_downvotes'])
         post.refresh_from_db()  # fix for reload modified_on date
+
+        # add user_vote value
+        if post.user_post_votes.filter(user=request.user).count() > 0:
+            post.user_vote = post.user_post_votes.filter(user=request.user)[0].val
+        else:
+            post.user_vote = 0
 
         # return new post instance
         serializer = self.get_serializer(post)

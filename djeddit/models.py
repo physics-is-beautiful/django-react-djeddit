@@ -290,5 +290,3 @@ class UserPostVote(NamedModel):
 
 
 from .meta_badges import *
-
-

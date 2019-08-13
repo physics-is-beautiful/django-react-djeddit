@@ -4,7 +4,7 @@ django-mptt>=0.8.7
 awesome-slugify>=1.6.5
 django-ipware>=2.1.0
 django-meta>=1.4.1
-djangorestframework>=3.8.2
+djangorestframework>=3.10.2
 django-allauth==0.39.1
 django-filter==2.0.0
 

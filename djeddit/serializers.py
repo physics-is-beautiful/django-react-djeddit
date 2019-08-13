@@ -32,10 +32,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
+    # user_post_vote = serializers.IntegerField(read_only=True)
+    user_vote = serializers.SerializerMethodField()
+
+    def get_user_vote(self, obj):
+        return obj.user_vote if hasattr(obj, 'user_vote') and obj.user_vote else 0
 
     class Meta:
-        fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score']
-        read_only_fields = ('level', )
+        fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score',
+                  'user_vote']
+        read_only_fields = ('level',)
         model = Post
 
 
