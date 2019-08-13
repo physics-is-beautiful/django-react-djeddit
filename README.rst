@@ -1,4 +1,18 @@
 =============================
+django-djeddit-client
+=============================
+
+This application is fork of django-djeddit.
+
+* Django Rest Framework api included
+* React application as frontend included
+* MathJax support
+* Embed Thread component
+
+.. image:: https://raw.githubusercontent.com/physics-is-beautiful/django-react-djeddit/master/media/drc1.jpg
+.. image:: https://raw.githubusercontent.com/physics-is-beautiful/django-react-djeddit/master/media/drc21.jpg
+
+=============================
 django-djeddit
 =============================
 
@@ -41,7 +55,7 @@ Screenshots
 
 .. image:: https://raw.githubusercontent.com/EatEmAll/django-djeddit/master/media/Comments.jpg
 
-Supported Dajngo versions
+Supported Django versions
 -------------------------
 
 The app is currently tested with Django 1.8, 1.9, 1.10 and 1.11, 2.0

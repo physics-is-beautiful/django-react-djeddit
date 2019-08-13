@@ -34,13 +34,33 @@ class PostSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     # user_post_vote = serializers.IntegerField(read_only=True)
     user_vote = serializers.SerializerMethodField()
+    user_can_edit = serializers.SerializerMethodField()
+    user_can_delete = serializers.SerializerMethodField()
 
     def get_user_vote(self, obj):
         return obj.user_vote if hasattr(obj, 'user_vote') and obj.user_vote else 0
 
+    def get_user_can_edit(self, obj):
+        if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
+            return True
+
+        if self.context['request'].user == obj.created_by:
+            return True
+
+        return False
+
+    def get_user_can_delete(self, obj):
+        if self.context['request'].user.is_staff or self.context['request'].user.is_superuser:
+            return True
+
+        if self.context['request'].user == obj.created_by:
+            return True
+
+        return False
+
     class Meta:
         fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score',
-                  'user_vote']
+                  'user_vote', 'user_can_edit', 'user_can_delete']
         read_only_fields = ('level',)
         model = Post
 

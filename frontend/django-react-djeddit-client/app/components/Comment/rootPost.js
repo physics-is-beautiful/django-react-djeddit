@@ -193,12 +193,14 @@ export class RootPost extends React.Component {
                               className="btn-group btn-group-xs"
                               role="group"
                             >
-                              <button
-                                onClick={this.toggleEditForm}
-                                className="btn btn-secondary"
-                              >
-                                Edit
-                              </button>
+                              {this.props.post.user_can_edit && (
+                                <button
+                                  onClick={this.toggleEditForm}
+                                  className="btn btn-secondary"
+                                >
+                                  Edit
+                                </button>
+                              )}
                               <button
                                 onClick={this.toggleReplyForm}
                                 className="btn btn-secondary"
@@ -210,12 +212,14 @@ export class RootPost extends React.Component {
                               {/* className='btn btn-secondary'> */}
                               {/* Parent */}
                               {/* </button> */}
-                              <button
-                                onClick={this.deleteComment}
-                                className="btn btn-secondary"
-                              >
-                                Delete
-                              </button>
+                              {this.props.post.user_can_delete && (
+                                <button
+                                  onClick={this.deleteComment}
+                                  className="btn btn-secondary"
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </div>
                           ) : (
                             <span>

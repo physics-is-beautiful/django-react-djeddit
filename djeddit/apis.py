@@ -48,7 +48,7 @@ class ThreadCommentsFilter(filters.FilterSet):
         method='thread_filter',
     )
 
-    # TODO wee need to get it from serializer class
+    # TODO we need to get it from api view class
     def get_queryset(self, thread):
         # get current user post value
 
