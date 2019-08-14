@@ -61,7 +61,7 @@ class PostSerializer(serializers.ModelSerializer):
             # hide deleted content
             ret['content'] = '\[deleted\]'
             ret['created_by']['id'] = 0
-            ret['created_by']['username'] = '[deleted]'
+            ret['created_by'][get_user_model().USERNAME_FIELD] = '[deleted]'
 
         return ret
 
