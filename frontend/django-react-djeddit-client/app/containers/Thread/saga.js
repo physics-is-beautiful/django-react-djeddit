@@ -87,8 +87,8 @@ export function* deletePost(sagaArgs) {
   const { post } = sagaArgs
 
   try {
-    yield call(Api.deletePostCall, post)
-    yield put(deletePostSuccess(post))
+    const deletedPost = yield call(Api.deletePostCall, post)
+    yield put(deletePostSuccess(deletedPost))
   } catch (err) {}
 }
 

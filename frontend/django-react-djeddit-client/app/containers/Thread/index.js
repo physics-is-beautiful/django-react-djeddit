@@ -236,9 +236,21 @@ export function ThreadPage({
   }, [newPost])
 
   useEffect(() => {
-    //  remove delete post
     if (deletedPost) {
-      setPosts(posts.filter(item => deletedPost.uid !== item.uid))
+      // setPosts(posts.filter(item => deletedPost.uid !== item.uid)) //  remove deleted post
+      setPosts(
+        posts.map(item => {
+          if (deletedPost.uid === item.uid) {
+            return deletedPost
+            // const deletedPostCopy = Object.assign({}, item)
+            // deletedPostCopy.content = '\\[deleted\\]'
+            // deletedPostCopy.created_by.id = 0
+            // deletedPostCopy.created_by.username = '[deleted]'
+            // return deletedPostCopy
+          }
+          return item
+        }),
+      )
     }
   }, [deletedPost])
 

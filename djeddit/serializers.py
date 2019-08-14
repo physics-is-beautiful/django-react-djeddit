@@ -37,6 +37,34 @@ class PostSerializer(serializers.ModelSerializer):
     user_can_edit = serializers.SerializerMethodField()
     user_can_delete = serializers.SerializerMethodField()
 
+    # TODO deny edit removed comment
+    # TODO deny reply to removed comment
+
+    def validate(self, data):
+        if not self.instance and 'parent' in data and data['parent'] and data['parent'].deleted_on:
+            raise serializers.ValidationError("Can't reply to the removed post")
+
+        if self.instance and self.instance.deleted_on:
+            raise serializers.ValidationError("Can't edit removed post")
+
+        return data
+
+    def to_representation(self, obj):
+        # get the original representation
+        ret = super(PostSerializer, self).to_representation(obj)
+
+        # remove 'url' field if mobile request
+        # if is_mobile_platform(self.context.get('request', None)):
+        #     ret.pop('url')
+
+        if ret['deleted_on']:
+            # hide deleted content
+            ret['content'] = '\[deleted\]'
+            ret['created_by']['id'] = 0
+            ret['created_by']['username'] = '[deleted]'
+
+        return ret
+
     def get_user_vote(self, obj):
         return obj.user_vote if hasattr(obj, 'user_vote') and obj.user_vote else 0
 
@@ -62,8 +90,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score',
-                  'user_vote', 'user_can_edit', 'user_can_delete']
-        read_only_fields = ('level',)
+                  'user_vote', 'user_can_edit', 'user_can_delete', 'deleted_on']
+        read_only_fields = ('level', 'deleted_on')
         model = Post
 
 

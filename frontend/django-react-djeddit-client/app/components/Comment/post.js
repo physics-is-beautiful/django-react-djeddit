@@ -59,6 +59,12 @@ export class Post extends React.Component {
     this.deleteComment = this.deleteComment.bind(this)
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.post && this.props.post.content !== prevProps.post.content) {
+      this.setState({ content: this.props.post.content })
+    }
+  }
+
   onSubmitReplay(...args) {
     this.props.onSubmitReplay(...args)
     this.toggleReplyForm()
@@ -155,63 +161,71 @@ export class Post extends React.Component {
                         )}
                       </div>
                       <div className="djeddit-post-item-footer">
-                        <div className="djeddit-score">
-                          {/* TODO replace with react-icons */}
-                          <FaArrowUp
-                            onClick={() => this.onVoteClick(1)}
-                            style={{
-                              cursor: 'pointer',
-                              margin: '0 .5rem',
-                              color: this.props.post.user_vote === 1 && 'blue',
-                            }}
-                          />
-                          <span className=" djeddit-score-number">
-                            {this.props.post.score}
-                          </span>
-                          <FaArrowDown
-                            onClick={() => this.onVoteClick(-1)}
-                            style={{
-                              cursor: 'pointer',
-                              margin: '0 .5rem',
-                              color: this.props.post.user_vote === -1 && 'blue',
-                            }}
-                          />
-                        </div>
-                        {this.props.currentProfile ? (
-                          <div className="btn-group btn-group-xs" role="group">
-                            {this.props.post.user_can_edit && (
-                              <button
-                                onClick={this.toggleEditForm}
-                                className="btn btn-secondary"
-                              >
-                                Edit
-                              </button>
-                            )}
-                            <button
-                              onClick={this.toggleReplyForm}
-                              className="btn btn-secondary"
-                            >
-                              Reply
-                            </button>
-                            {/* <button */}
-                            {/* onClick={this.toggleReplyForm} */}
-                            {/* className='btn btn-secondary'> */}
-                            {/* Parent */}
-                            {/* </button> */}
-                            {this.props.post.user_can_delete && (
-                              <button
-                                onClick={this.deleteComment}
-                                className="btn btn-secondary"
-                              >
-                                Delete
-                              </button>
-                            )}
+                        {!this.props.post.deleted_on && (
+                          <div className="djeddit-score">
+                            <FaArrowUp
+                              onClick={() => this.onVoteClick(1)}
+                              style={{
+                                cursor: 'pointer',
+                                margin: '0 .5rem',
+                                color:
+                                  this.props.post.user_vote === 1 && 'blue',
+                              }}
+                            />
+                            <span className=" djeddit-score-number">
+                              {this.props.post.score}
+                            </span>
+                            <FaArrowDown
+                              onClick={() => this.onVoteClick(-1)}
+                              style={{
+                                cursor: 'pointer',
+                                margin: '0 .5rem',
+                                color:
+                                  this.props.post.user_vote === -1 && 'blue',
+                              }}
+                            />
                           </div>
-                        ) : (
-                          <span>
-                            Please register or login to post a comment
-                          </span>
                         )}
+                        {this.props.currentProfile &&
+                        !this.props.post.deleted_on ? (
+                            <div className="btn-group btn-group-xs" role="group">
+                              {this.props.post.user_can_edit && (
+                                <button
+                                  onClick={this.toggleEditForm}
+                                  className="btn btn-secondary"
+                                >
+                                Edit
+                                </button>
+                              )}
+                              {!this.props.post.deleted_on && (
+                                <button
+                                  onClick={this.toggleReplyForm}
+                                  className="btn btn-secondary"
+                                >
+                                Reply
+                                </button>
+                              )}
+                              {/* <button */}
+                              {/* onClick={this.toggleReplyForm} */}
+                              {/* className='btn btn-secondary'> */}
+                              {/* Parent */}
+                              {/* </button> */}
+                              {this.props.post.user_can_delete && (
+                                <button
+                                  onClick={this.deleteComment}
+                                  className="btn btn-secondary"
+                                >
+                                Delete
+                                </button>
+                              )}
+                            </div>
+                          ) : null}
+                        {!this.props.currentProfile &&
+                        !this.props.post.deleted_on ? (
+                            <span>
+                            Please register or login to post a comment
+                            </span>
+                          ) : null}
                       </div>
                     </div>
                   </Col>
