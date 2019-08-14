@@ -14,7 +14,7 @@ class ThreadAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fields = ('content', 'modified_on')
+    fields = ('content', 'modified_on', 'deleted_on')
     readonly_fields = ('created_by',
                        'modified_on',
                        'created_on',

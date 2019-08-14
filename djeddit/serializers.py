@@ -3,7 +3,7 @@ from django.conf import settings
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.validators import UniqueValidator
+# from rest_framework.validators import UniqueValidator
 
 from .models import Thread, Post, Topic
 
@@ -37,9 +37,6 @@ class PostSerializer(serializers.ModelSerializer):
     user_can_edit = serializers.SerializerMethodField()
     user_can_delete = serializers.SerializerMethodField()
 
-    # TODO deny edit removed comment
-    # TODO deny reply to removed comment
-
     def validate(self, data):
         if not self.instance and 'parent' in data and data['parent'] and data['parent'].deleted_on:
             raise serializers.ValidationError("Can't reply to the removed post")
@@ -50,18 +47,13 @@ class PostSerializer(serializers.ModelSerializer):
         return data
 
     def to_representation(self, obj):
-        # get the original representation
         ret = super(PostSerializer, self).to_representation(obj)
-
-        # remove 'url' field if mobile request
-        # if is_mobile_platform(self.context.get('request', None)):
-        #     ret.pop('url')
 
         if ret['deleted_on']:
             # hide deleted content
-            ret['content'] = '\[deleted\]'
+            ret['content'] = '\\[deleted\\]'
             ret['created_by']['id'] = 0
-            ret['created_by'][get_user_model().USERNAME_FIELD] = '[deleted]'
+            ret['created_by'][getattr(settings, 'DJEDDIT_DISPLAY_USERNAME_FIELD', 'username')] = '[deleted]'
 
         return ret
 

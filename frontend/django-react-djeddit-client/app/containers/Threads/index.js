@@ -118,7 +118,7 @@ export function ThreadsList({
         onClick={e => {
           onThreadClick(e, item)
         }}
-        key={item.slug}
+        key={item.id}
         item={item}
       />
     ))

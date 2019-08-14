@@ -43,10 +43,10 @@
 //
 //   const conf = window.DJEDDIT_CONFIG
 //
-//   let USERNAME_FIELD = 'username'
+//   let DISPLAY_USERNAME_FIELD = 'username'
 //
 //   if (conf) {
-//     ;({ USERNAME_FIELD } = conf)
+//     ;({ DISPLAY_USERNAME_FIELD } = conf)
 //   }
 //
 //   const handleAddCommentValueChange = val => {
@@ -78,7 +78,7 @@
 //         src="https://react.semantic-ui.com/images/avatar/small/joe.jpg"
 //       />
 //       <Comment.Content>
-//         <Comment.Author>{props.item.created_by[USERNAME_FIELD]}</Comment.Author>
+//         <Comment.Author>{props.item.created_by[DISPLAY_USERNAME_FIELD]}</Comment.Author>
 //         <Comment.Metadata>
 //           <div>2 days ago</div>
 //           {/* <div> */}

@@ -15,10 +15,10 @@ import { EditForm } from './editForm'
 
 const conf = window.DJEDDIT_CONFIG
 
-let USERNAME_FIELD = 'username'
+let DISPLAY_USERNAME_FIELD = 'username'
 
 if (conf) {
-  ;({ USERNAME_FIELD } = conf)
+  ;({ DISPLAY_USERNAME_FIELD } = conf)
 }
 
 // TODO move MarkdownMathRender to utils
@@ -113,7 +113,7 @@ export class Post extends React.Component {
                         href={this.props.post.created_by.get_absolute_url}
                         target="_blank"
                       >
-                        {this.props.post.created_by[USERNAME_FIELD]}
+                        {this.props.post.created_by[DISPLAY_USERNAME_FIELD]}
                       </a>
                     ) : (
                       'Guest'

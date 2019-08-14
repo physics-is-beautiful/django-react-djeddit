@@ -12,10 +12,10 @@ import Showdown from 'showdown'
 
 const conf = window.DJEDDIT_CONFIG
 
-let USERNAME_FIELD = 'username'
+let DISPLAY_USERNAME_FIELD = 'username'
 
 if (conf) {
-  ;({ USERNAME_FIELD } = conf)
+  ;({ DISPLAY_USERNAME_FIELD } = conf)
 }
 
 export class EditForm extends React.Component {
@@ -75,7 +75,7 @@ export class EditForm extends React.Component {
                     href={this.props.currentProfile.get_absolute_url}
                     target="blank"
                   >
-                    {this.props.currentProfile[USERNAME_FIELD]}
+                    {this.props.currentProfile[DISPLAY_USERNAME_FIELD]}
                   </a>
                 </h4>
               ) : null}
