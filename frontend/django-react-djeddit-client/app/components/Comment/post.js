@@ -40,6 +40,7 @@ const MarkdownMathRender = props => {
   )
 }
 
+// TODO rewrite with react functional component
 export class Post extends React.Component {
   constructor(props) {
     super(props)
@@ -56,6 +57,7 @@ export class Post extends React.Component {
     this.toggleEditForm = this.toggleEditForm.bind(this)
     this.onVoteClick = this.onVoteClick.bind(this)
     this.editComment = this.editComment.bind(this)
+    this.restoreComment = this.restoreComment.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
   }
 
@@ -73,6 +75,11 @@ export class Post extends React.Component {
   onSubmitEdit(...args) {
     this.props.onSubmitEdit(...args)
     this.toggleEditForm()
+  }
+
+  restoreComment() {
+    const post = { uid: this.props.post.uid, deleted_on: null }
+    this.props.onSubmitEdit(post)
   }
 
   toggleReplyForm() {
@@ -188,44 +195,56 @@ export class Post extends React.Component {
                         )}
                         {this.props.currentProfile &&
                         !this.props.post.deleted_on ? (
-                            <div className="btn-group btn-group-xs" role="group">
-                              {this.props.post.user_can_edit && (
-                                <button
-                                  onClick={this.toggleEditForm}
-                                  className="btn btn-secondary"
-                                >
+                          <div className="btn-group btn-group-xs" role="group">
+                            {this.props.post.user_can_edit && (
+                              <button
+                                onClick={this.toggleEditForm}
+                                className="btn btn-secondary"
+                              >
                                 Edit
-                                </button>
-                              )}
-                              {!this.props.post.deleted_on && (
-                                <button
-                                  onClick={this.toggleReplyForm}
-                                  className="btn btn-secondary"
-                                >
+                              </button>
+                            )}
+                            {!this.props.post.deleted_on && (
+                              <button
+                                onClick={this.toggleReplyForm}
+                                className="btn btn-secondary"
+                              >
                                 Reply
-                                </button>
-                              )}
-                              {/* <button */}
-                              {/* onClick={this.toggleReplyForm} */}
-                              {/* className='btn btn-secondary'> */}
-                              {/* Parent */}
-                              {/* </button> */}
-                              {this.props.post.user_can_delete && (
-                                <button
-                                  onClick={this.deleteComment}
-                                  className="btn btn-secondary"
-                                >
+                              </button>
+                            )}
+                            {/* <button */}
+                            {/* onClick={this.toggleReplyForm} */}
+                            {/* className='btn btn-secondary'> */}
+                            {/* Parent */}
+                            {/* </button> */}
+                            {this.props.post.user_can_delete && (
+                              <button
+                                onClick={this.deleteComment}
+                                className="btn btn-secondary"
+                              >
                                 Delete
-                                </button>
-                              )}
-                            </div>
+                              </button>
+                            )}
+                          </div>
+                        ) : null}
+                        {this.props.currentProfile &&
+                        this.props.currentProfile.is_staff &&
+                        this.props.post.deleted_on ? (
+                          <div className="btn-group btn-group-xs" role="group">
+                            <button
+                              onClick={this.restoreComment}
+                              className="btn btn-secondary"
+                            >
+                              Restore
+                            </button>
+                          </div>
                           ) : null}
                         {!this.props.currentProfile &&
                         !this.props.post.deleted_on ? (
-                            <span>
+                          <span>
                             Please register or login to post a comment
-                            </span>
-                          ) : null}
+                          </span>
+                        ) : null}
                       </div>
                     </div>
                   </Col>

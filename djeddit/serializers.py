@@ -19,7 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        base_fields = ['id', get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(), 'password']
+        base_fields = ['id',
+                       get_user_model().USERNAME_FIELD, get_user_model().get_email_field_name(),
+                       'password',
+                       'is_staff']
         fields = tuple(
             settings.DJEDDIT_USER_FIELDS + base_fields
             if hasattr(settings, 'DJEDDIT_USER_FIELDS')
@@ -42,7 +45,11 @@ class PostSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Can't reply to the removed post")
 
         if self.instance and self.instance.deleted_on:
-            raise serializers.ValidationError("Can't edit removed post")
+            if 'request' in self.context and \
+                (self.context['request'].user.is_staff or self.context['request'].user.is_superuser):
+                pass
+            else:
+                raise serializers.ValidationError("Can't edit removed post")
 
         return data
 
@@ -83,7 +90,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['uid', 'content', 'created_by', 'created_on', 'parent', 'modified_on', 'level', 'score',
                   'user_vote', 'user_can_edit', 'user_can_delete', 'deleted_on']
-        read_only_fields = ('level', 'deleted_on')
+        read_only_fields = ('level', )
         model = Post
 
 

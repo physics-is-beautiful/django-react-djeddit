@@ -42,6 +42,7 @@ const MarkdownMathRender = props => {
   )
 }
 
+// TODO rewrite with react functional component
 export class RootPost extends React.Component {
   constructor(props) {
     super(props)
