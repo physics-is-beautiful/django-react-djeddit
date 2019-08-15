@@ -41,6 +41,7 @@ const MarkdownMathRender = props => {
 }
 
 // TODO rewrite with react functional component
+// TODO extract buttons and voting to the new component
 export class Post extends React.Component {
   constructor(props) {
     super(props)
