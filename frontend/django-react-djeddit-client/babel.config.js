@@ -3,7 +3,8 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        modules: false,
+        // modules: false,
+        modules: 'commonjs',
       },
     ],
     '@babel/preset-react',
@@ -30,4 +31,4 @@ module.exports = {
       ],
     },
   },
-};
+}

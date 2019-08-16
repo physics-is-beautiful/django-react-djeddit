@@ -8,12 +8,15 @@ const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const webpack = require('webpack')
-
-// const dependencies = Object.keys(require('../../package.json').peerDependencies)
+const nodeExternals = require('webpack-node-externals')
+const dependencies = Object.keys(require('../../package.json').dependencies)
 
 module.exports = require('./webpack.base.babel')({
-  // mode: 'development',
-  mode: 'none',
+  // mode: 'production',
+  // mode: 'none',
+
+  target: 'node', // in order to ignore built-in modules like path, fs, etc.
+  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
 
   // In production, we skip all hot-reloading stuff
   entry: [
@@ -21,14 +24,16 @@ module.exports = require('./webpack.base.babel')({
     path.join(process.cwd(), 'app/app.js'),
   ],
 
+  // externals: [nodeExternals({ modulesFromFile: true })],
+
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
     filename: 'index.js',
     // filename: '[name].[chunkhash].js',
     // chunkFilename: '[name].[chunkhash].chunk.js',
     path: path.resolve(process.cwd(), 'dist'),
-    libraryTarget: 'umd',
-    library: 'djeddit-react-client',
+    libraryTarget: 'commonjs2',
+    // library: 'djeddit-react-client',
   },
 
   optimization: {
@@ -56,27 +61,27 @@ module.exports = require('./webpack.base.babel')({
   //       cache: true,
   //       sourceMap: true,
   //     }),
-   // ],
-    // nodeEnv: 'production',
-    // sideEffects: true,
-    // concatenateModules: true,
-    // runtimeChunk: 'single',
-    // splitChunks: {
-    //   chunks: 'all',
-    //   maxInitialRequests: 10,
-    //   minSize: 0,
-    //   cacheGroups: {
-    //     vendor: {
-    //       test: /[\\/]node_modules[\\/]/,
-    //       name(module) {
-    //         const packageName = module.context.match(
-    //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-    //         )[1]
-    //         return `npm.${packageName.replace('@', '')}`
-    //       },
-    //     },
-    //   },
-    // },
+  // ],
+  // nodeEnv: 'production',
+  // sideEffects: true,
+  // concatenateModules: true,
+  // runtimeChunk: 'single',
+  // splitChunks: {
+  //   chunks: 'all',
+  //   maxInitialRequests: 10,
+  //   minSize: 0,
+  //   cacheGroups: {
+  //     vendor: {
+  //       test: /[\\/]node_modules[\\/]/,
+  //       name(module) {
+  //         const packageName = module.context.match(
+  //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+  //         )[1]
+  //         return `npm.${packageName.replace('@', '')}`
+  //       },
+  //     },
+  //   },
+  // },
   // },
 
   plugins: [
