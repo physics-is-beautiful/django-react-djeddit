@@ -8,8 +8,8 @@ import Button from 'react-bootstrap/Button'
 
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-// import * as Showdown from 'showdown'
-import Showdown from 'showdown'
+
+import markdownConverter from './markdownConverter'
 
 const conf = window.DJEDDIT_CONFIG
 
@@ -49,13 +49,6 @@ export class ReplyForm extends React.Component {
   }
 
   render() {
-    const markdownConverter = new Showdown.Converter({
-      tables: true,
-      simplifiedAutoLink: true,
-      strikethrough: true,
-      tasklists: true,
-    })
-
     return (
       <Row>
         <Col md={11}>

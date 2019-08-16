@@ -114,6 +114,7 @@ export default {
     'reselect',
     'styled-components',
     'showdown',
+    'showdown-katex',
     'react-mde',
     'react-bootstrap/Button',
     'react-bootstrap/Container',
