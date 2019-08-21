@@ -2,17 +2,17 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
-const OfflinePlugin = require('offline-plugin')
+// const OfflinePlugin = require('offline-plugin')
 const { HashedModuleIdsPlugin } = require('webpack')
-const TerserPlugin = require('terser-webpack-plugin')
+// const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
-const dependencies = Object.keys(require('../../package.json').dependencies)
+// const dependencies = Object.keys(require('../../package.json').dependencies)
 
 module.exports = require('./webpack.base.babel')({
-  // mode: 'production',
+  mode: 'production',
   // mode: 'none',
 
   target: 'node', // in order to ignore built-in modules like path, fs, etc.
@@ -21,19 +21,14 @@ module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
   entry: [
     require.resolve('react-app-polyfill/ie11'),
-    path.join(process.cwd(), 'app/app.js'),
+    path.join(process.cwd(), 'app/app_module.js'),
   ],
-
-  // externals: [nodeExternals({ modulesFromFile: true })],
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
     filename: 'index.js',
-    // filename: '[name].[chunkhash].js',
-    // chunkFilename: '[name].[chunkhash].chunk.js',
     path: path.resolve(process.cwd(), 'dist'),
     libraryTarget: 'commonjs2',
-    // library: 'djeddit-react-client',
   },
 
   optimization: {

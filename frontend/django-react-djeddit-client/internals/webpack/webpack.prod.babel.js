@@ -1,11 +1,38 @@
 // Important modules this config uses
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const HtmlWebpackChunkPrefixPlugin = require('html-webpack-chunk-prefix-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const OfflinePlugin = require('offline-plugin')
 const { HashedModuleIdsPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+
+class HtmlWebpackChunkPrefixPlugin {
+  constructor(options) {
+    this.options = options
+  }
+
+  apply(compiler) {
+    const SELF = this
+    compiler.hooks.compilation.tap(
+      'htmlWebpackChunkPrefixPlugin',
+      compilation => {
+        compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(
+          'htmlWebpackChunkPrefixPlugin',
+          (htmlPluginData, callback) => {
+            const { assets } = htmlPluginData
+            const js = assets.js.map(item => SELF.options.prefix + item)
+            const css = assets.css.map(item => SELF.query.prefix + item)
+            assets.js = js
+            assets.css = css
+            callback()
+          },
+        )
+      },
+    )
+  }
+}
 
 module.exports = require('./webpack.base.babel')({
   mode: 'production',
@@ -19,7 +46,12 @@ module.exports = require('./webpack.base.babel')({
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
     filename: '[name].[chunkhash].js',
+    path: path.resolve(process.cwd(), 'dist'),
     chunkFilename: '[name].[chunkhash].chunk.js',
+    // TODO need to investigate to create configurable path
+    // can't use publicPath due public path will embed into runtime file and no processed by django template engine
+    // publicPath: '{{STATIC_URL}}{{DJEDDIT_STATIC_FILES_URL_PREFIX}}',
+    publicPath: '/static/js/npm/@vermus/django-react-djeddit-client/dist/',
   },
 
   optimization: {
@@ -69,6 +101,7 @@ module.exports = require('./webpack.base.babel')({
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/index.html',
+      filename: 'index.html',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -84,29 +117,52 @@ module.exports = require('./webpack.base.babel')({
       inject: true,
     }),
 
+    // Minify and optimize the index.html
+    new HtmlWebpackPlugin({
+      template: 'app/index_django_embed.html',
+      filename: 'react_reddit_django_embed.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+      inject: true,
+    }),
+    // new HtmlWebpackChunkPrefixPlugin({
+    //   prefix: '{{STATIC_URL}}{{DJEDDIT_STATIC_FILES_URL_PREFIX}}',
+    // }),
     // Put it in the end to capture all the HtmlWebpackPlugin's
     // assets manipulations and do leak its manipulations to HtmlWebpackPlugin
-    new OfflinePlugin({
-      relativePaths: false,
-      publicPath: '/',
-      appShell: '/',
-
-      // No need to cache .htaccess. See http://mxs.is/googmp,
-      // this is applied before any match in `caches` section
-      excludes: ['.htaccess'],
-
-      caches: {
-        main: [':rest:'],
-
-        // All chunks marked as `additional`, loaded after main section
-        // and do not prevent SW to install. Change to `optional` if
-        // do not want them to be preloaded at all (cached only when first loaded)
-        additional: ['*.chunk.js'],
-      },
-
-      // Removes warning for about `additional` section usage
-      safeToUseOptionalCaches: true,
-    }),
+    // TODO check it
+    // new OfflinePlugin({
+    //   relativePaths: false,
+    //   // publicPath: : '{{STATIC_URL}}{{DJEDDIT_STATIC_FILES_URL_PREFIX}}',
+    //   publicPath: '/',
+    //   appShell: '/',
+    //
+    //   // No need to cache .htaccess. See http://mxs.is/googmp,
+    //   // this is applied before any match in `caches` section
+    //   excludes: ['.htaccess'],
+    //
+    //   caches: {
+    //     main: [':rest:'],
+    //
+    //     // All chunks marked as `additional`, loaded after main section
+    //     // and do not prevent SW to install. Change to `optional` if
+    //     // do not want them to be preloaded at all (cached only when first loaded)
+    //     additional: ['*.chunk.js'],
+    //   },
+    //
+    //   // Removes warning for about `additional` section usage
+    //   safeToUseOptionalCaches: true,
+    // }),
 
     new CompressionPlugin({
       algorithm: 'gzip',
@@ -116,9 +172,9 @@ module.exports = require('./webpack.base.babel')({
     }),
 
     new WebpackPwaManifest({
-      name: 'React Boilerplate',
-      short_name: 'React BP',
-      description: 'My React Boilerplate-based project!',
+      name: 'React Reddit Django',
+      short_name: 'React RD',
+      description: 'React Django like Reddit forum application',
       background_color: '#fafafa',
       theme_color: '#b1624d',
       inject: true,
