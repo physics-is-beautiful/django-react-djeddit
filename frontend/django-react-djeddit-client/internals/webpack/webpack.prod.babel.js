@@ -48,10 +48,12 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].[chunkhash].js',
     path: path.resolve(process.cwd(), 'dist'),
     chunkFilename: '[name].[chunkhash].chunk.js',
-    // TODO need to investigate to create configurable path
+    // TODO create configurable path
     // can't use publicPath due public path will embed into runtime file and no processed by django template engine
+    // TODO proccess js with template engine?
     // publicPath: '{{STATIC_URL}}{{DJEDDIT_STATIC_FILES_URL_PREFIX}}',
-    publicPath: '/static/js/npm/@vermus/django-react-djeddit-client/dist/',
+    publicPath:
+      'https://assets.physicsisbeautiful.com/js/npm/@vermus/django-react-djeddit-client/dist/',
   },
 
   optimization: {
