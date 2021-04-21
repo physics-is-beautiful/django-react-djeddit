@@ -18,7 +18,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from slugify import slugify
 # we can use following for this
 # from django.template.defaultfilters import slugify
-from ipware.ip import get_ip
+from ipware.ip import get_client_ip
 
 # Our app imports
 from djeddit.utils.utility_funcs import gen_uuid, wsi_confidence

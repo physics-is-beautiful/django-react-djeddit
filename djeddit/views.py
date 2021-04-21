@@ -19,7 +19,7 @@ from django.conf import settings
 
 
 # Third-party app imports
-from ipware.ip import get_ip
+from ipware.ip import get_client_ip
 from meta.views import Meta
 
 # Imports from our apps
