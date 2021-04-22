@@ -260,7 +260,7 @@ class Post(MPTTModel, NamedModel):
 
     def setMeta(self, request):
         """update post ip_address & user_agent attributes"""
-        ip = get_ip(request)
+        ip = get_client_ip(request)
         if ip is not None:
             self.ip_address = ip
         ua = request.META.get('HTTP_USER_AGENT', '')
